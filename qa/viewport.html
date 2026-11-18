@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>QA viewport harness</title>
+<style>
+  html,body{margin:0;padding:0;background:#202020;font:12px/1.4 monospace;color:#ddd}
+  #wrap{position:fixed;left:0;top:0;width:var(--w);height:var(--h);overflow:hidden;background:#000}
+  iframe{border:0;display:block;width:var(--w);height:var(--h)}
+  #log{position:fixed;left:0;top:var(--h);right:0;max-height:calc(100vh - var(--h));overflow:auto;padding:4px 6px;white-space:pre-wrap}
+</style>
+</head>
+<body>
+<div id="wrap"><iframe id="f"></iframe></div>
+<div id="log">harness ready</div>
+<script>
+(function(){
+  var q = new URLSearchParams(location.search);
+  var app = q.get('app') || 'oneink';
+  var w = q.get('w') || '360';
+  var h = q.get('h') || '780';
+  document.documentElement.style.setProperty('--w', w + 'px');
+  document.documentElement.style.setProperty('--h', h + 'px');
+  var logEl = document.getElementById('log');
+  var lines = [];
+  window.__qa = { errors: [], logs: [], src: '/prototype-preview/' + app + '/' };
+  function log(s){ lines.push(s); logEl.textContent = lines.join('\n'); }
+  window.__qa.log = log;
+  var f = document.getElementById('f');
+  f.addEventListener('load', function(){
+    try {
+      var win = f.contentWindow;
+      var doc = f.contentDocument;
+      window.__qa.doc = doc;
+      window.__qa.win = win;
+      win.addEventListener('error', function(e){
+        window.__qa.errors.push('error: ' + (e.message || '') + ' @' + (e.filename||'') + ':' + (e.lineno||''));
+      });
+      win.addEventListener('unhandledrejection', function(e){
+        window.__qa.errors.push('unhandledrejection: ' + (e.reason && e.reason.message ? e.reason.message : String(e.reason)));
+      });
+      var ce = win.console.error;
+      win.console.error = function(){ window.__qa.errors.push('console.error: ' + Array.prototype.join.call(arguments,' ')); return ce.apply(win.console, arguments); };
+      var cw = win.console.warn;
+      win.console.warn = function(){ window.__qa.logs.push('console.warn: ' + Array.prototype.join.call(arguments,' ')); return cw.apply(win.console, arguments); };
+      log('loaded ' + f.contentWindow.location.href + ' viewport=' + win.innerWidth + 'x' + win.innerHeight);
+    } catch(err){ log('harness hook failed: ' + err); }
+  });
+  f.src = window.__qa.src;
+})();
+</script>
+</body>
+</html>
