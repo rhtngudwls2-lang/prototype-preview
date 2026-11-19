@@ -302,6 +302,7 @@ button {touch-action:manipulation}
 #linkHelp {position:fixed;inset:auto 0 0;margin:auto;max-width:320px;border-radius:14px;background:var(--panel,#132234);color:var(--fg,#fff);padding:12px;z-index:1200}
 #linkHelp input {width:100%;padding:8px}
 .cardActions {flex-wrap:wrap}
+.privacy-link{color:inherit;text-decoration:none;min-height:44px}
 </style>
 </head>
 <body>
@@ -419,6 +420,7 @@ button {touch-action:manipulation}
       <div class="row"><svg class="ic" id="icSound"><use href="#i-sound"/></svg><div class="label">SOUND</div><div class="toggle" data-toggle="sound"></div></div>
       <div class="row"><svg class="ic"><use href="#i-vibrate"/></svg><div class="label">HAPTIC</div><div class="toggle" data-toggle="haptic"></div></div>
       <div class="row"><svg class="ic" id="icTheme"><use href="#i-moon"/></svg><div class="label">THEME</div><div class="toggle" data-toggle="dark"></div></div>
+      <a class="row privacy-link" href="https://experiencedb.kr/apps/privacy/" target="_blank" rel="noopener noreferrer" onclick="if(window.PuzzleAndroid){PuzzleAndroid.openPrivacy();return false;}"><div class="label">Privacy Policy</div><svg class="ic sm" aria-hidden="true"><use href="#i-next"/></svg></a>
       <div class="row" id="rowReset"><svg class="ic" style="color:var(--danger)"><use href="#i-restart"/></svg><div class="label">RESET PROGRESS</div><svg class="ic sm" style="color:var(--muted)"><use href="#i-next"/></svg></div>
     </div>
 
@@ -841,7 +843,7 @@ function dirOf(a, b, W) {
 /* ── game state ──────────────────────────────────────────── */
 const G = {
   mode: "level", level: 1, B: null, path: [],
-  dragging: false, playing: false, undos: 0, startedAt: 0,
+  dragging: false, playing: false, undos: 0, activeSince: null, activeMs: 0,
   ghostTimer: null, day: null, inbound: false, friend: null, completed: null
 };
 const cache = new Map();
@@ -1165,8 +1167,8 @@ function starsFor(timeSec) {
 }
 function checkWin() {
   if (!G.playing || !G.B || !completeFriendPath(G.B,G.path)) return;
-  G.playing=false;
-  const t=Math.max(0,(Date.now()-G.startedAt)/1000);
+  pauseClock();G.playing=false;
+  const t=activeElapsed()/1000;
   const stars=starsFor(t), key=currentRunKey();
   delete S.pendingRuns[key]; if(S.resumeKey===key)S.resumeKey=null;
   const first=!Object.hasOwn(S.best,key);
@@ -1245,10 +1247,22 @@ function readFriend(B,mode,identity){
   return completeFriendPath(B,path)?{path,time:parseInt(elapsed,36)}:null;
 }
 function currentRunKey(){return G.mode==="daily"?"D"+G.day:"L"+G.level;}
+let pageSuspended=false, nativeForeground=true;
+function activeElapsed(){return G.activeMs+(G.activeSince===null?0:Math.max(0,performance.now()-G.activeSince));}
+function pauseClock(){
+  if(G.activeSince!==null){G.activeMs=activeElapsed();G.activeSince=null;}
+}
+function syncClock(){
+  if(G.playing&&!document.hidden&&!pageSuspended&&nativeForeground){
+    if(G.activeSince===null)G.activeSince=performance.now();
+  }else{
+    pauseClock();G.dragging=false;snapshotRun();
+  }
+}
 function snapshotRun(){
   if(!G.playing||!G.B||G.path.length>=G.B.free)return;
   const key=currentRunKey();
-  S.pendingRuns[key]={path:G.path.slice(),undos:G.undos,elapsed:Math.max(0,Date.now()-G.startedAt)};
+  S.pendingRuns[key]={path:G.path.slice(),undos:G.undos,elapsed:activeElapsed()};
   S.resumeKey=key;
   const keys=Object.keys(S.pendingRuns);
   if(keys.length>96)delete S.pendingRuns[keys.find(k=>k!==key)];
@@ -1262,7 +1276,7 @@ function restoreRun(key,B){
   return r;
 }
 function homeFromBoard(){
-  snapshotRun();G.playing=false;G.dragging=false;clearHint();show(home);updateHome();
+  pauseClock();snapshotRun();G.playing=false;G.dragging=false;clearHint();show(home);updateHome();
 }
 function resumeOrPlay(){
   SFX.ensure();
@@ -1290,8 +1304,8 @@ function begin(){
   setComparison(false);qs("#btnFriend").setAttribute("aria-pressed","false");
   ghostPath.style.display="none";clearHint();
   const saved=restoreRun(currentRunKey(),G.B);
-  G.path=[];G.undos=saved?.undos||0;G.playing=true;G.dragging=false;G.completed=null;G.startedAt=Date.now()-(saved?.elapsed||0);
-  renderBoard(G.B);G.path=saved?.path.slice()||[];show(game);paintPath(false);requestAnimationFrame(layoutBoard);
+  G.path=[];G.undos=saved?.undos||0;G.playing=true;G.dragging=false;G.completed=null;G.activeMs=saved?.elapsed||0;G.activeSince=null;
+  renderBoard(G.B);G.path=saved?.path.slice()||[];show(game);syncClock();paintPath(false);requestAnimationFrame(layoutBoard);
 }
 function resetActive(){
   if(!G.playing)return;
@@ -1521,7 +1535,7 @@ function updateHome() {
 }
 
 /* ── localization resources ── */
-const KO={
+const KO={"Privacy Policy":"개인정보처리방침",
 "LEVELS":"단계","DAILY":"일일판","RECORDS":"기록","SETTINGS":"설정","SOUND":"소리","HAPTIC":"진동","THEME":"테마","RESET PROGRESS":"진행 초기화","STREAK":"연속","BEST":"최고","CLEARED":"완료","BEST TIME":"최고 기록","COINS":"코인","play":"시작","back":"뒤로","settings":"설정","restart":"초기화","undo":"되돌리기","hint":"힌트","share":"결과 카드","replay":"새로 도전","next":"다음","close":"닫기","New challenge":"새로 도전","Compare a friend’s path":"친구 경로 겹쳐 보기","Share my completed path":"완성 경로 보내기","Copy the challenge link":"같은 판 링크 복사","My path and friend path":"나의 경로와 친구 경로","Challenge link":"도전 링크","UNDO":"한 칸 되돌리기","COPIED":"복사했어요","SHARE":"공유","LOCKED":"잠김","RESET":"초기화","Invalid challenge":"유효하지 않은 도전 링크","Not enough coins":"코인이 부족해요"
 };
 const isKo=/^ko\b/i.test(navigator.language||"");
@@ -1544,15 +1558,16 @@ applySettings();
 updateHome();
 window.addEventListener("resize", () => { layoutBoard(); });
 if (window.visualViewport) window.visualViewport.addEventListener("resize", layoutBoard);
-window.addEventListener("pagehide",snapshotRun);
-window.addEventListener("pageshow",e=>{
-  if(!e.persisted||!G.B||!G.playing)return;
-  const saved=restoreRun(currentRunKey(),G.B);
-  if(saved){G.path=saved.path.slice();G.undos=saved.undos;G.startedAt=Date.now()-saved.elapsed;G.dragging=false;paintPath(false);}
-});
+window.addEventListener("pagehide",()=>{pageSuspended=true;syncClock();});
+window.addEventListener("pageshow",()=>{pageSuspended=false;syncClock();});
 document.addEventListener("visibilitychange", () => {
-  if (document.hidden) {stopDemo();snapshotRun();} else if (home.classList.contains("on")) startDemo();
+  syncClock();
+  if (document.hidden) stopDemo(); else if (home.classList.contains("on")) startDemo();
 });
+if(window.PuzzleAndroid){
+  nativeForeground=window.PuzzleAndroid.isForeground();
+  window.addEventListener("puzzle-lifecycle",e=>{nativeForeground=e.detail===true;syncClock();});
+}
 
 const u=new URL(location.href);
 const day=KIT.challengeDay(u.href),level=u.searchParams.get("l");
