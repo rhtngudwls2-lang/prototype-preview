@@ -222,7 +222,6 @@ html[data-theme="light"] .playBtn{color:#fff;box-shadow:0 18px 40px -18px rgba(1
 .grab{width:38px;height:4px;border-radius:99px;background:var(--line);margin:4px auto 12px}
 .sheetHead{display:flex;align-items:center;gap:10px;margin-bottom:14px}
 .sheetHead h2{margin:0;font-size:12px;letter-spacing:.13em;font-weight:800;color:var(--muted)}
-.tag{font-size:9px;font-weight:800;letter-spacing:.1em;padding:3px 6px;border-radius:6px;background:color-mix(in srgb,var(--accent2) 18%,transparent);color:var(--accent2)}
 
 .levelGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
 .lv{
@@ -256,35 +255,6 @@ html[data-theme="light"] .playBtn{color:#fff;box-shadow:0 18px 40px -18px rgba(1
 .stat .k{display:flex;align-items:center;gap:6px;font-size:10px;letter-spacing:.1em;font-weight:800;color:var(--muted)}
 .stat .k .ic{width:14px;height:14px}
 .stat .v{font-size:22px;font-weight:800;margin-top:6px;font-variant-numeric:tabular-nums}
-
-.passCard{
-  border-radius:20px;padding:16px;margin-bottom:10px;
-  background:linear-gradient(150deg, color-mix(in srgb,var(--accent) 16%,var(--surface)), color-mix(in srgb,var(--accent2) 14%,var(--surface)));
-  border:1px solid color-mix(in srgb,var(--accent) 35%,transparent);
-}
-.passCard .t{display:flex;align-items:center;gap:8px;font-weight:800;font-size:15px}
-.passCard .t .ic{color:var(--accent)}
-.passCard ul{margin:10px 0 12px;padding:0;list-style:none;display:grid;gap:6px}
-.passCard li{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--text);opacity:.9}
-.passCard li .ic{width:15px;height:15px;color:var(--accent)}
-.priceRow{display:flex;gap:8px}
-.priceBtn{
-  flex:1;border-radius:14px;padding:11px 8px;background:var(--surface);border:1px solid var(--line);
-  display:flex;flex-direction:column;gap:3px;align-items:center;transition:transform .12s ease;
-}
-.priceBtn:active{transform:scale(var(--tap))}
-.priceBtn .amt{font-weight:800;font-size:15px;font-variant-numeric:tabular-nums}
-.priceBtn .per{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.04em}
-.priceBtn.hot{border-color:color-mix(in srgb,var(--accent) 55%,transparent);background:color-mix(in srgb,var(--accent) 10%,var(--surface))}
-
-/* ad */
-#adview{background:#05070b}
-.adbox{width:100%;max-width:300px;text-align:center;color:#fff}
-.adbadge{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:800;letter-spacing:.18em;padding:4px 8px;border-radius:6px;background:rgba(255,255,255,.12);margin-bottom:18px}
-.ring{width:120px;height:120px;margin:0 auto 16px;position:relative;display:grid;place-items:center}
-.ring svg{position:absolute;inset:0;transform:rotate(-90deg)}
-.ring .num{font-size:30px;font-weight:800;font-variant-numeric:tabular-nums}
-.adbox .cap{font-size:12px;color:rgba(255,255,255,.55);font-weight:600;letter-spacing:.04em}
 
 /* toast */
 #toast{
@@ -358,15 +328,12 @@ button {touch-action:manipulation}
 <symbol id="i-share" viewBox="0 0 24 24"><circle cx="6.4" cy="12" r="2.6"/><circle cx="17.6" cy="6.2" r="2.6"/><circle cx="17.6" cy="17.8" r="2.6"/><path d="M8.8 10.8 15.2 7.4M8.8 13.2l6.4 3.4"/></symbol>
 <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5.2" y="10.4" width="13.6" height="9.6" rx="3"/><path d="M8.4 10.4V8a3.6 3.6 0 0 1 7.2 0v2.4"/></symbol>
 <symbol id="i-check" viewBox="0 0 24 24"><path d="m5.2 12.6 4.4 4.4 9.2-9.4"/></symbol>
-<symbol id="i-ad" viewBox="0 0 24 24"><rect x="3.2" y="4.8" width="17.6" height="14.4" rx="3.4"/><path d="M10.4 9.2 15.2 12l-4.8 2.8z"/></symbol>
-<symbol id="i-bag" viewBox="0 0 24 24"><path d="M5.4 8.4h13.2l-1 11.2H6.4z"/><path d="M9 8.4V6.6a3 3 0 0 1 6 0v1.8"/></symbol>
 <symbol id="i-flame" viewBox="0 0 24 24"><path d="M12 3.2c3.4 3 5.2 5.6 5.2 8.6a5.2 5.2 0 0 1-10.4 0c0-1.6.7-2.9 1.9-4.1.4 1.4 1.1 2.2 2.1 2.4-.2-2.6.2-4.9 1.2-6.9Z"/></symbol>
 <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.3"/><path d="M12 7.4V12l3.2 2"/></symbol>
 <symbol id="i-arrow-u" viewBox="0 0 24 24"><path d="M12 19.4V5.2M7.4 9.6 12 5l4.6 4.6"/></symbol>
 <symbol id="i-arrow-d" viewBox="0 0 24 24"><path d="M12 4.6v14.2M7.4 14.4 12 19l4.6-4.6"/></symbol>
 <symbol id="i-arrow-l" viewBox="0 0 24 24"><path d="M19.4 12H5.2M9.6 7.4 5 12l4.6 4.6"/></symbol>
 <symbol id="i-arrow-r" viewBox="0 0 24 24"><path d="M4.6 12h14.2M14.4 7.4 19 12l-4.6 4.6"/></symbol>
-<symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13.4 3 6.6 13.2h4.6L10.2 21l7-10.4h-4.6z"/></symbol>
 <symbol id="i-seal" viewBox="0 0 24 24"><path d="M12 3.4l2.3 1.7 2.8-.2.9 2.7 2.3 1.6-1 2.6 1 2.6-2.3 1.6-.9 2.7-2.8-.2L12 20.6l-2.3-1.7-2.8.2-.9-2.7-2.3-1.6 1-2.6-1-2.6 2.3-1.6.9-2.7 2.8.2z"/><path d="m9.4 12.2 1.9 1.9 3.6-3.9"/></symbol>
 </defs></svg>
 
@@ -410,7 +377,6 @@ button {touch-action:manipulation}
         <div class="pill" id="levelPill">1</div><button class="ib big" id="btnFresh" aria-label="New challenge" hidden><svg class="ic"><use href="#i-play"/></svg></button>
         <div class="spacer"></div>
         <div class="chip coin"><svg class="ic"><use href="#i-coin"/></svg><b id="coinNum2">0</b></div>
-        <button class="ib" id="btnStoreTop" aria-label="store"><svg class="ic"><use href="#i-bag"/></svg></button>
       </div>
       <div class="progress"><i id="progBar"></i></div>
       <div class="boardwrap" id="boardwrap">
@@ -468,41 +434,7 @@ button {touch-action:manipulation}
       </div>
       <div class="row"><svg class="ic"><use href="#i-clock"/></svg><div class="label">BEST TIME</div><div class="sub" id="stTime">--:--</div></div>
       <div class="row"><svg class="ic"><use href="#i-coin"/></svg><div class="label">COINS</div><div class="sub" id="stCoins">0</div></div>
-      <div class="row"><svg class="ic"><use href="#i-seal"/></svg><div class="label">INKS OWNED</div><div class="sub" id="stInks">1</div></div><div id="dailyHistory"></div>
-    </div>
-
-    <div class="sheet" id="sheetStore">
-      <div class="grab"></div>
-      <div class="sheetHead"><svg class="ic sm" style="color:var(--muted)"><use href="#i-bag"/></svg><h2>STORE</h2><span class="tag">PROTO</span><div class="spacer"></div>
-        <button class="ib ghost" data-close style="width:34px;height:34px"><svg class="ic sm"><use href="#i-close"/></svg></button></div>
-
-      <div class="passCard">
-        <div class="t"><svg class="ic"><use href="#i-bolt"/></svg>INK PASS</div>
-        <ul>
-          <li><svg class="ic"><use href="#i-check"/></svg>No ads, ever</li>
-          <li><svg class="ic"><use href="#i-check"/></svg>Unlimited hints</li>
-          <li><svg class="ic"><use href="#i-check"/></svg>Full daily archive</li>
-          <li><svg class="ic"><use href="#i-check"/></svg>All ink skins</li>
-        </ul>
-        <div class="priceRow">
-          <button class="priceBtn" data-buy="pass_m"><span class="amt">$2.99</span><span class="per">MONTH</span></button>
-          <button class="priceBtn hot" data-buy="pass_y"><span class="amt">$19.99</span><span class="per">YEAR · 44% OFF</span></button>
-        </div>
-      </div>
-
-      <div class="sheetHead" style="margin:14px 0 10px"><svg class="ic sm" style="color:var(--gold)"><use href="#i-coin"/></svg><h2>COIN PACKS</h2></div>
-      <div class="priceRow">
-        <button class="priceBtn" data-buy="c1"><span class="amt">120</span><span class="per">$0.99</span></button>
-        <button class="priceBtn" data-buy="c2"><span class="amt">600</span><span class="per">$3.99</span></button>
-        <button class="priceBtn" data-buy="c3"><span class="amt">1,800</span><span class="per">$9.99</span></button>
-      </div>
-
-      <div class="sheetHead" style="margin:14px 0 10px"><svg class="ic sm" style="color:var(--accent2)"><use href="#i-seal"/></svg><h2>INK SKINS</h2></div>
-      <div class="priceRow">
-        <button class="priceBtn" data-buy="ink1"><span class="amt">AURORA</span><span class="per">$1.99</span></button>
-        <button class="priceBtn" data-buy="ink2"><span class="amt">SUMI</span><span class="per">$1.99</span></button>
-        <button class="priceBtn" data-buy="ink3"><span class="amt">EMBER</span><span class="per">$1.99</span></button>
-      </div>
+      <div id="dailyHistory"></div>
     </div>
 
     <!-- ══════════ win ══════════ -->
@@ -523,33 +455,10 @@ button {touch-action:manipulation}
           <button class="ib" id="btnFriend" aria-label="Compare a friend’s path" hidden><svg class="ic"><use href="#i-grid"/></svg></button>
           <button class="ib" id="btnTrace" aria-label="Share my completed path" hidden><svg class="ic"><use href="#i-flame"/></svg></button>
           <button class="ib" id="btnLink" aria-label="Copy the challenge link"><svg class="ic"><use href="#i-share"/></svg></button>
-          <button class="ib" id="btnWinDouble" aria-label="double coins with an ad"><svg class="ic"><use href="#i-ad"/></svg></button>
           <button class="ib" id="btnWinShare" aria-label="share"><svg class="ic"><use href="#i-star"/></svg></button>
           <button class="ib" id="btnWinReplay" aria-label="replay"><svg class="ic"><use href="#i-restart"/></svg></button>
           <button class="ib primary" id="btnWinNext" aria-label="next"><svg class="ic"><use href="#i-next"/></svg></button>
         </div>
-      </div>
-    </div>
-
-    <!-- ══════════ ad ══════════ -->
-    <div class="overlay" id="adview">
-      <div class="adbox">
-        <div class="adbadge"><svg class="ic" style="width:14px;height:14px"><use href="#i-ad"/></svg>AD</div>
-        <div class="ring">
-          <svg viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="6"/>
-            <circle id="adRing" cx="50" cy="50" r="44" fill="none" stroke="var(--accent)" stroke-width="6"
-                    stroke-linecap="round" stroke-dasharray="276.5" stroke-dashoffset="0"/>
-          </svg>
-          <div class="num" id="adCount">5</div>
-        </div>
-        <div class="cap">REWARDED AD <span class="tag" style="margin-left:6px;background:rgba(255,255,255,.12);color:#fff">PROTO</span></div>
-        <button class="ib primary" id="btnAdClaim" style="width:100%;height:50px;margin-top:20px;border-radius:16px" disabled>
-          <svg class="ic"><use href="#i-check"/></svg>
-        </button>
-        <button class="ib" id="btnAdClose" aria-label="close" style="width:100%;height:46px;margin-top:10px;border-radius:14px;background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.14);color:#fff">
-          <svg class="ic"><use href="#i-close"/></svg>
-        </button>
       </div>
     </div>
 
@@ -645,7 +554,7 @@ const DEF = {
   level: 1, unlocked: 1, coins: 80,
   stars: {}, best: {}, solved: 0,
   streak: 0, bestStreak: 0, lastDaily: null, dailyCount: 0,
-  bestTime: null, inks: 1, dailyHistory: {}, tutorialDone: false,
+  bestTime: null, dailyHistory: {}, tutorialDone: false, pendingRuns: {}, resumeKey: null,
   settings: { sound: true, haptic: true, dark: true }
 };
 function loadState() {
@@ -655,6 +564,7 @@ function loadState() {
     const s = Object.assign(JSON.parse(JSON.stringify(DEF)), raw);
     s.settings = Object.assign({}, DEF.settings, raw.settings || {});
     if (!s.dailyHistory || typeof s.dailyHistory !== "object" || Array.isArray(s.dailyHistory)) s.dailyHistory = {};
+    if (!s.pendingRuns || typeof s.pendingRuns !== "object" || Array.isArray(s.pendingRuns)) s.pendingRuns={};
     return s;
   } catch (e) { return JSON.parse(JSON.stringify(DEF)); }
 }
@@ -1177,7 +1087,7 @@ function stepTo(target) {
     if (back === G.path.length - 2) {
       G.path.pop();G.undos++;clearHint();
       SFX.undo(); haptic(8);
-      paintPath();
+      paintPath();snapshotRun();
     }
     return;
   }
@@ -1201,7 +1111,7 @@ function stepTo(target) {
     }
     if (ok && cur === target) {
       clearHint();chain.forEach(i => { G.path.push(i); SFX.step(G.path.length); });
-      haptic(9); paintPath(); checkWin();
+      haptic(9);paintPath();checkWin();snapshotRun();
       return;
     }
     invalid(target, cause);
@@ -1214,7 +1124,7 @@ function pushTile(i) {
   SFX.step(G.path.length);
   haptic(9);
   paintPath();
-  checkWin();
+  checkWin();snapshotRun();
 }
 
 boardEl.addEventListener("pointerdown", (e) => {
@@ -1229,7 +1139,7 @@ boardEl.addEventListener("pointerdown", (e) => {
     const start=checkMove(null,i); if (!start.ok) { invalid(i,start.cause); G.dragging=false; return; }
     G.path = [i];
     SFX.step(0); haptic(10);
-    paintPath();
+    paintPath();snapshotRun();
   } else {
     stepTo(i);
   }
@@ -1257,7 +1167,8 @@ function checkWin() {
   if (!G.playing || !G.B || !completeFriendPath(G.B,G.path)) return;
   G.playing=false;
   const t=Math.max(0,(Date.now()-G.startedAt)/1000);
-  const stars=starsFor(t), key=G.mode==="daily" ? "D"+G.day : "L"+G.level;
+  const stars=starsFor(t), key=currentRunKey();
+  delete S.pendingRuns[key]; if(S.resumeKey===key)S.resumeKey=null;
   const first=!Object.hasOwn(S.best,key);
   const gain=first ? 5+stars*3+(G.mode==="daily"?15:0) : 0;
   G.completed=Object.freeze({mode:G.mode,level:G.level,day:G.day,t,stars,undos:G.undos,gain,path:Object.freeze(G.path.slice())});
@@ -1308,9 +1219,8 @@ function showWin(stars, coins, timeSec) {
   qs("#winTime").textContent = fmtTime(timeSec);
   qs("#winUndo").textContent = G.undos;
   qs("#btnFriend").hidden=!G.friend;
-  qs("#friendPaths").hidden=true;qs("#friendTimes").hidden=true;
+  setComparison(false);
   qs("#btnTrace").hidden=!G.completed;
-  qs("#btnWinDouble").disabled=coins===0;
   qs("#winOverlay").classList.add("on");
 }
 function fmtTime(s) {
@@ -1334,6 +1244,36 @@ function readFriend(B,mode,identity){
   const path=cells.map(x=>parseInt(x,36));
   return completeFriendPath(B,path)?{path,time:parseInt(elapsed,36)}:null;
 }
+function currentRunKey(){return G.mode==="daily"?"D"+G.day:"L"+G.level;}
+function snapshotRun(){
+  if(!G.playing||!G.B||G.path.length>=G.B.free)return;
+  const key=currentRunKey();
+  S.pendingRuns[key]={path:G.path.slice(),undos:G.undos,elapsed:Math.max(0,Date.now()-G.startedAt)};
+  S.resumeKey=key;
+  const keys=Object.keys(S.pendingRuns);
+  if(keys.length>96)delete S.pendingRuns[keys.find(k=>k!==key)];
+  save();
+}
+function restoreRun(key,B){
+  const r=S.pendingRuns[key];
+  if(!r||!Array.isArray(r.path)||r.path.length>=B.free||
+      !Number.isSafeInteger(r.undos)||r.undos<0||!Number.isFinite(r.elapsed)||r.elapsed<0||
+      !r.path.every((v,i)=>checkPathMove(B,r.path.slice(0,i),i?r.path[i-1]:null,v).ok))return null;
+  return r;
+}
+function homeFromBoard(){
+  snapshotRun();G.playing=false;G.dragging=false;clearHint();show(home);updateHome();
+}
+function resumeOrPlay(){
+  SFX.ensure();
+  const key=S.resumeKey;
+  if(typeof key==="string"&&S.pendingRuns[key]){
+    const inbound=G.inbound&&G.B&&currentRunKey()===key;
+    if(/^D[1-9]\d{7}$/.test(key)&&KIT.validDay(key.slice(1))){startDaily(key.slice(1),inbound);return;}
+    if(/^L[1-9]\d{0,8}$/.test(key)){startLevel(Number(key.slice(1)),inbound);return;}
+  }
+  startLevel(S.level);
+}
 function startLevel(n,inbound=false){
   G.mode="level";G.level=n;G.day=null;G.inbound=inbound;G.B=getLevel(n);
   G.friend=inbound?readFriend(G.B,G.mode,n):null;
@@ -1347,15 +1287,16 @@ function startDaily(day=todayKey(),inbound=false){
 }
 function begin(){
   qs("#winOverlay").classList.remove("on");qs("#btnFresh").hidden=!G.inbound&&G.mode!=="daily";
-  qs("#friendPaths").hidden=true;qs("#friendTimes").hidden=true;qs("#btnFriend").setAttribute("aria-pressed","false");
+  setComparison(false);qs("#btnFriend").setAttribute("aria-pressed","false");
   ghostPath.style.display="none";clearHint();
-  G.path=[];G.undos=0;G.playing=true;G.dragging=false;G.completed=null;G.startedAt=Date.now();
-  renderBoard(G.B);show(game);paintPath(false);requestAnimationFrame(layoutBoard);
+  const saved=restoreRun(currentRunKey(),G.B);
+  G.path=[];G.undos=saved?.undos||0;G.playing=true;G.dragging=false;G.completed=null;G.startedAt=Date.now()-(saved?.elapsed||0);
+  renderBoard(G.B);G.path=saved?.path.slice()||[];show(game);paintPath(false);requestAnimationFrame(layoutBoard);
 }
 function resetActive(){
   if(!G.playing)return;
   G.undos+=G.path.length;
-  G.path=[];clearHint();paintPath();SFX.undo();haptic(8);
+  G.path=[];clearHint();paintPath();snapshotRun();SFX.undo();haptic(8);
 }
 function findHint(B,path,budget=30000){
   if(!path.length)return B.start;
@@ -1389,20 +1330,20 @@ function showHint(i){
   clearHint();tileEls[i].classList.add("hint-next");qs("#btnHint").setAttribute("aria-pressed","true");
   SFX.coin();G.ghostTimer=setTimeout(clearHint,3200);
 }
-qs("#btnPlay").addEventListener("click",()=>{SFX.ensure();startLevel(S.level);});
-qs("#btnBack").addEventListener("click",()=>{G.playing=false;show(home);updateHome();});
+qs("#btnPlay").addEventListener("click",resumeOrPlay);
+qs("#btnBack").addEventListener("click",homeFromBoard);
 qs("#btnRestart").addEventListener("click",resetActive);
 qs("#btnFresh").addEventListener("click",resetActive);
 qs("#btnUndo").addEventListener("click",()=>{
   if(!G.playing||!G.path.length)return;
-  G.path.pop();G.undos++;clearHint();SFX.undo();haptic(10);paintPath();
+  G.path.pop();G.undos++;clearHint();SFX.undo();haptic(10);paintPath();snapshotRun();
 });
 qs("#btnHint").addEventListener("click",()=>{
   if(!G.playing)return;
   if(qs("#btnHint").getAttribute("aria-pressed")==="true"){clearHint();return;}
   const i=findHint(G.B,G.path);
   if(i==null){toast("UNDO","i-undo");return;}
-  if(S.coins<30){askAd("hint");return;}
+  if(S.coins<30){toast("Not enough coins","i-coin");return;}
   S.coins-=30;save();syncHud();showHint(i);
 });
 qs("#btnWinNext").addEventListener("click",()=>{
@@ -1411,7 +1352,6 @@ qs("#btnWinNext").addEventListener("click",()=>{
   else startLevel(G.level+1);
 });
 qs("#btnWinReplay").addEventListener("click",begin);
-qs("#btnWinDouble").addEventListener("click",()=>askAd("double"));
 qs("#btnWinShare").addEventListener("click",()=>{
   if(G.completed)KIT.saveCard({variant:"oneink",score:G.completed.stars}).catch(()=>toast("SHARE","i-share"));
 });
@@ -1428,9 +1368,15 @@ function copyText(t){
   if(navigator.clipboard?.writeText)navigator.clipboard.writeText(t).then(()=>toast("COPIED","i-share"),fallback);
   else fallback();
 }
+function setComparison(visible){
+  qs("#friendPaths").toggleAttribute("hidden",!visible);
+  qs("#friendTimes").hidden=!visible;
+  qs("#btnFriend").setAttribute("aria-pressed",String(visible));
+}
 function drawComparison(){
   if(!G.completed||!G.friend)return;
   const el=qs("#friendPaths"),B=G.B,ns="http://www.w3.org/2000/svg";
+  if(!el.hasAttribute("hidden")){setComparison(false);return;}
   el.replaceChildren();el.setAttribute("viewBox","0 0 "+B.w+" "+B.h);
   for(let i=0;i<B.w*B.h;i++){
     if(B.blocked[i])continue;
@@ -1441,52 +1387,9 @@ function drawComparison(){
     const p=document.createElementNS(ns,"path");p.setAttribute("class",cls);
     p.setAttribute("d",trace.map((v,i)=>(i?"L":"M")+(v%B.w+.5)+" "+(Math.floor(v/B.w)+.5)).join(" "));el.append(p);
   }
-  el.hidden=!el.hidden;const times=qs("#friendTimes");times.hidden=el.hidden;times.textContent=fmtTime(G.completed.t)+" / "+fmtTime(G.friend.time);qs("#btnFriend").setAttribute("aria-pressed",String(!el.hidden));
+  qs("#friendTimes").textContent=fmtTime(G.completed.t)+" / "+fmtTime(G.friend.time);setComparison(true);
 }
 qs("#btnFriend").addEventListener("click",drawComparison);
-/* ── rewarded ad (simulated) ─────────────────────────────── */
-let adState = { open: false, purpose: null, timer: null };
-function askAd(purpose) {
-  adState.open = true; adState.purpose = purpose;
-  let left = 5;
-  qs("#adview").classList.add("on");
-  qs("#btnAdClaim").disabled = true;
-  qs("#adCount").textContent = left;
-  const ring = qs("#adRing");
-  const total = 6;
-  ring.setAttribute("stroke-dashoffset", "0");
-  ring.style.transition = "none";
-  requestAnimationFrame(() => {
-    ring.style.transition = "stroke-dashoffset 5s linear";
-    ring.setAttribute("stroke-dashoffset", "276.5");
-  });
-  clearInterval(adState.timer);
-  adState.timer = setInterval(() => {
-    left--;
-    qs("#adCount").textContent = Math.max(0, left);
-    if (left <= 0) {
-      clearInterval(adState.timer);
-      qs("#adCount").textContent = "";
-      qs("#btnAdClaim").disabled = false;
-      qs("#btnAdClaim").querySelector("use").setAttribute("href", "#i-check");
-    }
-  }, 1000);
-}
-qs("#btnAdClose").addEventListener("click", () => {
-  clearInterval(adState.timer);
-  adState.open = false;
-  qs("#adview").classList.remove("on");
-});
-qs("#btnAdClaim").addEventListener("click", () => {
-  if (qs("#btnAdClaim").disabled || !adState.open) return;
-  qs("#adview").classList.remove("on");
-  const p=adState.purpose;adState.purpose=null;adState.open=false;
-  if(p==="hint"&&G.playing){const i=findHint(G.B,G.path);if(i!=null)showHint(i);}
-  else if(p==="double"&&G.completed?.gain&&!qs("#btnWinDouble").disabled){
-    qs("#btnWinDouble").disabled=true;S.coins+=G.completed.gain;save();syncHud();toast("+"+G.completed.gain,"i-coin");
-  }
-});
-
 /* ── sheets & toggles ────────────────────────────────────── */
 scrim.addEventListener("click", closeSheets);
 qsa("[data-close]").forEach(b => b.addEventListener("click", closeSheets));
@@ -1494,7 +1397,6 @@ qsa("[data-close]").forEach(b => b.addEventListener("click", closeSheets));
 qs("#btnLevels").addEventListener("click", () => { buildLevelGrid(); openSheet("sheetLevels"); });
 qs("#btnDaily").addEventListener("click", () => { startDaily(); });
 qs("#btnRecords").addEventListener("click", () => { fillRecords(); openSheet("sheetRecords"); });
-qs("#btnStoreTop").addEventListener("click", () => openSheet("sheetStore"));
 qs("#btnSettings").addEventListener("click", () => openSheet("sheetSettings"));
 qs("#home").addEventListener("contextmenu", e => { e.preventDefault(); });
 
@@ -1533,7 +1435,6 @@ function fillRecords() {
   qs("#stDaily").textContent = S.dailyCount;
   qs("#stTime").textContent = S.bestTime ? fmtTime(S.bestTime) : "--:--";
   qs("#stCoins").textContent = S.coins;
-  qs("#stInks").textContent = S.inks;
   const h=qs("#dailyHistory");h.replaceChildren();
   for(const [key,v] of Object.entries(S.dailyHistory).filter(([k,v])=>KIT.validDay(k)&&v&&Number.isFinite(v.time)).sort(([a],[b])=>b.localeCompare(a)).slice(0,180)) {
     const b=document.createElement("button");b.textContent=isoDay(key)+" · "+v.stars+"/3 · "+fmtTime(v.time);
@@ -1566,17 +1467,6 @@ qs("#rowReset").addEventListener("click", () => {
   save(); applySettings(); syncHud(); updateHome();
   toast("RESET", "i-restart");
 });
-
-qsa("[data-buy]").forEach(b => b.addEventListener("click", () => {
-  const id = b.dataset.buy;
-  if (id === "c1") S.coins += 120;
-  if (id === "c2") S.coins += 600;
-  if (id === "c3") S.coins += 1800;
-  if (id.startsWith("pass")) { S.inks = 4; S.coins += 100; }
-  if (id.startsWith("ink")) S.inks = Math.min(4, S.inks + 1);
-  save(); syncHud(); SFX.coin();
-  toast("PROTO — NO CHARGE", "i-bag");
-}));
 
 /* ── home demo animation ─────────────────────────────────── */
 const DEMO = { n: 5, path: [0, 1, 2, 3, 4, 9, 14, 19, 24, 23, 22, 21, 20, 15, 10, 5, 6, 7, 8, 13, 18, 17, 16, 11, 12] };
@@ -1632,7 +1522,7 @@ function updateHome() {
 
 /* ── localization resources ── */
 const KO={
-"LEVELS":"단계","DAILY":"일일판","RECORDS":"기록","SETTINGS":"설정","SOUND":"소리","HAPTIC":"진동","THEME":"테마","RESET PROGRESS":"진행 초기화","STREAK":"연속","BEST":"최고","CLEARED":"완료","BEST TIME":"최고 기록","COINS":"코인","INKS OWNED":"보유 잉크","STORE":"상점","PROTO":"테스트","INK PASS":"잉크 패스","No ads, ever":"광고 제거","Unlimited hints":"힌트 무제한","Full daily archive":"일일판 전체","All ink skins":"모든 잉크 디자인","COIN PACKS":"코인 묶음","INK SKINS":"잉크 디자인","MONTH":"월","YEAR · 44% OFF":"연 · 44% 할인","AURORA":"오로라","SUMI":"먹","EMBER":"불씨","AD":"광고","REWARDED AD":"보상형 광고","play":"시작","back":"뒤로","settings":"설정","store":"상점","restart":"초기화","undo":"되돌리기","hint":"힌트","double coins with an ad":"광고로 코인 두 배","share":"결과 카드","replay":"새로 도전","next":"다음","close":"닫기","New challenge":"새로 도전","Compare a friend’s path":"친구 경로 겹쳐 보기","Share my completed path":"완성 경로 보내기","Copy the challenge link":"같은 판 링크 복사","My path and friend path":"나의 경로와 친구 경로","Challenge link":"도전 링크","UNDO":"한 칸 되돌리기","COPIED":"복사했어요","SHARE":"공유","LOCKED":"잠김","RESET":"초기화","PROTO — NO CHARGE":"테스트 · 결제 없음","Invalid challenge":"유효하지 않은 도전 링크"
+"LEVELS":"단계","DAILY":"일일판","RECORDS":"기록","SETTINGS":"설정","SOUND":"소리","HAPTIC":"진동","THEME":"테마","RESET PROGRESS":"진행 초기화","STREAK":"연속","BEST":"최고","CLEARED":"완료","BEST TIME":"최고 기록","COINS":"코인","play":"시작","back":"뒤로","settings":"설정","restart":"초기화","undo":"되돌리기","hint":"힌트","share":"결과 카드","replay":"새로 도전","next":"다음","close":"닫기","New challenge":"새로 도전","Compare a friend’s path":"친구 경로 겹쳐 보기","Share my completed path":"완성 경로 보내기","Copy the challenge link":"같은 판 링크 복사","My path and friend path":"나의 경로와 친구 경로","Challenge link":"도전 링크","UNDO":"한 칸 되돌리기","COPIED":"복사했어요","SHARE":"공유","LOCKED":"잠김","RESET":"초기화","Invalid challenge":"유효하지 않은 도전 링크","Not enough coins":"코인이 부족해요"
 };
 const isKo=/^ko\b/i.test(navigator.language||"");
 const tr=s=>isKo?(KO[s]||s):s;
@@ -1654,8 +1544,14 @@ applySettings();
 updateHome();
 window.addEventListener("resize", () => { layoutBoard(); });
 if (window.visualViewport) window.visualViewport.addEventListener("resize", layoutBoard);
+window.addEventListener("pagehide",snapshotRun);
+window.addEventListener("pageshow",e=>{
+  if(!e.persisted||!G.B||!G.playing)return;
+  const saved=restoreRun(currentRunKey(),G.B);
+  if(saved){G.path=saved.path.slice();G.undos=saved.undos;G.startedAt=Date.now()-saved.elapsed;G.dragging=false;paintPath(false);}
+});
 document.addEventListener("visibilitychange", () => {
-  if (document.hidden) stopDemo(); else if (home.classList.contains("on")) startDemo();
+  if (document.hidden) {stopDemo();snapshotRun();} else if (home.classList.contains("on")) startDemo();
 });
 
 const u=new URL(location.href);

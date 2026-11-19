@@ -835,6 +835,8 @@ tr.is-highlight > :last-child { box-shadow: 12px 0 var(--fill-tertiary); }
       #win .x-stats { gap: 8px; margin: 0 0 16px; }
       #win .x-stats div { border-radius: var(--r-pill); padding: 6px 14px; font-size: 15px; }
       #win .x-wmain { display: flex; width: 100%; max-width: 300px; height: 54px; margin: 0 auto 12px; border-radius: var(--r-pill); font: 600 18px var(--sans); }
+      #win .x-wday { display: block; margin: 0 auto 4px; font: var(--type-label); font-weight: 600; }
+      #win .x-wchallenge { min-height: 44px; width: 100%; margin: 8px 0; gap: 8px; font-size: 15px; }
       #win .x-wsub { justify-content: center; gap: 14px; }
       #win .x-wsub .x-btn { width: 48px; min-width: 48px; height: 48px; padding: 0; border-radius: var(--r-pill); font-size: 18px; }
       .x-clay .x-wstars .x-x2 { color: #a9481f; }
@@ -1289,7 +1291,9 @@ tr.is-highlight > :last-child { box-shadow: 12px 0 var(--fill-tertiary); }
           <span class="x-wani" id="wAni" aria-hidden="true"></span>
           <p class="x-wstars" id="wStars"></p>
           <p class="x-wbest" id="wBest"></p>
+          <time class="x-wday" id="wDay" hidden></time>
           <div class="x-stats"><div><svg class="x-i" aria-hidden="true"><use href="#i-clock"/></svg> <span id="wTime"></span></div><div><svg class="x-i" aria-hidden="true"><use href="#i-hint"/></svg> <span id="wHints"></span></div></div>
+          <button class="x-btn x-wchallenge" id="wChallenge" hidden><svg class="x-i" aria-hidden="true"><use href="#i-link"/></svg><span id="wChallengeText"></span></button>
           <button class="x-btn on x-wmain" id="next" data-t="다음 판">다음 판</button>
           <div class="x-row x-wsub">
             <button class="x-btn" id="share" aria-label="공유" data-aria="공유"><svg class="x-i" aria-hidden="true"><use href="#i-share"/></svg></button>
@@ -1539,7 +1543,10 @@ tr.is-highlight > :last-child { box-shadow: 12px 0 var(--fill-tertiary); }
         });
       }
       if(root.navigator.canShare?.({files:[f]})&&root.navigator.share){
-        try{await root.navigator.share({files:[f]});return true;}catch(e){if(e.name==="AbortError")return false;}
+        const payload={files:[f]};
+        if(typeof args.caption==="string" && args.caption) payload.text=args.caption;
+        if(typeof args.url==="string" && args.url) payload.url=args.url;
+        try{await root.navigator.share(payload);return true;}catch(e){if(e.name==="AbortError")return false;}
       }
       const u=URL.createObjectURL(blob), a=root.document.createElement("a");
       a.href=u;a.download=f.name;root.document.body.append(a);a.click();a.remove();root.setTimeout(()=>URL.revokeObjectURL(u),30000);
@@ -2106,6 +2113,14 @@ tr.is-highlight > :last-child { box-shadow: 12px 0 var(--fill-tertiary); }
         }
         function showWin() {
           $("wTime").textContent = fmt(S.t); $("wHints").textContent = S.hints;
+          var d = mode === "daily" ? S.date : null, wd = $("wDay");
+          wd.hidden = $("wChallenge").hidden = !d;
+          if (d) {
+            wd.dateTime = d;
+            wd.textContent = new Intl.DateTimeFormat(lang,{year:"numeric",month:"short",day:"numeric",timeZone:"UTC"}).format(new Date(d+"T00:00:00Z"));
+            $("wChallengeText").textContent = lang === "ko" ? "같은 퍼즐 공유" : "Share same puzzle";
+          } else { wd.removeAttribute("datetime"); wd.textContent = ""; }
+
           var wa = $("wAni"); wa.style.backgroundImage = "var(--img-" + S.p.N + ")"; wa.style.animation = "none"; void wa.offsetWidth; wa.style.animation = "";
           var nb = starsFor(S.hints), sh = "";
           for (var si = 0; si < 3; si++) sh += si < nb
@@ -2283,18 +2298,23 @@ tr.is-highlight > :last-child { box-shadow: 12px 0 var(--fill-tertiary); }
         };
 
         // ---- Share ----
+        function datedShare(day) {
+          var key=day.replace(/-/g,"");
+          var base=/^https?:$/.test(location.protocol) && !["appassets.androidplatform.net","127.0.0.1","localhost"].includes(location.hostname) ? location.href : "https://rhtngudwls2-lang.github.io/prototype-preview/daily-grid-puzzle/";
+          return {url:K.challengeURL(key,base),caption:"Spot Apart · "+day};
+        }
         $("share").onclick = function () {
-          K.saveCard({variant:'spot',score:starsFor(S.hints)}).then(function(ok){ if(ok) toast("",1100,[],"ok"); });
+          var detail=mode==="daily" ? datedShare(S.date) : {};
+          K.saveCard(Object.assign({variant:"spot",score:starsFor(S.hints)},detail)).then(function(ok){if(ok)toast("",1100,[],"ok");});
         };
-        $("challengeLink").onclick = async function () {
+        async function shareDatedChallenge() {
           if (mode !== "daily") return;
-          var key = S.date.replace(/-/g,'');
-          var base = /^https?:$/.test(location.protocol) && location.hostname !== "appassets.androidplatform.net" && !["127.0.0.1","localhost"].includes(location.hostname) ? location.href : "https://rhtngudwls2-lang.github.io/prototype-preview/daily-grid-puzzle/";
-          var url = K.challengeURL(key,base);
-          if(window.PuzzleAndroid && typeof PuzzleAndroid.shareLink==="function"){ PuzzleAndroid.shareLink(url); return; }
-          try { if (navigator.share) { await navigator.share({url:url}); return; } } catch (e) { if(e.name==="AbortError") return; }
-          try { await navigator.clipboard.writeText(url); toast("",1100,[],"ok"); } catch(_) { window.prompt(tr("공유 링크 복사"),url); }
-        };
+          var detail=datedShare(S.date);
+          if(window.PuzzleAndroid && typeof PuzzleAndroid.shareLink==="function"){ PuzzleAndroid.shareLink(detail.url); return; }
+          try { if (navigator.share) { await navigator.share({text:detail.caption,url:detail.url}); return; } } catch (e) { if(e.name==="AbortError") return; }
+          try { await navigator.clipboard.writeText(detail.url); toast("",1100,[],"ok"); } catch(_) { window.prompt(tr("공유 링크 복사"),detail.url); }
+        }
+        $("challengeLink").onclick = $("wChallenge").onclick = shareDatedChallenge;
         $("freshChallenge").onclick=function(){ if (mode==="daily") openDaily(S.date,true); };
         $("close").onclick = function () { $("win").classList.remove("show"); syncAfter(); };
         // After the win sheet is closed: one row under the board to reopen it or move on
