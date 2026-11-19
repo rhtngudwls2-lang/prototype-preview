@@ -2,7 +2,7 @@
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080B10">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -305,6 +305,33 @@ html[data-theme="light"] .playBtn{color:#fff;box-shadow:0 18px 40px -18px rgba(1
   12%{opacity:1}
   100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1) rotate(var(--rot))}
 }
+
+/* Counterpart paths are hidden until the local run completes. */
+button.ib,button[data-close],.navBtn,.lv {min-width:44px!important;min-height:44px!important}
+html,body,#phone {overflow:clip}
+button {touch-action:manipulation}
+#home .navBtn>span {display:none}
+.sheet:not(.on) {visibility:hidden;pointer-events:none}
+#friendPaths {width:min(100%,182px);height:112px;display:block;margin:10px auto;overflow:visible}
+#friendPaths[hidden],#btnFriend[hidden],#btnFresh[hidden],#btnTrace[hidden] {display:none!important}
+#friendPaths .mine {stroke:#7ce9ff;stroke-width:.19}
+#friendPaths .theirs {stroke:#ffd069;stroke-width:.09;stroke-dasharray:.13 .09}
+#friendPaths path {fill:none;stroke-linecap:round;stroke-linejoin:round}
+#friendPaths rect {fill:#fff;opacity:.13}
+#tutorialHand {position:absolute;inset:0;z-index:6;pointer-events:none;color:var(--fg,#fff)}
+#tutorialHand svg {width:35px;height:35px;position:absolute;left:calc(var(--tx) - 12px);top:calc(var(--ty) - 6px);animation:swipe-hand 1.55s ease-in-out infinite}
+@keyframes swipe-hand {0%,25%{opacity:0;transform:translate(0,0)}36%{opacity:1}72%{opacity:1;transform:translate(var(--dx),var(--dy))}100%{opacity:0;transform:translate(var(--dx),var(--dy))}}
+@media(prefers-reduced-motion:reduce){#tutorialHand svg{animation:none}}
+.tile.hint-next {outline:3px solid var(--gold);outline-offset:-4px}
+.tile.tutorial-target {outline:2px dashed var(--accent2);outline-offset:-5px}
+#friendTimes {margin:4px 0 8px;font-variant-numeric:tabular-nums;letter-spacing:.04em;color:#ffd069}
+#friendTimes[hidden] {display:none}
+#btnFresh {margin-left:4px}
+#dailyHistory {margin:8px 14px;display:grid;gap:5px;max-height:156px;overflow:auto}
+#dailyHistory button {border:1px solid var(--line,#69a);background:none;color:inherit;border-radius:10px;min-height:44px;display:flex;justify-content:space-between;padding:8px}
+#linkHelp {position:fixed;inset:auto 0 0;margin:auto;max-width:320px;border-radius:14px;background:var(--panel,#132234);color:var(--fg,#fff);padding:12px;z-index:1200}
+#linkHelp input {width:100%;padding:8px}
+.cardActions {flex-wrap:wrap}
 </style>
 </head>
 <body>
@@ -380,14 +407,14 @@ html[data-theme="light"] .playBtn{color:#fff;box-shadow:0 18px 40px -18px rgba(1
     <section class="screen" id="game">
       <div class="topbar">
         <button class="ib ghost" id="btnBack" aria-label="back"><svg class="ic"><use href="#i-back"/></svg></button>
-        <div class="pill" id="levelPill">1</div>
+        <div class="pill" id="levelPill">1</div><button class="ib big" id="btnFresh" aria-label="New challenge" hidden><svg class="ic"><use href="#i-play"/></svg></button>
         <div class="spacer"></div>
         <div class="chip coin"><svg class="ic"><use href="#i-coin"/></svg><b id="coinNum2">0</b></div>
         <button class="ib" id="btnStoreTop" aria-label="store"><svg class="ic"><use href="#i-bag"/></svg></button>
       </div>
       <div class="progress"><i id="progBar"></i></div>
       <div class="boardwrap" id="boardwrap">
-        <div class="board" id="board">
+        <div class="board" id="board"><div id="tutorialHand" hidden aria-hidden="true"></div>
           <svg class="link" id="link" viewBox="0 0 4 4">
             <defs>
               <linearGradient id="inkGrad" x1="0" y1="0" x2="1" y2="1">
@@ -402,7 +429,7 @@ html[data-theme="light"] .playBtn{color:#fff;box-shadow:0 18px 40px -18px rgba(1
           </svg>
         </div>
       </div>
-      <div class="footbar">
+      <div class="footbar" style="position:relative">
         <button class="ib big" id="btnRestart" aria-label="restart"><svg class="ic"><use href="#i-restart"/></svg></button>
         <button class="ib big undoBtn" id="btnUndo" aria-label="undo"><svg class="ic"><use href="#i-undo"/></svg></button>
         <button class="ib big" id="btnHint" aria-label="hint" style="position:relative"><svg class="ic"><use href="#i-hint"/></svg><i class="hintCost">30</i></button>
@@ -441,7 +468,7 @@ html[data-theme="light"] .playBtn{color:#fff;box-shadow:0 18px 40px -18px rgba(1
       </div>
       <div class="row"><svg class="ic"><use href="#i-clock"/></svg><div class="label">BEST TIME</div><div class="sub" id="stTime">--:--</div></div>
       <div class="row"><svg class="ic"><use href="#i-coin"/></svg><div class="label">COINS</div><div class="sub" id="stCoins">0</div></div>
-      <div class="row"><svg class="ic"><use href="#i-seal"/></svg><div class="label">INKS OWNED</div><div class="sub" id="stInks">1</div></div>
+      <div class="row"><svg class="ic"><use href="#i-seal"/></svg><div class="label">INKS OWNED</div><div class="sub" id="stInks">1</div></div><div id="dailyHistory"></div>
     </div>
 
     <div class="sheet" id="sheetStore">
@@ -491,9 +518,13 @@ html[data-theme="light"] .playBtn{color:#fff;box-shadow:0 18px 40px -18px rgba(1
           <span><svg class="ic"><use href="#i-clock"/></svg><b id="winTime">0:00</b></span>
           <span><svg class="ic"><use href="#i-undo"/></svg><b id="winUndo">0</b></span>
         </div>
+        <svg id="friendPaths" hidden aria-label="My path and friend path" role="img"></svg><div id="friendTimes" hidden aria-live="polite"></div>
         <div class="cardActions">
+          <button class="ib" id="btnFriend" aria-label="Compare a friend’s path" hidden><svg class="ic"><use href="#i-grid"/></svg></button>
+          <button class="ib" id="btnTrace" aria-label="Share my completed path" hidden><svg class="ic"><use href="#i-flame"/></svg></button>
+          <button class="ib" id="btnLink" aria-label="Copy the challenge link"><svg class="ic"><use href="#i-share"/></svg></button>
           <button class="ib" id="btnWinDouble" aria-label="double coins with an ad"><svg class="ic"><use href="#i-ad"/></svg></button>
-          <button class="ib" id="btnWinShare" aria-label="share"><svg class="ic"><use href="#i-share"/></svg></button>
+          <button class="ib" id="btnWinShare" aria-label="share"><svg class="ic"><use href="#i-star"/></svg></button>
           <button class="ib" id="btnWinReplay" aria-label="replay"><svg class="ic"><use href="#i-restart"/></svg></button>
           <button class="ib primary" id="btnWinNext" aria-label="next"><svg class="ic"><use href="#i-next"/></svg></button>
         </div>
@@ -522,12 +553,84 @@ html[data-theme="light"] .playBtn{color:#fff;box-shadow:0 18px 40px -18px rgba(1
       </div>
     </div>
 
+    <dialog id="linkHelp"><input aria-label="Challenge link" readonly><form method="dialog"><button class="ib" aria-label="close"><svg class="ic"><use href="#i-close"/></svg></button></form></dialog>
     <div id="toast"><svg class="ic"><use href="#i-check"/></svg><span id="toastText"></span></div>
   </div>
 </div>
 
+<script>/* PuzzleKit 1.0 — UTC key and ?p= convention derived from Relay Tiles v1.
+   Calendar validation, clean replay link, and non-spoiler card are new. */
+(function (root) {
+  "use strict";
+  function dateKey(d = new Date()) {
+    if (!(d instanceof Date) || !Number.isFinite(d.getTime())) throw new TypeError("Invalid date");
+    return d.toISOString().slice(0, 10).replace(/-/g, "");
+  }
+  function validDay(s) {
+    if (typeof s !== "string" || !/^[1-9]\d{7}$/.test(s)) return false;
+    const d = new Date(s.slice(0,4)+"-"+s.slice(4,6)+"-"+s.slice(6,8)+"T00:00:00.000Z");
+    return Number.isFinite(d.getTime()) && dateKey(d) === s;
+  }
+  function challengeDay(url = root.location.href) {
+    try {
+      const days = new URL(url).searchParams.getAll("p");
+      return days.length === 1 && validDay(days[0]) ? days[0] : null;
+    } catch (_) { return null; }
+  }
+  function challengeURL(day, base = root.location.href) {
+    if (!validDay(day)) throw new RangeError("Invalid puzzle day");
+    const u = new URL(base);
+    if(u.hostname==="appassets.androidplatform.net" && root.PuzzleAndroid){
+      const p=root.PuzzleAndroid.previewURL(); return challengeURL(day,p);
+    }
+    u.search = ""; u.hash = ""; u.searchParams.set("p", day); return u.href;
+  }
+  const handSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M14 24V8a2.5 2.5 0 0 1 5 0v10l1.1-1.6a2.1 2.1 0 0 1 3.8 1l.3 1.2a2 2 0 0 1 3.7.6l.4 1.1a2 2 0 0 1 3.1 1.7l-.7 5.7c-.2 3-2.7 5.3-5.7 5.3h-4.8c-2 0-3.9-1-5-2.7L10 23a2.3 2.3 0 0 1 3.4-2.8L14 21" fill="#faf7f0" stroke="#201f26" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  function cardBlob({variant,score}) {
+    const c = root.document.createElement("canvas"); c.width=640; c.height=360;
+    const x=c.getContext("2d"); if(!x) return Promise.resolve(null);
+    const ink=variant==="oneink", glow=ink?"#ff998c":"#83dfc8";
+    x.fillStyle=ink?"#211b30":"#122b32";x.fillRect(0,0,640,360);
+    x.lineCap="round";x.lineJoin="round";x.lineWidth=9;x.strokeStyle=glow;
+    if(ink) {
+      x.beginPath(); x.moveTo(262,164);x.lineTo(262,103);x.lineTo(320,103);x.lineTo(320,148);x.lineTo(378,148);x.lineTo(378,193);x.stroke();
+    } else {
+      for(let i=0;i<3;i++)for(let j=0;j<3;j++){
+        x.beginPath();x.arc(270+i*50,105+j*42,9,0,Math.PI*2);
+        x.fillStyle=(i+j)%2===0?glow:"#35545a";x.fill();
+      }
+    }
+    const n=Number.isFinite(+score)?Math.max(0,Math.min(3,Math.floor(+score))):0;
+    for(let i=0;i<3;i++){
+      x.beginPath();x.arc(275+i*45,248,11,0,Math.PI*2);
+      x.fillStyle=i<n?glow:"#45525d";x.fill();
+    }
+    return new Promise(resolve=>c.toBlob(resolve,"image/png"));
+  }
+  async function saveCard(args={}) {
+    try {
+      const blob=await cardBlob(args);if(!blob)return false;
+      const f=new File([blob],args.variant==="oneink"?"oneink-result.png":"spot-apart-result.png",{type:"image/png"});
+      if(root.PuzzleAndroid?.shareCard){
+        return await new Promise(resolve=>{
+          const reader=new FileReader();
+          reader.onload=()=>{root.PuzzleAndroid.shareCard(String(reader.result));resolve(true);};
+          reader.onerror=()=>resolve(false);reader.readAsDataURL(blob);
+        });
+      }
+      if(root.navigator.canShare?.({files:[f]})&&root.navigator.share){
+        try{await root.navigator.share({files:[f]});return true;}catch(e){if(e.name==="AbortError")return false;}
+      }
+      const u=URL.createObjectURL(blob), a=root.document.createElement("a");
+      a.href=u;a.download=f.name;root.document.body.append(a);a.click();a.remove();root.setTimeout(()=>URL.revokeObjectURL(u),30000);
+      return true;
+    } catch (_) {return false;}
+  }
+  root.PuzzleKit=Object.freeze({dateKey,validDay,challengeDay,challengeURL,handSVG,saveCard,cardBlob});
+})(typeof window === "undefined" ? globalThis : window);</script>
 <script>
 "use strict";
+(() => {
 /* ═══════════════════════════════════════════════════════════
    ONEINK — one-stroke daily puzzle (prototype)
    No emoji. Every icon is an inline SVG symbol.
@@ -542,7 +645,7 @@ const DEF = {
   level: 1, unlocked: 1, coins: 80,
   stars: {}, best: {}, solved: 0,
   streak: 0, bestStreak: 0, lastDaily: null, dailyCount: 0,
-  bestTime: null, inks: 1,
+  bestTime: null, inks: 1, dailyHistory: {}, tutorialDone: false,
   settings: { sound: true, haptic: true, dark: true }
 };
 function loadState() {
@@ -551,6 +654,7 @@ function loadState() {
     if (!raw || typeof raw !== "object") return JSON.parse(JSON.stringify(DEF));
     const s = Object.assign(JSON.parse(JSON.stringify(DEF)), raw);
     s.settings = Object.assign({}, DEF.settings, raw.settings || {});
+    if (!s.dailyHistory || typeof s.dailyHistory !== "object" || Array.isArray(s.dailyHistory)) s.dailyHistory = {};
     return s;
   } catch (e) { return JSON.parse(JSON.stringify(DEF)); }
 }
@@ -561,6 +665,7 @@ function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e
 const SFX = {
   ctx: null,
   ensure() {
+    if (!S.settings.sound) return this.ctx;
     if (!this.ctx) {
       const AC = window.AudioContext || window.webkitAudioContext;
       if (AC) this.ctx = new AC();
@@ -595,7 +700,7 @@ const SFX = {
   coin() { this.tone(880, 0.1, "square", 0.04); this.tone(1320, 0.12, "square", 0.03, 0.06); }
 };
 function haptic(ms = 12) {
-  if (!S.settings.haptic) return;
+  if (!S.settings.haptic || navigator.userActivation?.hasBeenActive === false) return;
   if (navigator.vibrate) try { navigator.vibrate(ms); } catch (e) {}
 }
 
@@ -616,7 +721,11 @@ function hashSeed(str) {
   return h >>> 0;
 }
 function pad2(n) { return n < 10 ? "0" + n : "" + n; }
-function todayKey() { const d = new Date(); return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`; }
+const KIT = window.PuzzleKit;
+function todayKey() { return KIT.dateKey(); }
+function isoDay(k) { return k.slice(0,4)+"-"+k.slice(4,6)+"-"+k.slice(6,8); }
+function previousDay(k) { return KIT.dateKey(new Date(Date.parse(isoDay(k)+"T00:00:00Z")-86400000)); }
+function normalDay(k) { const d = typeof k === "string" ? k.replace(/-/g,"") : ""; return KIT.validDay(d) ? d : null; }
 
 /* ── level shapes ────────────────────────────────────────── */
 const SHAPES = [
@@ -625,15 +734,15 @@ const SHAPES = [
   [8, 6], [8, 6], [8, 7], [8, 7], [8, 7], [8, 7], [8, 7], [8, 7], [8, 7], [8, 7]
 ];
 function levelSpec(n) {
-  const [w, h] = SHAPES[Math.min(n - 1, SHAPES.length - 1)];
+  const [w, h] = n<=SHAPES.length ? SHAPES[n-1] : [[7,7],[8,7],[7,6],[8,6]][(n-SHAPES.length-1)%4];
   const holes = n >= 4 ? Math.min(3, Math.floor(n / 6) + 1) : 0;
   const gates = n >= 12 ? (n >= 18 ? 2 : 1) : 0;
   const oneway = n >= 16 ? 1 : 0;
   return { w, h, holes, gates, oneway };
 }
-function dailySpec() {
-  const d = new Date();
-  const dow = d.getDay();
+function dailySpec(day) {
+  const d = new Date(isoDay(day)+"T00:00:00Z");
+  const dow = d.getUTCDay();
   return { w: 5, h: 5, holes: dow % 2, gates: dow >= 4 ? 1 : 0, oneway: 0 };
 }
 
@@ -664,7 +773,7 @@ function solveHamilton(W, H, blocked, start, budgetNodes) {
     for (let i = 0; i < N; i++) {
       if (blocked[i] || vis[i]) continue;
       const d = avail(i);
-      if (d === 0) { vis[cur] = 0; path.pop(); return false; }
+      if (d === 0 && !(path.length === free-1 && nb[cur].includes(i))) { vis[cur] = 0; path.pop(); return false; }
       if (d === 1) { d1++; forced = i; }
     }
     if (d1 > 2) { vis[cur] = 0; path.pop(); return false; }
@@ -683,10 +792,9 @@ function solveHamilton(W, H, blocked, start, budgetNodes) {
 function buildLevel(spec, seedStr) {
   const { w: W, h: H } = spec;
   const rnd = makeRng(hashSeed(seedStr));
-  const t0 = performance.now();
   if (spec.holes) {
     if (W * H <= 40) {
-      const withHoles = tryHoles(W, H, spec, rnd, t0);
+      const withHoles = tryHoles(W, H, spec, rnd);
       if (withHoles) return withHoles;
     }
     return notchLevel(W, H, spec, rnd);
@@ -695,10 +803,9 @@ function buildLevel(spec, seedStr) {
   return finishLevel(snakePath(W, H, rnd, 70), W, H, blocked, spec);
 }
 
-function tryHoles(W, H, spec, rnd, t0) {
+function tryHoles(W, H, spec, rnd) {
   const N = W * H;
   for (let attempt = 0; attempt < 6; attempt++) {
-    if (performance.now() - t0 > 60) return null;
     const blocked = new Uint8Array(N);
     let placed = 0, guard = 0;
     while (placed < spec.holes && guard++ < 400) {
@@ -825,7 +932,7 @@ function dirOf(a, b, W) {
 const G = {
   mode: "level", level: 1, B: null, path: [],
   dragging: false, playing: false, undos: 0, startedAt: 0,
-  hintLeft: 0, ghostTimer: null, solvedPath: null
+  ghostTimer: null, day: null, inbound: false, friend: null, completed: null
 };
 const cache = new Map();
 
@@ -834,16 +941,44 @@ function getLevel(n) {
   if (!cache.has(key)) cache.set(key, buildLevel(levelSpec(n), "oneink/level/" + n));
   return cache.get(key);
 }
-function getDaily() {
-  const k = todayKey();
-  const key = "D" + k;
-  if (!cache.has(key)) cache.set(key, buildLevel(dailySpec(), "oneink/daily/" + k));
+function getDaily(k) {
+  const key="D2/"+k;
+  if(!cache.has(key)){
+    const spec=dailySpec(k), W=spec.w,H=spec.h;
+    const rnd=makeRng(hashSeed("oneink/daily/r2/"+k));
+    const full=snakePath(W,H,rnd,145), blocked=new Uint8Array(W*H);
+    const remove=1+Math.floor(rnd()*3);
+    for(const i of full.slice(0,remove))blocked[i]=1;
+    const path=full.slice(remove), b=finishLevel(path,W,H,blocked,{gates:0,oneway:0});
+    const dow=new Date(isoDay(k)+"T00:00:00Z").getUTCDay(), gates=dow===0||dow>=4?2:1;
+    const first=4+Math.floor(rnd()*5);b.gates[path[first]]=1;
+    if(gates===2)b.gates[path[12+Math.floor(rnd()*5)]]=2;
+    b.gateCount=gates;
+    if(dow>=3){
+      const cells=path.slice(2,-2).map((id)=>[id,path.indexOf(id)]).filter(([id,i])=>!b.gates[id]&&dirOf(path[i-1],id,W)===dirOf(id,path[i+1],W));
+      if(cells.length){const [id,i]=cells[Math.floor(rnd()*cells.length)];b.oneways[id]=dirOf(path[i-1],id,W);}
+    }
+    cache.set(key,b);
+  }
   return cache.get(key);
 }
-
+function checkPathMove(B, path, from, to) {
+  if (!Number.isInteger(to) || to < 0 || to >= B.w * B.h || B.blocked[to] || path.includes(to)) return { ok:false, cause:{kind:"lock"} };
+  if (from === null && to !== B.start) return {ok:false,cause:{kind:"lock"}};
+  if (from !== null && !neighborsOf(from,B.w,B.h).includes(to)) return {ok:false,cause:{kind:"lock"}};
+  if (B.gates[to]) {
+    const passed = path.reduce((n,i)=>n+Number(Boolean(B.gates[i])),0);
+    if (B.gates[to] !== passed+1) return {ok:false,cause:{kind:"gate",need:passed+1}};
+  }
+  if (B.oneways[to] !== undefined && (from === null || dirOf(from,to,B.w) !== B.oneways[to])) return {ok:false,cause:{kind:"dir",dir:B.oneways[to]}};
+  return {ok:true};
+}
+function completeFriendPath(B, cells) {
+  return cells.length === B.free && cells.every((v,i)=>checkPathMove(B,cells.slice(0,i),i?cells[i-1]:null,v).ok);
+}
 /* ── DOM refs ────────────────────────────────────────────── */
 const home = qs("#home"), game = qs("#game");
-const boardEl = qs("#board"), boardWrap = qs("#boardwrap");
+const boardEl = qs("#board"), boardWrap = qs("#boardwrap"), tutorialEl = qs("#tutorialHand");
 const linkEl = qs("#link"), corePath = qs("#corePath"), haloPath = qs("#haloPath"),
       headDot = qs("#headDot"), ghostPath = qs("#ghostPath");
 const progBar = qs("#progBar");
@@ -865,7 +1000,7 @@ function closeSheets() {
 }
 function toast(msg, icon = "i-check") {
   const t = qs("#toast");
-  qs("#toastText").textContent = msg;
+  qs("#toastText").textContent = tr(msg);
   t.querySelector("use").setAttribute("href", "#" + icon);
   t.classList.add("on");
   clearTimeout(toast._t);
@@ -877,7 +1012,7 @@ function syncHud() {
   qs("#coinNum").textContent = S.coins;
   qs("#coinNum2").textContent = S.coins;
   qs("#lvBadge").textContent = S.unlocked;
-  qs("#dailyDot").hidden = S.lastDaily === todayKey();
+  qs("#dailyDot").hidden = normalDay(S.lastDaily) === todayKey();
   qs("#btnHint").querySelector(".hintCost").textContent = "30";
 }
 
@@ -885,6 +1020,7 @@ function syncHud() {
 function renderBoard(B) {
   boardEl.innerHTML = "";
   boardEl.appendChild(linkEl);
+  boardEl.appendChild(tutorialEl);
   const frag = document.createDocumentFragment();
   tileEls = [];
   const gap = Math.max(4, Math.round(7 - B.w * 0.28));
@@ -933,6 +1069,7 @@ function layoutBoard() {
   if (w > maxW) { const k = maxW / w; w *= k; h *= k; }
   boardEl.style.width = Math.round(w) + "px";
   boardEl.style.height = Math.round(h) + "px";
+  paintTutorial();
 }
 
 function cellCenter(i) {
@@ -965,27 +1102,25 @@ function paintPath(animate = true) {
   }
   progBar.style.width = Math.round((G.path.length / B.free) * 100) + "%";
   updateStuck();
+  paintTutorial();
 }
 
 function legalDirs(i) {
   const B = G.B;
-  const out = [];
-  for (const n of neighborsOf(i, B.w, B.h)) {
-    if (B.blocked[n]) continue;
-    if (G.path.includes(n)) continue;
-    if (B.gates[n]) {
-      const need = B.gates[n] - 1;
-      let have = 0;
-      for (const p of G.path) if (B.gates[p]) have++;
-      if (have < need) continue;
-    }
-    if (B.oneways[n] !== undefined) {
-      const dir = dirOf(i, n, B.w);
-      if (dir !== B.oneways[n]) continue;
-    }
-    out.push(n);
-  }
-  return out;
+  return neighborsOf(i,B.w,B.h).filter(n=>checkPathMove(B,G.path,i,n).ok);
+}
+function paintTutorial() {
+  const el=qs("#tutorialHand"), B=G.B;
+  if (!el || !B) return;
+  el.hidden=!(G.mode==="level" && G.level===1 && G.playing && !S.tutorialDone && G.path.length<2);
+  boardEl.querySelectorAll(".tutorial-target").forEach(t=>t.classList.remove("tutorial-target"));
+  if (el.hidden) return;
+  const i=B.start, j=B.path[1], r=boardEl.getBoundingClientRect();
+  tileEls[j]?.classList.add("tutorial-target");
+  el.style.setProperty("--tx",(i%B.w+.5)*r.width/B.w+"px");
+  el.style.setProperty("--ty",(Math.floor(i/B.w)+.5)*r.height/B.h+"px");
+  el.style.setProperty("--dx",(j%B.w-i%B.w)*r.width/B.w+"px");
+  el.style.setProperty("--dy",(Math.floor(j/B.w)-Math.floor(i/B.w))*r.height/B.h+"px");
 }
 function updateStuck() {
   const B = G.B; if (!B) return;
@@ -997,14 +1132,16 @@ function updateStuck() {
 
 /* ── input ───────────────────────────────────────────────── */
 function cellFromEvent(e) {
-  const el = document.elementFromPoint(e.clientX, e.clientY);
-  if (!el) return -1;
-  const tile = el.closest(".tile");
-  if (!tile || !boardEl.contains(tile)) return -1;
-  const i = Number(tile.dataset.i);
-  if (Number.isNaN(i)) return -1;
-  if (G.B && G.B.blocked[i]) return -1;
-  return i;
+  if (!G.B) return -1;
+  const x=e.clientX, y=e.clientY, box=boardEl.getBoundingClientRect();
+  if (x < box.left || x >= box.right || y < box.top || y >= box.bottom) return -1;
+  const hit = document.elementFromPoint(x,y)?.closest(".tile");
+  if (hit && boardEl.contains(hit)) return Number(hit.dataset.i);
+  // Hit-test half the gap on each side, including rounded corners.
+  const first=tileEls[0].getBoundingClientRect(), gap=parseFloat(boardEl.style.gap)||0;
+  const col=Math.max(0,Math.min(G.B.w-1,Math.floor((x-first.left+gap/2)/(first.width+gap))));
+  const row=Math.max(0,Math.min(G.B.h-1,Math.floor((y-first.top+gap/2)/(first.height+gap))));
+  return row*G.B.w+col;
 }
 function invalid(i, cause) {
   const t = tileEls[i];
@@ -1027,21 +1164,7 @@ function invalid(i, cause) {
   SFX.err();
   haptic(18);
 }
-function checkMove(from, to) {
-  const B = G.B;
-  if (B.blocked[to] || G.path.includes(to)) return { ok: false, cause: null };
-  if (!neighborsOf(from, B.w, B.h).includes(to)) return { ok: false, cause: { kind: "lock" } };
-  if (B.gates[to]) {
-    const need = B.gates[to] - 1;
-    let have = 0;
-    for (const p of G.path) if (B.gates[p]) have++;
-    if (have < need) return { ok: false, cause: { kind: "gate", need: need + 1 } };
-  }
-  if (B.oneways[to] !== undefined && dirOf(from, to, B.w) !== B.oneways[to]) {
-    return { ok: false, cause: { kind: "dir", dir: B.oneways[to] } };
-  }
-  return { ok: true };
-}
+function checkMove(from,to,path=G.path) { return checkPathMove(G.B,path,from,to); }
 function stepTo(target) {
   const B = G.B; if (!B || !G.playing) return;
   if (target < 0) return;
@@ -1051,8 +1174,8 @@ function stepTo(target) {
   // walking back over your own line retracts to that tile
   const back = G.path.indexOf(target);
   if (back >= 0) {
-    if (back < G.path.length - 1) {
-      G.path = G.path.slice(0, back + 1);
+    if (back === G.path.length - 2) {
+      G.path.pop();G.undos++;clearHint();
       SFX.undo(); haptic(8);
       paintPath();
     }
@@ -1068,16 +1191,16 @@ function stepTo(target) {
   if (hx === tx || hy === ty) {
     const dx = Math.sign(tx - hx), dy = Math.sign(ty - hy);
     let cur = head, steps = 0, ok = true, cause = null;
-    const chain = [];
+    const chain = []; const trial=G.path.slice();
     while (cur !== target && steps < 14) {
       const nx = (cur % B.w) + dx, ny = ((cur - cur % B.w) / B.w) + dy;
       const next = ny * B.w + nx;
-      const chk = checkMove(cur, next);
+      const chk = checkMove(cur,next,trial);
       if (!chk.ok) { ok = false; cause = chk.cause; break; }
-      chain.push(next); cur = next; steps++;
+      chain.push(next); trial.push(next); cur = next; steps++;
     }
     if (ok && cur === target) {
-      chain.forEach(i => { G.path.push(i); SFX.step(G.path.length); });
+      clearHint();chain.forEach(i => { G.path.push(i); SFX.step(G.path.length); });
       haptic(9); paintPath(); checkWin();
       return;
     }
@@ -1087,7 +1210,7 @@ function stepTo(target) {
   invalid(target, { kind: "lock" });
 }
 function pushTile(i) {
-  G.path.push(i);
+  clearHint();G.path.push(i);
   SFX.step(G.path.length);
   haptic(9);
   paintPath();
@@ -1095,7 +1218,7 @@ function pushTile(i) {
 }
 
 boardEl.addEventListener("pointerdown", (e) => {
-  if (!G.playing) return;
+  if (!G.playing || e.isPrimary === false || (e.pointerType === "mouse" && e.button !== 0)) return;
   SFX.ensure();
   const i = cellFromEvent(e);
   if (i < 0) return;
@@ -1103,6 +1226,7 @@ boardEl.addEventListener("pointerdown", (e) => {
   G.dragging = true;
   try { boardEl.setPointerCapture(e.pointerId); } catch (err) {}
   if (G.path.length === 0) {
+    const start=checkMove(null,i); if (!start.ok) { invalid(i,start.cause); G.dragging=false; return; }
     G.path = [i];
     SFX.step(0); haptic(10);
     paintPath();
@@ -1130,42 +1254,32 @@ function starsFor(timeSec) {
   return 1;
 }
 function checkWin() {
-  const B = G.B;
-  if (!B || G.path.length !== B.free) return;
-  G.playing = false;
-  const t = (Date.now() - G.startedAt) / 1000;
-  const stars = starsFor(t);
-  const base = 5 + stars * 3;
-  const bonus = G.mode === "daily" ? 15 : 0;
-  const gain = base + bonus;
-  S.coins += gain;
-  S.solved += 1;
-
-  const key = G.mode === "daily" ? "daily" : "L" + G.level;
-  S.stars[key] = Math.max(S.stars[key] || 0, stars);
-  const prevBest = S.best[key];
-  if (!prevBest || t < prevBest) S.best[key] = Math.round(t);
-
-  if (G.mode === "level") {
-    S.unlocked = Math.max(S.unlocked, Math.min(SHAPES.length, G.level + 1));
-    S.level = Math.min(SHAPES.length, G.level + 1);
+  if (!G.playing || !G.B || !completeFriendPath(G.B,G.path)) return;
+  G.playing=false;
+  const t=Math.max(0,(Date.now()-G.startedAt)/1000);
+  const stars=starsFor(t), key=G.mode==="daily" ? "D"+G.day : "L"+G.level;
+  const first=!Object.hasOwn(S.best,key);
+  const gain=first ? 5+stars*3+(G.mode==="daily"?15:0) : 0;
+  G.completed=Object.freeze({mode:G.mode,level:G.level,day:G.day,t,stars,undos:G.undos,gain,path:Object.freeze(G.path.slice())});
+  S.coins+=gain;
+  if(first)S.solved++;
+  S.stars[key]=Math.max(S.stars[key]||0,stars);
+  if(first||t<S.best[key])S.best[key]=t;
+  if(G.mode==="level"){
+    if(G.level===1)S.tutorialDone=true;
+    if(!G.inbound||G.level<=S.unlocked){S.unlocked=Math.max(S.unlocked,G.level+1);S.level=G.level+1;}
   } else {
-    const tk = todayKey();
-    if (S.lastDaily !== tk) {
-      const d = new Date(); d.setDate(d.getDate() - 1);
-      const yk = `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
-      S.streak = S.lastDaily === yk ? S.streak + 1 : 1;
-      S.bestStreak = Math.max(S.bestStreak, S.streak);
-      S.lastDaily = tk;
-      S.dailyCount += 1;
+    const old=S.dailyHistory[G.day];
+    S.dailyHistory[G.day]={stars:Math.max(stars,old?.stars||0),time:Math.min(t,old?.time??Infinity)};
+    if(first){
+      S.dailyCount++;
+      const last=normalDay(S.lastDaily);
+      if(G.day===todayKey()&&G.day!==last){S.streak=last===previousDay(G.day)?S.streak+1:1;S.bestStreak=Math.max(S.bestStreak,S.streak);S.lastDaily=G.day;}
     }
   }
-  if (!S.bestTime || t < S.bestTime) S.bestTime = Math.round(t);
-  save(); syncHud();
-
-  SFX.win(); haptic([12, 40, 18]);
-  confetti();
-  showWin(stars, gain, t);
+  if(S.bestTime==null||t<S.bestTime)S.bestTime=t;
+  save();syncHud();SFX.win();haptic([12,40,18]);confetti();
+  showWin(stars,gain,t);
 }
 function confetti() {
   const layer = document.createElement("div");
@@ -1193,6 +1307,10 @@ function showWin(stars, coins, timeSec) {
   qs("#winCoins").textContent = "+" + coins;
   qs("#winTime").textContent = fmtTime(timeSec);
   qs("#winUndo").textContent = G.undos;
+  qs("#btnFriend").hidden=!G.friend;
+  qs("#friendPaths").hidden=true;qs("#friendTimes").hidden=true;
+  qs("#btnTrace").hidden=!G.completed;
+  qs("#btnWinDouble").disabled=coins===0;
   qs("#winOverlay").classList.add("on");
 }
 function fmtTime(s) {
@@ -1201,98 +1319,131 @@ function fmtTime(s) {
 }
 
 /* ── game flow ───────────────────────────────────────────── */
-function startLevel(n) {
-  G.mode = "level"; G.level = n;
-  G.B = getLevel(n);
-  begin();
-  qs("#levelPill").textContent = n;
+const TRACE_VERSION="r2";
+const WEB_BASE="https://rhtngudwls2-lang.github.io/prototype-preview/oneink/";
+function boardBase(){return location.hostname==="appassets.androidplatform.net" ? (window.PuzzleAndroid?.previewURL()||WEB_BASE) : /^(https?:)$/.test(location.protocol)?location.href:WEB_BASE;}
+function boardURL(run){
+  if(run.mode==="daily")return KIT.challengeURL(run.day,boardBase());
+  const url=new URL(boardBase());url.search="";url.hash="";url.searchParams.set("l",run.level);return url.href;
 }
-function startDaily() {
-  G.mode = "daily";
-  G.B = getDaily();
-  begin();
-  qs("#levelPill").textContent = "D";
+function readFriend(B,mode,identity){
+  const data=new URLSearchParams(location.hash.slice(1)).get("trace");
+  if(!data||!/^[a-zA-Z0-9_.-]{12,240}$/.test(data))return null;
+  const [v,type,id,elapsed,...cells]=data.split(".");
+  if(v!==TRACE_VERSION||type!==mode||id!==String(identity)||!/^[0-9a-z]{1,4}$/.test(elapsed)||!cells.every(x=>/^[0-9a-z]{1,2}$/.test(x)))return null;
+  const path=cells.map(x=>parseInt(x,36));
+  return completeFriendPath(B,path)?{path,time:parseInt(elapsed,36)}:null;
 }
-function begin() {
-  qs("#winOverlay").classList.remove("on");
-  ghostPath.style.display = "none";
-  renderBoard(G.B);
-  G.path = [];
-  G.undos = 0;
-  G.playing = true;
-  G.dragging = false;
-  G.startedAt = Date.now();
-  paintPath(false);
-  show(game);
-  requestAnimationFrame(layoutBoard);
+function startLevel(n,inbound=false){
+  G.mode="level";G.level=n;G.day=null;G.inbound=inbound;G.B=getLevel(n);
+  G.friend=inbound?readFriend(G.B,G.mode,n):null;
+  begin();qs("#levelPill").textContent=n;
 }
-
-qs("#btnPlay").addEventListener("click", () => { SFX.ensure(); startLevel(S.level); });
-qs("#btnBack").addEventListener("click", () => { G.playing = false; show(home); updateHome(); });
-qs("#btnRestart").addEventListener("click", () => {
-  if (!G.playing) return;
-  G.path = []; G.undos += 0; paintPath(); SFX.undo(); haptic(8);
-});
-qs("#btnUndo").addEventListener("click", () => {
-  if (!G.playing || G.path.length === 0) return;
-  G.path.pop();
-  G.undos += 1;
-  SFX.undo(); haptic(10);
-  paintPath();
-});
-qs("#btnHint").addEventListener("click", () => {
-  if (!G.playing) return;
-  if (S.coins >= 30) {
-    S.coins -= 30; save(); syncHud();
-    revealSolution();
-  } else {
-    askAd("hint");
+function startDaily(day=todayKey(),inbound=false){
+  if(!KIT.validDay(day))return;
+  G.mode="daily";G.day=day;G.inbound=inbound;G.B=getDaily(day);
+  G.friend=inbound?readFriend(G.B,G.mode,day):null;
+  begin();qs("#levelPill").textContent=day.slice(4,6)+"/"+day.slice(6,8);
+}
+function begin(){
+  qs("#winOverlay").classList.remove("on");qs("#btnFresh").hidden=!G.inbound&&G.mode!=="daily";
+  qs("#friendPaths").hidden=true;qs("#friendTimes").hidden=true;qs("#btnFriend").setAttribute("aria-pressed","false");
+  ghostPath.style.display="none";clearHint();
+  G.path=[];G.undos=0;G.playing=true;G.dragging=false;G.completed=null;G.startedAt=Date.now();
+  renderBoard(G.B);show(game);paintPath(false);requestAnimationFrame(layoutBoard);
+}
+function resetActive(){
+  if(!G.playing)return;
+  G.undos+=G.path.length;
+  G.path=[];clearHint();paintPath();SFX.undo();haptic(8);
+}
+function findHint(B,path,budget=30000){
+  if(!path.length)return B.start;
+  if(path.length>=B.free)return null;
+  if(path.every((v,i)=>v===B.path[i]))return B.path[path.length];
+  const p=path.slice(),nb=Array.from({length:B.w*B.h},(_,i)=>neighborsOf(i,B.w,B.h)),seen=new Uint8Array(B.w*B.h);
+  for(const i of p)seen[i]=1;
+  let gates=p.reduce((n,i)=>n+Number(Boolean(B.gates[i])),0), nodes=0;
+  function go(cur){
+    if(p.length===B.free)return true;
+    if(++nodes>budget)return false;
+    const choices=nb[cur].filter(n=>!B.blocked[n]&&!seen[n]&&(!B.gates[n]||B.gates[n]===gates+1)&&(B.oneways[n]===undefined||dirOf(cur,n,B.w)===B.oneways[n]));
+    const degree=n=>nb[n].filter(j=>!B.blocked[j]&&!seen[j]).length;
+    choices.sort((a,b)=>degree(a)-degree(b)||a-b);
+    for(const n of choices){
+      seen[n]=1;p.push(n);gates+=Number(Boolean(B.gates[n]));
+      if(go(n))return true;
+      gates-=Number(Boolean(B.gates[n]));p.pop();seen[n]=0;
+      if(nodes>budget)break;
+    }
+    return false;
   }
-});
-function revealSolution() {
-  const B = G.B;
-  if (!B) return;
-  let d = "";
-  B.path.forEach((i, k) => {
-    const [cx, cy] = cellCenter(i);
-    d += (k === 0 ? "M" : "L") + cx + " " + cy + " ";
-  });
-  ghostPath.setAttribute("d", d.trim());
-  ghostPath.style.display = "";
-  SFX.coin();
-  toast("HINT", "i-hint");
-  clearTimeout(G.ghostTimer);
-  G.ghostTimer = setTimeout(() => { ghostPath.style.display = "none"; }, 3200);
+  return go(p[p.length-1])?p[path.length]:null;
 }
-
-qs("#btnWinNext").addEventListener("click", () => {
+function clearHint(){
+  clearTimeout(G.ghostTimer);boardEl.querySelector(".hint-next")?.classList.remove("hint-next");
+  qs("#btnHint").setAttribute("aria-pressed","false");
+}
+function showHint(i){
+  if(i==null)return;
+  clearHint();tileEls[i].classList.add("hint-next");qs("#btnHint").setAttribute("aria-pressed","true");
+  SFX.coin();G.ghostTimer=setTimeout(clearHint,3200);
+}
+qs("#btnPlay").addEventListener("click",()=>{SFX.ensure();startLevel(S.level);});
+qs("#btnBack").addEventListener("click",()=>{G.playing=false;show(home);updateHome();});
+qs("#btnRestart").addEventListener("click",resetActive);
+qs("#btnFresh").addEventListener("click",resetActive);
+qs("#btnUndo").addEventListener("click",()=>{
+  if(!G.playing||!G.path.length)return;
+  G.path.pop();G.undos++;clearHint();SFX.undo();haptic(10);paintPath();
+});
+qs("#btnHint").addEventListener("click",()=>{
+  if(!G.playing)return;
+  if(qs("#btnHint").getAttribute("aria-pressed")==="true"){clearHint();return;}
+  const i=findHint(G.B,G.path);
+  if(i==null){toast("UNDO","i-undo");return;}
+  if(S.coins<30){askAd("hint");return;}
+  S.coins-=30;save();syncHud();showHint(i);
+});
+qs("#btnWinNext").addEventListener("click",()=>{
   qs("#winOverlay").classList.remove("on");
-  if (G.mode === "daily") { show(home); updateHome(); }
-  else startLevel(Math.min(SHAPES.length, G.level + 1));
+  if(G.mode==="daily"||(G.inbound&&G.level>=S.unlocked)){show(home);updateHome();}
+  else startLevel(G.level+1);
 });
-qs("#btnWinReplay").addEventListener("click", () => {
-  qs("#winOverlay").classList.remove("on");
-  G.B = G.mode === "daily" ? getDaily() : getLevel(G.level);
-  begin();
+qs("#btnWinReplay").addEventListener("click",begin);
+qs("#btnWinDouble").addEventListener("click",()=>askAd("double"));
+qs("#btnWinShare").addEventListener("click",()=>{
+  if(G.completed)KIT.saveCard({variant:"oneink",score:G.completed.stars}).catch(()=>toast("SHARE","i-share"));
 });
-qs("#btnWinShare").addEventListener("click", shareResult);
-qs("#btnWinDouble").addEventListener("click", () => askAd("double"));
-
-/* ── share ───────────────────────────────────────────────── */
-function shareResult() {
-  const tag = G.mode === "daily" ? "DAILY " + todayKey() : "LEVEL " + G.level;
-  const stars = "★".repeat(S.stars[G.mode === "daily" ? "daily" : "L" + G.level] || 1);
-  const text = `ONEINK · ${tag}\n${stars} · ${fmtTime((Date.now() - G.startedAt) / 1000)} · ${G.undos} undo\none line, every tile.`;
-  if (navigator.share) {
-    navigator.share({ title: "ONEINK", text }).catch(() => copyText(text));
-  } else copyText(text);
+qs("#btnLink").addEventListener("click",()=>{if(G.completed)copyText(boardURL(G.completed));});
+qs("#btnTrace").addEventListener("click",()=>{
+  const r=G.completed;if(!r)return;
+  const u=new URL(boardURL(r));
+  u.hash="trace="+[TRACE_VERSION,r.mode,r.mode==="daily"?r.day:r.level,Math.min(1679615,Math.round(r.t)).toString(36),...r.path.map(i=>i.toString(36))].join(".");
+  copyText(u.href);
+});
+function copyText(t){
+  if(window.PuzzleAndroid?.shareLink){window.PuzzleAndroid.shareLink(t);return;}
+  const fallback=()=>{const d=qs("#linkHelp"),i=d.querySelector("input");i.value=t;if(!d.open)d.showModal();i.select();};
+  if(navigator.clipboard?.writeText)navigator.clipboard.writeText(t).then(()=>toast("COPIED","i-share"),fallback);
+  else fallback();
 }
-function copyText(t) {
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(t).then(() => toast("COPIED", "i-share")).catch(() => toast("SHARE", "i-share"));
-  } else toast("SHARE", "i-share");
+function drawComparison(){
+  if(!G.completed||!G.friend)return;
+  const el=qs("#friendPaths"),B=G.B,ns="http://www.w3.org/2000/svg";
+  el.replaceChildren();el.setAttribute("viewBox","0 0 "+B.w+" "+B.h);
+  for(let i=0;i<B.w*B.h;i++){
+    if(B.blocked[i])continue;
+    const r=document.createElementNS(ns,"rect");r.setAttribute("x",i%B.w+.1);r.setAttribute("y",Math.floor(i/B.w)+.1);
+    r.setAttribute("width",".8");r.setAttribute("height",".8");r.setAttribute("rx",".15");el.append(r);
+  }
+  for(const [cls,trace] of [["mine",G.completed.path],["theirs",G.friend.path]]){
+    const p=document.createElementNS(ns,"path");p.setAttribute("class",cls);
+    p.setAttribute("d",trace.map((v,i)=>(i?"L":"M")+(v%B.w+.5)+" "+(Math.floor(v/B.w)+.5)).join(" "));el.append(p);
+  }
+  el.hidden=!el.hidden;const times=qs("#friendTimes");times.hidden=el.hidden;times.textContent=fmtTime(G.completed.t)+" / "+fmtTime(G.friend.time);qs("#btnFriend").setAttribute("aria-pressed",String(!el.hidden));
 }
-
+qs("#btnFriend").addEventListener("click",drawComparison);
 /* ── rewarded ad (simulated) ─────────────────────────────── */
 let adState = { open: false, purpose: null, timer: null };
 function askAd(purpose) {
@@ -1327,12 +1478,13 @@ qs("#btnAdClose").addEventListener("click", () => {
   qs("#adview").classList.remove("on");
 });
 qs("#btnAdClaim").addEventListener("click", () => {
-  if (qs("#btnAdClaim").disabled) return;
+  if (qs("#btnAdClaim").disabled || !adState.open) return;
   qs("#adview").classList.remove("on");
-  const p = adState.purpose;
-  adState.open = false;
-  if (p === "hint") { S.coins += 40; save(); syncHud(); revealSolution(); }
-  else if (p === "double") { S.coins += 20; save(); syncHud(); toast("+20", "i-coin"); }
+  const p=adState.purpose;adState.purpose=null;adState.open=false;
+  if(p==="hint"&&G.playing){const i=findHint(G.B,G.path);if(i!=null)showHint(i);}
+  else if(p==="double"&&G.completed?.gain&&!qs("#btnWinDouble").disabled){
+    qs("#btnWinDouble").disabled=true;S.coins+=G.completed.gain;save();syncHud();toast("+"+G.completed.gain,"i-coin");
+  }
 });
 
 /* ── sheets & toggles ────────────────────────────────────── */
@@ -1349,7 +1501,7 @@ qs("#home").addEventListener("contextmenu", e => { e.preventDefault(); });
 function buildLevelGrid() {
   const grid = qs("#levelGrid");
   grid.innerHTML = "";
-  for (let n = 1; n <= SHAPES.length; n++) {
+  for (let n = Math.max(1,S.unlocked-30); n <= Math.max(30,S.unlocked+12); n++) {
     const b = document.createElement("button");
     b.className = "lv";
     b.dataset.n = n;
@@ -1382,6 +1534,11 @@ function fillRecords() {
   qs("#stTime").textContent = S.bestTime ? fmtTime(S.bestTime) : "--:--";
   qs("#stCoins").textContent = S.coins;
   qs("#stInks").textContent = S.inks;
+  const h=qs("#dailyHistory");h.replaceChildren();
+  for(const [key,v] of Object.entries(S.dailyHistory).filter(([k,v])=>KIT.validDay(k)&&v&&Number.isFinite(v.time)).sort(([a],[b])=>b.localeCompare(a)).slice(0,180)) {
+    const b=document.createElement("button");b.textContent=isoDay(key)+" · "+v.stars+"/3 · "+fmtTime(v.time);
+    b.addEventListener("click",()=>{closeSheets();startDaily(key);});h.append(b);
+  }
 }
 
 qsa(".toggle").forEach(t => {
@@ -1469,11 +1626,30 @@ function stopDemo() { if (demoRAF) { cancelAnimationFrame(demoRAF); demoRAF = nu
 
 function updateHome() {
   syncHud();
-  qs("#dailyDot").hidden = S.lastDaily === todayKey();
+  qs("#dailyDot").hidden = normalDay(S.lastDaily) === todayKey();
   startDemo();
 }
 
-/* ── boot ────────────────────────────────────────────────── */
+/* ── localization resources ── */
+const KO={
+"LEVELS":"단계","DAILY":"일일판","RECORDS":"기록","SETTINGS":"설정","SOUND":"소리","HAPTIC":"진동","THEME":"테마","RESET PROGRESS":"진행 초기화","STREAK":"연속","BEST":"최고","CLEARED":"완료","BEST TIME":"최고 기록","COINS":"코인","INKS OWNED":"보유 잉크","STORE":"상점","PROTO":"테스트","INK PASS":"잉크 패스","No ads, ever":"광고 제거","Unlimited hints":"힌트 무제한","Full daily archive":"일일판 전체","All ink skins":"모든 잉크 디자인","COIN PACKS":"코인 묶음","INK SKINS":"잉크 디자인","MONTH":"월","YEAR · 44% OFF":"연 · 44% 할인","AURORA":"오로라","SUMI":"먹","EMBER":"불씨","AD":"광고","REWARDED AD":"보상형 광고","play":"시작","back":"뒤로","settings":"설정","store":"상점","restart":"초기화","undo":"되돌리기","hint":"힌트","double coins with an ad":"광고로 코인 두 배","share":"결과 카드","replay":"새로 도전","next":"다음","close":"닫기","New challenge":"새로 도전","Compare a friend’s path":"친구 경로 겹쳐 보기","Share my completed path":"완성 경로 보내기","Copy the challenge link":"같은 판 링크 복사","My path and friend path":"나의 경로와 친구 경로","Challenge link":"도전 링크","UNDO":"한 칸 되돌리기","COPIED":"복사했어요","SHARE":"공유","LOCKED":"잠김","RESET":"초기화","PROTO — NO CHARGE":"테스트 · 결제 없음","Invalid challenge":"유효하지 않은 도전 링크"
+};
+const isKo=/^ko\b/i.test(navigator.language||"");
+const tr=s=>isKo?(KO[s]||s):s;
+function localize(){
+  document.documentElement.lang=isKo?"ko":"en";
+  const walker=document.createTreeWalker(qs("#stage"),NodeFilter.SHOW_TEXT);
+  for(let n=walker.nextNode();n;n=walker.nextNode()){
+    const k=n.nodeValue.trim();if(isKo&&Object.hasOwn(KO,k))n.nodeValue=n.nodeValue.replace(k,KO[k]);
+  }
+  qsa("[aria-label]").forEach(el=>el.setAttribute("aria-label",tr(el.getAttribute("aria-label"))));
+  for(const [id,v] of [["btnLevels","LEVELS"],["btnDaily","DAILY"],["btnRecords","RECORDS"]]){
+    const b=qs("#"+id);b.setAttribute("aria-label",tr(v));b.title=tr(v);
+  }
+  qsa("[data-close]").forEach(el=>el.setAttribute("aria-label",tr("close")));
+}
+qs("#tutorialHand").innerHTML=KIT.handSVG;
+localize();
 applySettings();
 updateHome();
 window.addEventListener("resize", () => { layoutBoard(); });
@@ -1482,48 +1658,12 @@ document.addEventListener("visibilitychange", () => {
   if (document.hidden) stopDemo(); else if (home.classList.contains("on")) startDemo();
 });
 
-/* debug handle for automated verification */
-window.__oneink = {
-  state() {
-    return {
-      mode: G.mode, level: G.level, playing: G.playing,
-      path: G.path.slice(), free: G.B ? G.B.free : 0,
-      solution: G.B ? G.B.path.slice() : [],
-      undos: G.undos, coins: S.coins, unlocked: S.unlocked,
-      grid: G.B ? { w: G.B.w, h: G.B.h } : null,
-      saved: localStorage.getItem(KEY)
-    };
-  },
-  cellRect(i) {
-    if (!tileEls[i]) return null;
-    const r = tileEls[i].getBoundingClientRect();
-    return { x: r.x + r.width / 2, y: r.y + r.height / 2, w: r.width, h: r.height };
-  },
-  levelInfo(n) {
-    const t0 = performance.now();
-    const L = n === "daily" ? getDaily() : getLevel(n);
-    const ms = performance.now() - t0;
-    const okAdj = L.path.every((c, k) => {
-      if (k === 0) return true;
-      return Math.abs(c - L.path[k - 1]) === 1 || Math.abs(c - L.path[k - 1]) === L.w;
-    });
-    const gateOrder = [];
-    L.path.forEach((c, k) => { if (L.gates[c]) gateOrder.push(L.gates[c]); });
-    return {
-      n, w: L.w, h: L.h, free: L.free, holes: Array.from(L.blocked).filter(Boolean).length,
-      gates: Object.keys(L.gates).length, oneways: Object.keys(L.oneways).length,
-      covers: L.path.length === L.free,
-      adjacency: okAdj,
-      gateOrder: gateOrder.join(","),
-      ms: Math.round(ms * 10) / 10
-    };
-  },
-  forcePath(arr) {
-    G.path = arr.slice();
-    paintPath();
-    return G.path.length;
-  }
-};
+const u=new URL(location.href);
+const day=KIT.challengeDay(u.href),level=u.searchParams.get("l");
+if(day)startDaily(day,true);
+else if(u.searchParams.has("p"))toast("Invalid challenge","i-lock");
+else if(level&&/^[1-9]\d{0,8}$/.test(level))startLevel(Number(level),true);
+})();
 </script>
 </body>
 </html>
