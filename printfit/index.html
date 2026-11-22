@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="description" content="PrintFit local-only millimeter label templates and vector PDF.">
+<title>PrintFit · Label sheet studio</title>
+<link rel="stylesheet" href="./styles.css">
+<script type="module" src="./app.mjs"></script>
+</head>
+<body>
+<header class="mast"><div class="container mast-inner">
+<div class="brand"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M5 11V5h6m10 0h6v6m0 10v6h-6M11 27H5v-6M12 12h8v8h-8z"/></svg></span><div><strong>PrintFit</strong><span data-t="brandLine">Label sheet studio</span></div></div>
+<div class="language" aria-label="Language"><button type="button" data-locale="en" aria-pressed="true">EN</button><button type="button" data-locale="ko" aria-pressed="false">한국어</button></div>
+</div></header>
+<main class="container">
+<section class="hero"><div class="kicker"><span class="dot"></span><span data-t="localOnly">LOCAL WORKSPACE</span></div><h1 data-t="headline">Build a label sheet that fits.</h1><p data-t="lead">Enter the dimensions in millimeters. Check the layout and export a vector PDF, without uploading anything.</p></section>
+<div class="workspace">
+<section class="controls card" aria-labelledby="setup"><div class="card-title"><div><p class="step" data-t="stepOne">01 / SETUP</p><h2 id="setup" data-t="setup">Sheet settings</h2></div><button class="quiet" id="reset" type="button" data-t="reset">Reset sample</button></div>
+<form novalidate id="builder">
+<fieldset><legend data-t="paperLegend">Sheet &amp; output</legend><div class="fields three">
+<label><span data-t="paper">Paper</span><select name="paper"><option value="a4">A4 · 210 × 297 mm</option><option value="letter">US Letter · 215.9 × 279.4 mm</option></select></label>
+<label><span data-t="alignment">Alignment</span><select name="alignment"><option value="center" data-t="center">Centered</option><option value="corner" data-t="corner">Top-left</option></select></label>
+<label><span data-t="rotation">Rotation</span><select name="rotation"><option value="0">0°</option><option value="90">90°</option></select></label>
+</div></fieldset>
+<fieldset><legend data-t="labelLegend">Label size &amp; pitch</legend><div class="fields four" id="size-fields"></div><p class="help" data-t="pitchHelp">Pitch is the distance between matching points on adjacent labels, not the gap.</p></fieldset>
+<fieldset><legend data-t="quantityLegend">Quantity</legend><div class="fields three" id="qty-fields"></div></fieldset>
+<fieldset><legend data-t="marginLegend">Minimum page margins</legend><div class="fields four" id="margin-fields"></div><p class="help" data-t="marginHelp">Margins protect the full outline, including bleed, crop marks and an ink buffer.</p></fieldset>
+<fieldset><legend data-t="guideLegend">Print guides</legend><div class="fields three" id="guide-fields"><label class="check"><input type="checkbox" name="crop"><span data-t="crop">Crop marks</span></label></div></fieldset>
+</form>
+<div class="status" id="status" role="status" aria-live="polite"></div>
+</section>
+<aside class="card preview" aria-labelledby="preview-title"><div class="card-title"><div><p class="step" data-t="stepTwo">02 / PREVIEW</p><h2 id="preview-title" data-t="preview">Layout preview</h2></div><div class="unit">mm</div></div>
+<div class="canvas"><svg id="sheet" role="img" aria-labelledby="svg-title" viewBox="0 0 210 297"></svg></div>
+<div class="sheet-bar"><label><span data-t="pageLabel">Sheet</span><select id="page-select"></select></label><span id="sheet-summary"></span></div>
+<div class="legend"><span><i class="trim"></i><span data-t="trim">Trim</span></span><span><i class="bleed"></i><span data-t="bleed">Bleed</span></span><span><i class="safe"></i><span data-t="safe">Safe inset</span></span></div>
+<button id="export" type="button" class="export" data-t="export">Download vector PDF</button>
+<p class="print-note" data-t="printNote">Print at 100% / Actual size. Turn off “Fit to page”. Printer scale, stock alignment and printable margins are not verified. Measure a test sheet first.</p>
+</aside>
+</div>
+<footer data-t="footer">PrintFit runs locally. It creates blank sheet guides, not print-shop output or a printer guarantee.</footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-9aDqVwOv6+hW/4rhmq6FqK7AXBtJKc3pJDLkDZ8tYBo=' 'sha256-V5KcuWMBU5jxTs/QW9ixHVJ+aGc7n6Wkm089uacWkHM='; style-src 'sha256-mIlZ2IxReGqddphN18e8P9QcZvLFJxzqgc+tY0E7Waw='; connect-src 'none'; object-src 'none'; form-action 'none'; base-uri 'none'"><meta name="robots" content="noindex">
+<title>BatchQuote</title>
+<style>
+:root{color-scheme:light;--ink:#242a20;--muted:#555d4f;--green:#21513d;--line:#dce2d8;--surface:#fffdf8;--paper:#f1f0e7;--pale:#e8efe3;--danger:#9a392b}
+*{box-sizing:border-box}html{min-width:0}body{margin:0;font:16px/1.55 system-ui,-apple-system,"Malgun Gothic",sans-serif;color:var(--ink);background:var(--paper)}button,input,select,textarea{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #28785a;outline-offset:3px}
+header{border-bottom:1px solid var(--line);background:var(--surface)}.bar,.wrap{max-width:1160px;margin:auto;padding:12px clamp(15px,4vw,42px)}.bar{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:63px}.logo{display:flex;align-items:center;gap:8px;font-weight:850;letter-spacing:-.02em}.logo svg{width:27px;height:27px;color:var(--green)}.seg{display:flex;gap:3px;background:#ecede4;padding:3px;border-radius:12px}.seg button{border:0;background:transparent;color:var(--muted);padding:0 11px;border-radius:9px;min-height:44px;min-width:44px;font-weight:650}.seg button[aria-pressed=true]{color:#fff;background:var(--green)}
+.hero{padding:28px 0 18px;max-width:780px}.eyebrow{font-size:.74rem;font-weight:850;text-transform:uppercase;letter-spacing:.125em;color:var(--green);margin:0 0 7px}h1{font-size:clamp(2rem,5.1vw,3.8rem);line-height:1.09;letter-spacing:-.058em;margin:0 0 12px}.lead,.meta{color:var(--muted);margin:0}.notice{position:relative;display:grid;grid-template-columns:auto 1fr;gap:9px;padding:11px 13px;margin:2px 0 18px;color:#46351c;border:1px solid #e0d8b9;border-radius:11px;background:#f9f3de;font-size:.88rem}.notice-mark{font-weight:900}.layout{display:grid;grid-template-columns:minmax(0,1.14fr) minmax(0,.86fr);gap:18px;align-items:start}.layout[data-mode=operator]{grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr)}.panel{min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:clamp(14px,2.4vw,24px);box-shadow:0 3px 0 #22281909}.panel h2{line-height:1.28;font-size:1.26rem;letter-spacing:-.02em;margin:0 0 4px}.fields{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:13px 11px;margin:16px 0}.wide{grid-column:1/-1}.field{min-width:0}.field label{display:block;margin-bottom:5px;font-size:.91rem;font-weight:750}.field input,.field select{min-height:45px;min-width:0;width:100%;padding:8px 9px;border:1px solid #9da99a;border-radius:9px;color:var(--ink);background:#fff}.field [aria-invalid=true]{border-color:var(--danger)}.hint{display:block;margin-top:4px;line-height:1.35;font-size:.75rem;color:var(--muted)}.primary,.secondary{min-height:45px;padding:8px 13px;border-radius:10px;font-weight:750;border:1px solid var(--green);white-space:normal}.primary{color:#fff;background:var(--green)}.secondary{color:var(--green);background:var(--surface)}.actions{display:flex;flex-wrap:wrap;gap:8px}.errors{color:var(--danger);padding:0;margin:10px 0 0;font-size:.9rem}.errors li{margin-left:20px}.tabline{display:flex;justify-content:flex-end;margin:0 0 10px}.flag{display:inline-block;background:#e9efe0;color:#2c4d35;border-radius:999px;padding:4px 9px;font-size:.77rem;font-weight:800;letter-spacing:.015em}.pending{border:1px dashed #b7c2b2;padding:17px;border-radius:12px;margin-top:16px;color:var(--muted);background:#f5f6ec}.quote{margin:12px 0 0}.quote div{display:grid;grid-template-columns:minmax(7ch,.95fr) minmax(0,1.4fr);gap:10px;padding:7px 0;border-bottom:1px solid #e5e9de}.quote dt{color:var(--muted)}.quote dd{margin:0;font-weight:700;overflow-wrap:anywhere}.review{padding:11px 11px 11px 29px;border-radius:10px;background:#f0f4eb;font-size:.88rem}.copyarea{display:block;resize:vertical;width:100%;min-height:115px;padding:8px}.status{min-height:1.55em;margin:7px 0 0;font-size:.86rem;font-weight:650;color:var(--green)}.footer{font-size:.84rem;color:var(--muted);margin:15px 0 12px} [hidden]{display:none!important}
+@media(max-width:650px){.layout,.layout[data-mode=operator]{grid-template-columns:minmax(0,1fr)}.hero{padding:18px 0 16px}.tabline{justify-content:flex-start}.bar{padding-block:8px}.fields{gap:11px 8px}}@media(max-width:345px){.fields{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body>
+<header><div class="bar"><div class="logo">
+<svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="3" width="26" height="26" rx="8" fill="currentColor"/><path d="M10 11h10v9a4 4 0 0 1-4 4h-2a4 4 0 0 1-4-4zM20 13h2a2 2 0 0 1 0 4h-2M9 9h12" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>
+BatchQuote</div><div class="seg" aria-label="Language"><button type="button" data-lang="ko" lang="ko" aria-pressed="true">한국어</button><button type="button" data-lang="en" lang="en" aria-pressed="false">EN</button></div></div></header>
+<main class="wrap">
+<section class="hero"><p class="eyebrow" data-t="eyebrow"></p><h1 data-t="heading">카페 단체 견적 요청서</h1><p class="lead" data-t="lead"></p></section>
+<p class="notice" id="requiredNotice"><span class="notice-mark" aria-hidden="true">!</span><span data-t="notice"></span></p>
+<div class="tabline"><div class="seg" id="views"><button id="customerMode" type="button" data-mode="customer" data-t="customer" aria-pressed="true"></button><button id="operatorMode" type="button" data-mode="operator" data-t="operator" aria-pressed="false"></button></div></div>
+<div class="layout" id="layout" data-mode="customer">
+<section class="panel" id="customerPanel" aria-labelledby="formTitle"><h2 id="formTitle" data-t="inputs"></h2><p class="meta" data-t="formHint"></p>
+<form id="requestForm" autocomplete="off" novalidate>
+<div class="fields">
+<div class="field wide"><label for="product" data-t="product"></label><select id="product" required></select></div>
+<div class="field"><label for="quantity" data-t="quantity"></label><input id="quantity" type="number" autocomplete="off" min="1" max="1000" step="1" inputmode="numeric" placeholder="24" required></div>
+<div class="field"><label for="fulfillment" data-t="fulfillment"></label><select id="fulfillment" required></select></div>
+<div class="field"><label for="date" data-t="date"></label><input id="date" type="date" autocomplete="off" required></div>
+<div class="field"><label for="time" data-t="time"></label><select id="time" required></select></div>
+<div class="field"><label for="budget" data-t="budget"></label><input id="budget" type="number" min="1" max="50000000" step="1" inputmode="numeric" autocomplete="off" placeholder="120000" required><small class="hint" data-t="budgetHint"></small></div>
+<div class="field"><label for="packaging" data-t="packaging"></label><select id="packaging" required></select></div>
+</div>
+<div class="actions"><button id="generate" class="primary" type="submit" data-t="generate"></button><button id="reset" class="secondary" type="button" data-t="reset"></button></div>
+<ul id="errors" class="errors" aria-live="polite" hidden></ul>
+</form></section>
+<section class="panel" id="operatorPanel" aria-labelledby="operatorTitle" hidden><h2 id="operatorTitle" data-t="reviewTitle"></h2><p class="meta" data-t="reviewHint"></p><ol class="review" id="reviewList"><li data-t="review1"></li><li data-t="review2"></li><li data-t="review3"></li></ol><button type="button" class="secondary" id="editFromOperator" data-t="edit"></button></section>
+<section class="panel" id="quotePanel" aria-labelledby="outputTitle"><span class="flag" id="draftFlag" data-t="draft"></span><h2 id="outputTitle" data-t="summary"></h2><p class="pending" id="empty" data-t="empty"></p><div id="ready" hidden><dl class="quote" id="quoteRows"></dl><p class="meta" id="quoteCaution" data-t="outputNotice"></p><div class="actions"><button id="copy" type="button" class="primary" data-t="copy"></button></div><p class="status" id="status" role="status"></p><textarea class="copyarea" id="manualCopy" aria-label="Copy text" readonly hidden></textarea></div></section>
+</div>
+<p class="footer" data-t="privacy"></p>
+</main>
+<script id="rules">
+(function(g){
+"use strict";
+const spec={keys:["product","quantity","fulfillment","date","time","budget","packaging"],product:["coffee","tea","bakery","set"],fulfillment:["pickup","delivery"],packaging:["bulk","individual","boxed"]};
+const strings={
+ko:{eyebrow:"단체견적 워크시트",heading:"카페 단체 견적 요청서",lead:"수량·시간·예산을 정리해 매장에 보여 줄 초안을 만드세요. 이 도구에서 주문하거나 전송하지 않습니다.",notice:"견적 요청 초안입니다. 견적·주문·예약은 확정되지 않으며 자동 전송이나 결제가 없습니다.",customer:"고객용",operator:"매장용",inputs:"01. 요청 조건",formHint:"7개 필수 항목을 입력하세요.",product:"품목",quantity:"수량",fulfillment:"수령 방식",date:"희망 날짜",time:"희망 시간 (현지)",budget:"총 희망 예산 (원)",budgetHint:"배달비·포장비를 별도 확정하지 않습니다.",packaging:"포장",generate:"요청서 만들기",reset:"초기화",reviewTitle:"매장 검토",reviewHint:"아래 사항은 매장이 직접 검토합니다. 승인 버튼이나 발송 기능은 없습니다.",review1:"희망 날짜와 시간의 준비 가능 여부",review2:"수량, 재고, 포장 단위 및 배달 가능 여부",review3:"세금·포장·배송을 포함한 실제 금액은 별도 협의",edit:"고객용으로 돌아가기",draft:"미확정 · 발송 안 됨",summary:"02. 견적 요청 카드",empty:"조건을 입력하고 요청서를 만들면 여기에 표시됩니다.",outputNotice:"희망 조건일 뿐이며 견적·주문·예약이 확정되지 않았습니다.",copy:"초안 복사",copied:"초안만 클립보드에 복사했습니다.",manual:"자동 복사가 불가능합니다. 선택된 텍스트를 직접 복사하세요.",manualLabel:"복사용 초안",privacy:"이름·전화번호·주소를 받지 않습니다. 초안은 저장되지 않으며, 직접 복사할 때만 클립보드에 남습니다.",select:"선택",missing:"필수 항목을 확인하세요.",quantityError:"수량은 1~1,000개 정수여야 합니다.",dateError:"오늘부터 90일 이내의 날짜를 선택하세요.",timeError:"지나지 않은 08:00~19:00의 15분 단위 시간을 선택하세요.",budgetError:"총 예산은 1~50,000,000원 정수여야 합니다.",choiceError:"제공된 값 중 선택하세요.",coffee:"커피",tea:"차·논커피",bakery:"베이커리",set:"음료·간식 세트",pickup:"매장 픽업",delivery:"배달 가능 여부 문의",bulk:"단체 묶음 포장",individual:"개별 포장",boxed:"개별 상자 포장",preview:"카페 단체 견적 요청"},
+en:{eyebrow:"Group quote worksheet",heading:"Café group quote request",lead:"Organize quantity, schedule and budget into a draft you can show the café. This tool places no order and sends nothing.",notice:"This is a quote request draft. No quote, order or booking is confirmed; nothing is sent or paid automatically.",customer:"Customer",operator:"Operator",inputs:"01. Request details",formHint:"Complete all seven required fields.",product:"Product",quantity:"Quantity",fulfillment:"Fulfillment",date:"Preferred date",time:"Preferred time (local)",budget:"Target total budget (KRW)",budgetHint:"Delivery and packaging fees are not confirmed.",packaging:"Packaging",generate:"Create request",reset:"Reset",reviewTitle:"Operator review",reviewHint:"Check these items with the café directly. There is no approval or sending action here.",review1:"Availability on the preferred date and time",review2:"Quantity, stock, packing units and delivery feasibility",review3:"Actual total including taxes, packaging and delivery",edit:"Back to customer view",draft:"Unconfirmed · not sent",summary:"02. Quote request card",empty:"Complete the fields and create a request to preview it here.",outputNotice:"Requested terms only. No quote, order or booking is confirmed.",copy:"Copy draft",copied:"Only the draft was copied to the clipboard.",manual:"Automatic copy is unavailable. Copy the selected text manually.",manualLabel:"Draft text to copy",privacy:"No names, phone numbers or addresses are requested. Drafts are not stored; the clipboard changes only when you choose to copy.",select:"Select",missing:"Check the required fields.",quantityError:"Enter a whole quantity from 1 to 1,000.",dateError:"Select a date from today through 90 days ahead.",timeError:"Choose a future or current time from 08:00 to 19:00 in 15-minute steps.",budgetError:"Enter a whole total budget from 1 to 50,000,000 KRW.",choiceError:"Choose one of the listed options.",coffee:"Coffee",tea:"Tea and non-coffee",bakery:"Bakery items",set:"Drink and snack set",pickup:"Café pickup",delivery:"Ask if delivery is available",bulk:"Group packing",individual:"Individual wrapping",boxed:"Individual boxes",preview:"Café group quote request"}
+};
+const z=n=>String(n).padStart(2,"0");
+const day=d=>d.getFullYear()+"-"+z(d.getMonth()+1)+"-"+z(d.getDate());
+function limits(now){const max=new Date(now.getTime());max.setDate(max.getDate()+90);return [day(now),day(max)];}
+const slots=Array.from({length:45},(_,i)=>z(8+Math.floor(i/4))+":"+z(i%4*15));
+function dateObj(s){if(!/^\d{4}-\d\d-\d\d$/.test(s))return null;const [y,m,d]=s.split("-").map(Number),dt=new Date(y,m-1,d);return day(dt)===s?dt:null;}
+function integer(s,lo,hi){return typeof s==="string"&&/^[0-9]+$/.test(s)&&Number.isSafeInteger(Number(s))&&+s>=lo&&+s<=hi;}
+function validate(input,now=new Date()){
+const errors={},v={};for(const k of spec.keys){v[k]=typeof input[k]==="string"?input[k]:"";if(!v[k])errors[k]="missing";}
+for(const k of ["product","fulfillment","packaging"])if(v[k]&&!spec[k].includes(v[k]))errors[k]="choiceError";
+if(v.quantity&&!integer(v.quantity,1,1000))errors.quantity="quantityError";
+if(v.budget&&!integer(v.budget,1,50000000))errors.budget="budgetError";
+const [start,end]=limits(now);
+if(v.date&&(!dateObj(v.date)||v.date<start||v.date>end))errors.date="dateError";
+if(v.time&&!slots.includes(v.time))errors.time="timeError";
+if(v.time&&slots.includes(v.time)&&v.date===start&&v.time<z(now.getHours())+":"+z(now.getMinutes()))errors.time="timeError";
+return Object.keys(errors).length?{ok:false,errors}:{ok:true,draft:{product:v.product,quantity:+v.quantity,fulfillment:v.fulfillment,date:v.date,time:v.time,budget:+v.budget,packaging:v.packaging}};
+}
+function rows(draft,lang){const t=strings[lang];return spec.keys.map(k=>[t[k], k==="quantity"?new Intl.NumberFormat(lang).format(draft[k]):k==="budget"?(lang==="ko"?new Intl.NumberFormat(lang).format(draft[k])+"원":"KRW "+new Intl.NumberFormat(lang).format(draft[k])):spec[k]?t[draft[k]]:draft[k]]);}
+function toText(draft,lang){const t=strings[lang];return [t.preview,t.draft,...rows(draft,lang).map(([k,v])=>k+": "+v),t.outputNotice].join("\n");}
+g.BatchQuote=Object.freeze({spec,strings,slots,limits,validate,rows,toText});
+})(globalThis);
+</script>
+<script id="ui">
+(function(){
+"use strict";
+const {spec,strings,slots,limits,validate,rows,toText}=BatchQuote;
+const by=id=>document.getElementById(id), keys=spec.keys, fields=Object.fromEntries(keys.map(k=>[k,by(k)]));
+let lang="ko",mode="customer",draft=null,errors={};
+const unitBlocked=new Set(),blockedNonCancelable=new Set();
+const unitMessages={ko:{quantity:"단위 없이 숫자 0~9만 입력하세요.",budget:"금액은 원(KRW) 기준입니다. 통화 기호나 단위 없이 숫자 0~9만 입력하세요."},en:{quantity:"Enter digits 0–9 without item units.",budget:"The amount is in KRW. Enter digits 0–9 without currency signs or units."}};
+const msg=(id,t)=>{by(id).textContent=t;};
+function opts(k,values){const f=fields[k],v=f.value;f.replaceChildren(new Option(strings[lang].select,""),...values.map(i=>new Option(strings[lang][i]||i,i)));f.value=v;if(f.selectedIndex<0)f.selectedIndex=0;}
+function dateLimits(){const [min,max]=limits(new Date());fields.date.min=min;fields.date.max=max;}
+function renderErrors(){const t=strings[lang],list=by("errors");list.replaceChildren();for(const [key,error] of Object.entries(errors)){const li=document.createElement("li");li.textContent=t[key]+": "+(error==="rawUnits"?unitMessages[lang][key]:t[error]);list.append(li);}list.hidden=!Object.keys(errors).length;for(const key of keys){if(errors[key])fields[key].setAttribute("aria-invalid","true");else fields[key].removeAttribute("aria-invalid");}}
+function renderQuote(){by("empty").hidden=!!draft;by("ready").hidden=!draft;by("manualCopy").hidden=true;by("manualCopy").value="";msg("status","");by("quoteRows").replaceChildren();if(!draft)return;for(const [label,value] of rows(draft,lang)){const row=document.createElement("div"),dt=document.createElement("dt"),dd=document.createElement("dd");dt.textContent=label;dd.textContent=value;row.append(dt,dd);by("quoteRows").append(row);}}
+function renderLanguage(){document.documentElement.lang=lang;for(const e of document.querySelectorAll("[data-t]"))e.textContent=strings[lang][e.dataset.t];for(const b of document.querySelectorAll("[data-lang]"))b.setAttribute("aria-pressed",String(b.dataset.lang===lang));by("manualCopy").setAttribute("aria-label",strings[lang].manualLabel);by("views").setAttribute("aria-label",lang==="ko"?"보기 전환":"View mode");for(const k of ["product","fulfillment","packaging"])opts(k,spec[k]);opts("time",slots);renderErrors();renderQuote();}
+function setMode(m){mode=m;by("layout").dataset.mode=m;by("customerPanel").hidden=m!=="customer";by("operatorPanel").hidden=m!=="operator";for(const b of document.querySelectorAll("button[data-mode]"))b.setAttribute("aria-pressed",String(b.dataset.mode===mode));}
+function clear(){unitBlocked.clear();blockedNonCancelable.clear();for(const k of keys)fields[k].value="";draft=null;errors={};dateLimits();renderErrors();renderQuote();}
+for(const b of document.querySelectorAll("[data-lang]"))b.addEventListener("click",()=>{lang=b.dataset.lang;renderLanguage();});
+for(const b of document.querySelectorAll("button[data-mode]"))b.addEventListener("click",()=>setMode(b.dataset.mode));
+by("editFromOperator").addEventListener("click",()=>{setMode("customer");fields.product.focus();});
+by("reset").addEventListener("click",clear);
+function blockUnitText(k,e,raw){
+ if(typeof raw==="string"&&/^[0-9.eE+\s-]*$/u.test(raw))return;
+ if(e.cancelable)e.preventDefault();else blockedNonCancelable.add(k);
+ unitBlocked.add(k);errors={...errors,[k]:"rawUnits"};draft=null;renderErrors();renderQuote();
+}
+for(const k of ["quantity","budget"]){
+ const f=fields[k];
+ // Check the original edit before the native number editor discards its unit.
+ f.addEventListener("beforeinput",e=>{if(typeof e.data==="string")blockUnitText(k,e,e.data);});
+ f.addEventListener("paste",e=>blockUnitText(k,e,e.clipboardData?.getData("text/plain")));
+ f.addEventListener("drop",e=>blockUnitText(k,e,e.dataTransfer?.getData("text/plain")));
+ f.addEventListener("input",()=>{
+  if(blockedNonCancelable.delete(k)){f.value="";return;}
+  if(unitBlocked.delete(k)){if(errors[k]==="rawUnits")delete errors[k];renderErrors();}
+ });
+}
+by("requestForm").addEventListener("submit",e=>{e.preventDefault();dateLimits();const result=validate(Object.fromEntries(keys.map(k=>[k,fields[k].value])));errors={...(result.errors||{})};for(const k of unitBlocked)errors[k]="rawUnits";draft=result.ok&&!unitBlocked.size?result.draft:null;renderErrors();renderQuote();if(Object.keys(errors).length)fields[Object.keys(errors)[0]].focus();});
+by("copy").addEventListener("click",async()=>{if(!draft)return;const value=toText(draft,lang),t=strings[lang];try{if(!navigator.clipboard?.writeText)throw Error("unavailable");await navigator.clipboard.writeText(value);msg("status",t.copied);}catch{const b=by("manualCopy");b.value=value;b.hidden=false;b.focus();b.select();msg("status",t.manual);}});
+window.addEventListener("pageshow",()=>{lang="ko";setMode("customer");clear();renderLanguage();});
+dateLimits();renderLanguage();setMode(mode);
+})();
+</script>
+</body>
+</html>
