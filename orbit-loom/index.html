@@ -1,0 +1,1121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#09151f">
+  <meta name="description" content="Thread a little light through a moving universe. An offline one-touch arcade game.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>ORBIT LOOM</title>
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjQ0IiBmaWxsPSIjMDkxNTFmIi8+PGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYTZmM2QxIiBzdHJva2Utd2lkdGg9IjkiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+PHBhdGggZD0iTTExOSAzNWE2NSA2NSAwIDEgMS00NyAwIi8+PHBhdGggZD0iTTExMiA2MWEzOSAzOSAwIDEgMS0zMSAwIiBzdHJva2U9IiNhOWI4ZjUiIHN0cm9rZS13aWR0aD0iNyIvPjwvZz48cGF0aCBkPSJtOTYgMjggNSA2MCAxMSA4LTExIDgtNSAxMy01LTEzLTExLTggMTEtOFoiIGZpbGw9IiNhNmYzZDEiLz48L3N2Zz4K" type="image/svg+xml">
+  <style>
+:root{color-scheme:dark;--bg:#09151f;--panel:#10222e;--panel2:#162d39;--ink:#eef5f2;--muted:#8aabb7;--accent:#a6f3d1;--accent-rgb:166,243,209;--coral:#ffab96;--line:#233944;--font:Inter,"Aptos","Segoe UI",Arial,"Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none}body{background:#050e15;color:var(--ink);font-family:var(--font);font-size:16px;user-select:none;-webkit-user-select:none;touch-action:none}button,select{font:inherit}button{cursor:pointer;color:inherit;border:0;background:none;touch-action:manipulation}button:focus-visible,select:focus-visible,canvas:focus-visible{outline:2px solid var(--accent);outline-offset:4px}button:disabled{cursor:default;opacity:.38}button:active:not(:disabled){transform:scale(.97)}svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}svg use{pointer-events:none}.svg-defs{position:absolute;width:0;height:0;overflow:hidden}#game-shell{position:relative;margin:0 auto;width:100%;max-width:480px;height:100%;height:100dvh;display:flex;flex-direction:column;background:radial-gradient(ellipse at 45% 42%,#102633 0%,var(--bg) 62%);padding:max(20px,env(safe-area-inset-top)) 24px max(9px,env(safe-area-inset-bottom));overflow:hidden;box-shadow:0 0 100px #0005}
+.topbar{display:flex;align-items:center;justify-content:space-between;min-height:44px;gap:10px}.wordmark{display:flex;align-items:center;gap:9px;letter-spacing:2.6px;font-size:16px;font-weight:800;white-space:nowrap}.wordmark>svg{width:26px;height:26px;color:var(--accent);fill:var(--accent);stroke-width:.5}.wordmark-light{font-weight:350;margin-left:5px;color:#cadbdc}.top-actions{display:flex;align-items:center;gap:7px}.coin-pill{height:38px;border:1px solid var(--line);border-radius:22px;display:flex;align-items:center;gap:7px;padding:0 12px;font-size:14px;font-variant-numeric:tabular-nums}.coin-pill svg{width:15px;height:15px;color:var(--accent)}.icon-button{display:grid;place-items:center;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:50%}.level-head{margin-top:29px}.eyebrow{display:flex;justify-content:space-between;gap:10px;font-size:11px;font-weight:650;letter-spacing:1.8px;color:var(--muted)}.eyebrow span:first-child{color:var(--accent)}.stage-title{font-size:33px;letter-spacing:1px;margin-top:10px;font-weight:300;display:flex;align-items:baseline;gap:10px}.stage-title strong{font-size:41px;line-height:1.15;font-weight:550;letter-spacing:-1.5px}.stage-title>span:first-child{font-size:28px;font-weight:300}.mode-mark{margin-left:auto;font-size:39px;font-weight:200;color:var(--accent);line-height:1;opacity:.8}.progress-track{display:flex;gap:5px;margin-top:19px}.progress-track span{height:3px;flex:1;border-radius:5px;background:var(--line);transition:background .25s,box-shadow .25s}.progress-track .filled{background:var(--accent);box-shadow:0 0 10px #a6f3d133}
+.arena{position:relative;min-height:190px;flex:1;display:flex;flex-direction:column;margin-top:20px}.arena-hud{display:flex;align-items:center;justify-content:space-between;height:24px;z-index:1;pointer-events:none}.hearts{display:flex;gap:7px}.hearts svg{width:15px;height:15px;fill:var(--coral);stroke:var(--coral)}.hearts .empty{fill:none;stroke:#3e4c54}.record{font-size:10px;letter-spacing:1.3px;color:var(--muted)}.record b{font-weight:500;color:#d1e3e5;margin-left:5px;font-variant-numeric:tabular-nums}#game{width:100%;height:100%;min-height:0;flex:1;display:block;touch-action:none;outline:none}.floating-message{position:absolute;bottom:35px;left:0;width:100%;text-align:center;color:var(--accent);font-size:12px;font-weight:650;letter-spacing:2px;pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .18s,transform .18s}.floating-message.visible{opacity:1;transform:translateY(0)}.floating-message.bad{color:var(--coral)}.arena-caption{display:flex;align-items:center;justify-content:center;gap:9px;font-size:12px;letter-spacing:1.5px;color:var(--muted);height:26px;flex-shrink:0;font-variant-numeric:tabular-nums}.tiny-spark{color:var(--accent);font-size:15px}.caption-line{height:11px;width:1px;background:var(--line);margin:0 6px}#run-score{color:#cddddd}
+.controls{margin-top:17px}.path-state{height:21px;display:flex;align-items:center;justify-content:center;gap:7px;font-size:10px;font-weight:650;letter-spacing:2.5px;color:var(--muted);margin-bottom:12px}.path-state.ready{color:var(--accent)}.path-dot{width:5px;height:5px;border:1px solid currentColor;transform:rotate(45deg)}.ready .path-dot{background:var(--accent);box-shadow:0 0 10px var(--accent)}.fire-row{display:flex;gap:10px}.fire-button{width:100%;height:64px;background:var(--accent);color:#10282c;border-radius:20px;display:flex;align-items:center;justify-content:flex-start;padding:0 22px;gap:12px;font-size:15px;font-weight:750;letter-spacing:2px;box-shadow:0 5px 25px rgba(var(--accent-rgb),.09);transition:filter .15s,transform .1s}.fire-button>svg{width:25px;height:25px}.fire-button .button-end{margin-left:auto;font-size:12px;opacity:.45}.fire-button.waiting{filter:saturate(.5) brightness(.87)}.guide-button{width:64px;min-width:64px;background:#152d38;border:1px solid #2c4650;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#d3e8e8}.guide-button svg{width:22px;height:22px}.guide-button span{font-size:10px;letter-spacing:1px}.guide-button.active{color:var(--accent);border-color:var(--accent)}.control-hint{text-align:center;font-size:12px;color:var(--muted);margin:12px 0 0;letter-spacing:.35px}.bottom-nav{display:flex;justify-content:space-between;border-top:1px solid #1b303b;margin-top:23px;padding-top:11px;gap:8px;min-height:61px}.bottom-nav button{flex:1;display:flex;align-items:center;flex-direction:column;gap:5px;color:var(--muted);font-size:10px;min-height:45px;padding:2px}.bottom-nav svg{width:19px;height:19px}.bottom-nav button:hover{color:var(--accent)}
+.modal{position:absolute;inset:0;background:#020b13bf;backdrop-filter:blur(13px);-webkit-backdrop-filter:blur(13px);z-index:10;display:flex;align-items:center;justify-content:center;padding:22px 16px;padding-top:max(22px,env(safe-area-inset-top));padding-bottom:max(22px,env(safe-area-inset-bottom))}.modal[hidden],.toast[hidden]{display:none}.modal-panel{position:relative;width:100%;max-height:100%;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;background:linear-gradient(150deg,#17313e,#0d202c 70%);border:1px solid #2b4550;border-radius:28px;padding:28px 23px;box-shadow:0 30px 80px #0006;scrollbar-width:thin;scrollbar-color:#35515e transparent}.modal-panel *{touch-action:pan-y}.modal-close{position:absolute;right:13px;top:13px;border:0;background:#ffffff08}.modal-heading{padding-right:32px;margin:3px 0 10px;font-size:24px;font-weight:550;letter-spacing:-.7px}.modal-sub{font-size:14px;color:var(--muted);line-height:1.6;margin:8px 0 20px}.kicker{color:var(--accent);font-size:10px;letter-spacing:2px;font-weight:650;margin-bottom:10px}.result-art{display:block;width:160px;height:160px;margin:0 auto 6px}.result-title{text-align:center;font-size:26px;font-weight:500;letter-spacing:-.6px;margin:5px 0 8px}.result-sub{text-align:center;font-size:13px;color:var(--muted);line-height:1.65;margin:0 0 20px}.rating{display:flex;align-items:center;justify-content:center;gap:12px;margin:10px 0 20px;font-size:27px;color:var(--accent)}.rating .dim{opacity:.17}.stat-row{display:flex;margin:15px 0 23px;padding:17px 0;border-block:1px solid #29414d}.stat{flex:1;text-align:center}.stat+.stat{border-left:1px solid #29414d}.stat small{display:block;font-size:10px;letter-spacing:1.8px;color:var(--muted);margin-bottom:6px}.stat strong{font-size:24px;font-weight:500;font-variant-numeric:tabular-nums}.button{display:flex;justify-content:center;align-items:center;gap:10px;width:100%;min-height:51px;border-radius:15px;padding:13px 15px;font-size:14px;font-weight:650;background:var(--accent);color:#112b2c;line-height:1.4}.button+.button{margin-top:10px}.button.secondary{background:#203b47;color:var(--ink);border:1px solid #35525d}.button.ghost{background:transparent;color:var(--muted);font-weight:450;min-height:45px}.button.danger{background:#ffb2a0;color:#3c1614}.button svg{width:18px;height:18px}.reward-note,.demo-note,.fine-print{font-size:11px;color:var(--muted);line-height:1.6;text-align:center;margin:9px 0 15px}.demo-note{border-top:1px solid #29414d;padding-top:14px;margin-bottom:0;color:#7c9ca9}.menu-stack{display:grid;gap:10px;margin-top:24px}.menu-stack .button{margin:0}.setting-row{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:65px;border-bottom:1px solid #29414d;font-size:14px}.setting-row>span{display:flex;align-items:center;gap:10px}.setting-row svg{width:18px;height:18px;color:var(--muted)}.toggle{border:1px solid #36525d;background:#203843;border-radius:22px;padding:10px 14px;min-width:68px;font-size:12px}.toggle.on{background:var(--accent);color:#10282c;border-color:var(--accent)}select{appearance:auto;background:#203b47;color:var(--ink);border:1px solid #36525d;border-radius:10px;padding:10px;max-width:140px;font-size:14px;touch-action:manipulation}.chapter-section{margin-top:23px}.chapter-title{font-size:11px;letter-spacing:1px;color:var(--accent);margin:0 0 12px}.stage-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}.stage-cell{border:1px solid #36505d;border-radius:13px;min-height:60px;padding:8px 1px;background:#182f3b;font-size:15px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px}.stage-cell.current{border-color:var(--accent);color:var(--accent)}.stage-cell small{font-size:8px;letter-spacing:1px;color:var(--accent)}.stage-cell svg{width:15px;height:15px}.map-endless{margin-top:25px}.skin-grid{display:grid;gap:10px;margin-top:20px}.skin-card{display:flex;align-items:center;gap:12px;background:#172e3a;border:1px solid #304a56;border-radius:18px;padding:12px}.swatch{width:43px;height:43px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;background:radial-gradient(circle at 35% 35%,var(--swatch),#10222e 90%);box-shadow:inset 0 0 0 1px #ffffff24;color:var(--swatch);font-size:26px}.skin-info{flex:1}.skin-info strong{font-size:13px;font-weight:550}.skin-info small{display:block;font-size:11px;color:var(--muted);margin-top:3px}.skin-card button{font-size:11px;background:#27444f;border-radius:10px;min-height:44px;padding:8px 11px;max-width:92px}.skin-card.active{border-color:var(--accent)}.product{border-top:1px solid #29414d;margin-top:23px;padding-top:20px}.product h3{font-size:16px;margin:0 0 6px;font-weight:550}.product p{font-size:12px;color:var(--muted);line-height:1.6;margin:0 0 12px}.toast{position:absolute;z-index:50;left:18px;right:18px;bottom:max(100px,calc(env(safe-area-inset-bottom) + 90px));background:#e3f5ed;color:#10282c;box-shadow:0 5px 35px #0006;border-radius:15px;padding:15px;text-align:center;font-size:13px;line-height:1.5;pointer-events:none}.busy{opacity:.6;pointer-events:none}.mini-guide{height:110px;display:flex;align-items:center;justify-content:center;color:var(--accent)}.mini-guide svg{width:70px;height:70px;stroke-width:.75}.result-panel{padding-top:16px}.modal-panel:focus{outline:none}
+@media(min-width:650px){body{background:radial-gradient(ellipse at 20% 20%,#193036,#050e15 60%)}#game-shell{border-inline:1px solid #29414b}.topbar{padding-top:4px}}
+@media(max-width:374px){#game-shell{padding-inline:20px}.wordmark{font-size:14px;letter-spacing:2px}.wordmark>svg{width:23px}.top-actions{gap:5px}.coin-pill{padding:0 10px}.modal-panel{padding-inline:18px}.stage-grid{gap:5px}.stage-cell{font-size:13px}.skin-info strong{font-size:12px}}
+@media(max-height:740px){#game-shell{padding-top:max(12px,env(safe-area-inset-top))}.level-head{margin-top:17px}.stage-title{margin-top:7px}.stage-title strong{font-size:34px}.stage-title>span:first-child{font-size:25px}.progress-track{margin-top:12px}.arena{margin-top:14px}.controls{margin-top:7px}.fire-button{height:57px}.bottom-nav{margin-top:16px;padding-top:8px;min-height:54px}.path-state{margin-bottom:8px}.result-art{width:120px;height:120px}.result-title{font-size:24px}.result-sub{margin-bottom:12px}.stat-row{padding:12px 0;margin:10px 0 16px}.rating{margin:7px 0 12px}}
+@media(max-height:600px){.level-head{margin-top:10px}.arena{min-height:130px;margin-top:9px}.eyebrow{font-size:9px}.stage-title>span:first-child{font-size:20px}.stage-title strong{font-size:27px}.stage-title{margin-top:6px}.mode-mark{font-size:27px}.progress-track{margin-top:8px}.topbar{min-height:38px}.bottom-nav{margin-top:10px;min-height:43px;padding-top:6px}.bottom-nav button{min-height:37px}.bottom-nav span{display:none}.control-hint{margin-top:7px;font-size:10px}.fire-button{height:50px}.guide-button{width:56px;min-width:56px}.controls{margin-top:3px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+</style>
+</head>
+<body>
+  <svg class="svg-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2 15 9 22 12 15 15 12 22 9 15 2 12 9 9Z"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="m9 5 10 7-10 7Z"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20S3 14 3 8a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6-9 12-9 12Z"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="6" height="6" rx="2"/><rect x="15" y="3" width="6" height="6" rx="2"/><rect x="3" y="15" width="6" height="6" rx="2"/><rect x="15" y="15" width="6" height="6" rx="2"/></symbol>
+    <symbol id="i-palette" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="8" cy="9" r="1"/><circle cx="15" cy="8" r="1"/><circle cx="16" cy="15" r="1"/><path d="m7 15 2 2"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="15" cy="17" r="3"/></symbol>
+    <symbol id="i-guide" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><path d="M12 2v5m0 10v5M2 12h5m10 0h5"/><circle cx="12" cy="12" r="1"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V3m-4 4 4-4 4 4M5 12v8h14v-8"/></symbol>
+    <symbol id="i-retry" viewBox="0 0 24 24"><path d="M4 10a8 8 0 1 1 1 7M4 4v6h6"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 15A9 9 0 0 1 9 4a9 9 0 1 0 11 11Z"/></symbol>
+    <symbol id="i-volume" viewBox="0 0 24 24"><path d="m11 4-6 5H2v6h3l6 5ZM15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/></symbol>
+    <symbol id="i-vibrate" viewBox="0 0 24 24"><rect x="8" y="4" width="8" height="16" rx="2"/><path d="m4 7-2 3 2 4-2 3m18-10 2 3-2 4 2 3"/></symbol>
+  </defs></svg>
+  <main id="game-shell">
+    <header class="topbar">
+      <div class="wordmark"><svg><use href="#i-spark"/></svg><span>ORBIT<span class="wordmark-light">LOOM</span></span></div>
+      <div class="top-actions"><button id="coins-button" class="coin-pill"><svg><use href="#i-spark"/></svg><span id="coins">0</span></button><button id="pause-button" class="icon-button"><svg><use href="#i-pause"/></svg></button></div>
+    </header>
+    <section class="level-head">
+      <div class="eyebrow"><span id="chapter-label">01 / FIRST LIGHT</span><span id="stage-count">01 / 30</span></div>
+      <div class="stage-title"><span id="stage-label">STAGE</span> <strong id="stage-number">01</strong><span class="mode-mark" id="mode-mark">✧</span></div>
+      <div id="progress-track" class="progress-track" aria-label="Progress"></div>
+    </section>
+    <section class="arena" id="arena">
+      <div class="arena-hud"><div id="hearts" class="hearts" role="img"></div><div class="record"><span id="best-label">BEST</span> <b id="best-score">0</b></div></div>
+      <canvas id="game" tabindex="0" role="img"></canvas>
+      <div id="floating-message" class="floating-message" aria-live="polite"></div>
+      <div class="arena-caption"><span class="tiny-spark">✦</span><span id="thread-count">0 / 5</span><span class="caption-line"></span><span id="run-score">0000</span></div>
+    </section>
+    <section class="controls">
+      <div class="path-state" id="path-state"><span class="path-dot"></span><span id="path-text">PATH OPEN</span></div>
+      <div class="fire-row"><button id="fire-button" class="fire-button"><svg><use href="#i-spark"/></svg><span id="fire-label">THREAD</span><span class="button-end">✦</span></button><button id="guide-button" class="guide-button"><svg><use href="#i-guide"/></svg><span id="guide-count">+3</span></button></div>
+      <p class="control-hint" id="control-hint">Tap when the path opens</p>
+    </section>
+    <nav class="bottom-nav"><button data-open="map"><svg><use href="#i-grid"/></svg><span data-i18n="map">Constellations</span></button><button data-open="shop"><svg><use href="#i-palette"/></svg><span data-i18n="shop">Thread colors</span></button><button data-open="settings"><svg><use href="#i-settings"/></svg><span data-i18n="settings">Settings</span></button></nav>
+    <div id="modal" class="modal" hidden><div id="modal-panel" class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modal-title"></div></div>
+    <div id="toast" role="status" class="toast" hidden></div>
+  </main>
+<script>
+/* ORBIT LOOM — deterministic, dependency-free game rules. MIT. */
+(function (root, factory) {
+  'use strict';
+  const api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else root.LoomEngine = api;
+})(typeof globalThis !== 'undefined' ? globalThis : this, function () {
+  'use strict';
+  const TAU = Math.PI * 2;
+  const TOTAL_LEVELS = 30;
+  const clamp = (n, a, b) => Math.min(b, Math.max(a, n));
+  const angleDiff = (a, b) => Math.atan2(Math.sin(a - b), Math.cos(a - b));
+  const int = (n, a, b, fallback) => Number.isFinite(n) ? clamp(Math.floor(n), a, b) : fallback;
+
+  function levelSpec(number, mode) {
+    const n = int(number, 1, 10000, 1);
+    const difficulty = mode === 'endless' ? Math.min(39, 23 + n) : n - 1;
+    const chapter = Math.min(4, Math.floor(difficulty / 6));
+    const count = difficulty < 3 ? 1 : difficulty < 12 ? 2 : 3;
+    return {
+      number: n, chapter, count,
+      target: 5 + Math.min(3, Math.floor(difficulty / 8)),
+      speed: 0.30 + Math.min(0.28, difficulty * 0.009),
+      halfGap: 0.60 - Math.min(0.18, difficulty * 0.005),
+      wobble: Math.min(0.26, difficulty * 0.009),
+      gates: 3,
+      rings: Array.from({ length: count }, (_, i) => ({
+        radius: count === 1 ? 119 : count === 2 ? 96 + i * 47 : 78 + i * 38,
+        weight: count === 1 ? 0 : (i / (count - 1)) * 2 - 1
+      }))
+    };
+  }
+
+  function createRun(level, mode = 'campaign') {
+    mode = mode === 'endless' ? mode : 'campaign';
+    const n = int(level, 1, mode === 'campaign' ? TOTAL_LEVELS : 10000, 1);
+    return {
+      version: 1, id: Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 9),
+      mode, level: n, time: 0, aim: -Math.PI / 2,
+      drift: 0, driftTarget: 0, cooldown: 0, hits: 0, hearts: 3,
+      misses: 0, score: 0, combo: 0, maxCombo: 0, perfects: 0,
+      shots: [], status: 'playing', revived: false, guided: false,
+      rewarded: false, doubled: false, earned: 0
+    };
+  }
+
+  function restoreRun(raw) {
+    if (!raw || raw.version !== 1 || !['campaign', 'endless'].includes(raw.mode)) return null;
+    const run = createRun(raw.level, raw.mode);
+    const spec = levelSpec(run.level, run.mode);
+    if (typeof raw.id === 'string' && /^[a-z0-9-]{1,80}$/.test(raw.id)) run.id = raw.id;
+    for (const key of ['time', 'drift', 'driftTarget']) run[key] = Number.isFinite(raw[key]) ? clamp(raw[key], 0, 1000000) : 0;
+    run.aim = Number.isFinite(raw.aim) ? angleDiff(raw.aim, 0) : -Math.PI / 2;
+    run.hearts = int(raw.hearts, 0, 3, 3);
+    run.hits = int(raw.hits, 0, spec.target, 0);
+    for (const key of ['misses', 'score', 'combo', 'maxCombo', 'perfects', 'earned']) run[key] = int(raw[key], 0, 999999999, 0);
+    for (const key of ['revived', 'guided', 'rewarded', 'doubled']) run[key] = raw[key] === true;
+    run.shots = Array.isArray(raw.shots) ? raw.shots.filter(Number.isFinite).slice(0, run.hits) : [];
+    run.status = run.hits >= spec.target ? 'won' : run.hearts === 0 ? 'lost' : 'playing';
+    return run;
+  }
+
+  function rotation(run, index) {
+    const spec = levelSpec(run.level, run.mode);
+    return -Math.PI / 2 + run.time * spec.speed + run.drift +
+      Math.sin(run.time * 0.85) * spec.wobble * spec.rings[index].weight;
+  }
+
+  function inspect(run, aim = run.aim) {
+    const spec = levelSpec(run.level, run.mode);
+    let precision = 1;
+    for (let i = 0; i < spec.count; i++) {
+      const rot = rotation(run, i);
+      let distance = Math.PI;
+      for (let g = 0; g < spec.gates; g++) distance = Math.min(distance, Math.abs(angleDiff(aim, rot + g * TAU / spec.gates)));
+      const margin = spec.halfGap - 0.065 - distance;
+      if (margin < 0) return { clear: false, blockedRing: i, precision: 0 };
+      precision = Math.min(precision, 1 - distance / (spec.halfGap - 0.065));
+    }
+    return { clear: true, blockedRing: -1, precision };
+  }
+
+  function guideAngle(run) {
+    const spec = levelSpec(run.level, run.mode);
+    const center = -Math.PI / 2 + run.time * spec.speed + run.drift;
+    let best = center;
+    for (let i = 1; i < spec.gates; i++) {
+      const candidate = center + i * TAU / spec.gates;
+      if (Math.abs(angleDiff(candidate, run.aim)) < Math.abs(angleDiff(best, run.aim))) best = candidate;
+    }
+    return angleDiff(best, 0);
+  }
+
+  function tick(run, dt) {
+    if (run.status !== 'playing') return;
+    dt = clamp(Number.isFinite(dt) ? dt : 0, 0, 0.05);
+    run.time += dt;
+    run.cooldown = Math.max(0, run.cooldown - dt);
+    const step = 3.5 * dt;
+    run.drift += clamp(run.driftTarget - run.drift, -step, step);
+  }
+
+  function fire(run) {
+    if (run.status !== 'playing' || run.cooldown > 0) return { type: 'ignored' };
+    const result = inspect(run);
+    run.cooldown = 0.42;
+    if (!result.clear) {
+      run.hearts--;
+      run.misses++;
+      run.combo = 0;
+      if (run.hearts <= 0) run.status = 'lost';
+      return { type: 'miss', ...result, aim: run.aim };
+    }
+    const perfect = result.precision > 0.68;
+    const points = 100 + levelSpec(run.level, run.mode).count * 20 + (perfect ? 50 : 0) + Math.min(5, run.combo) * 20;
+    run.hits++;
+    run.combo++;
+    run.maxCombo = Math.max(run.maxCombo, run.combo);
+    run.perfects += Number(perfect);
+    run.score += points;
+    run.shots.push(run.aim);
+    run.driftTarget += 0.76;
+    if (run.hits >= levelSpec(run.level, run.mode).target) run.status = 'won';
+    return { type: 'hit', ...result, perfect, points, aim: run.aim };
+  }
+
+  function revive(run) {
+    if (run.status !== 'lost' || run.revived) return false;
+    run.revived = true;
+    run.hearts = 2;
+    run.status = 'playing';
+    run.cooldown = 0.2;
+    return true;
+  }
+
+  function nextWave(run) {
+    if (run.mode !== 'endless' || run.status !== 'won') return null;
+    const next = createRun(run.level + 1, 'endless');
+    for (const key of ['id', 'hearts', 'misses', 'score', 'combo', 'maxCombo', 'perfects', 'revived', 'guided']) next[key] = run[key];
+    return next;
+  }
+
+  const stars = run => run.misses === 0 ? 3 : run.misses === 1 ? 2 : 1;
+  return Object.freeze({ TAU, TOTAL_LEVELS, clamp, angleDiff, levelSpec, createRun, restoreRun, rotation, inspect, guideAngle, tick, fire, revive, nextWave, stars });
+});
+
+</script>
+<script>
+(function () {
+  'use strict';
+  const en = {
+    tagline: 'A LITTLE TIMING. A LITTLE MAGIC.', stage: 'STAGE', wave: 'WAVE', best: 'BEST', thread: 'THREAD',
+    tapHint: 'Tap when the path opens', dragHint: 'Drag to aim · release to thread', ready: 'PATH OPEN', wait: 'FIND THE GAP',
+    perfect: 'PERFECT THREAD', nice: 'BEAUTIFULLY THREADED', miss: 'A LITTLE TOO CLOSE', combo: 'STREAK',
+    chapters: ['FIRST LIGHT', 'TWIN TIDES', 'SOFT CHAOS', 'AFTERGLOW', 'A SKY OF YOUR OWN'],
+    pause: 'Take a breath', resume: 'Keep weaving', retry: 'Try again', map: 'Constellations', settings: 'Settings', shop: 'Thread colors',
+    sound: 'Sound', haptics: 'Haptics', language: 'Language', on: 'On', off: 'Off', close: 'Close',
+    complete: 'Beautifully woven.', clearSub: 'One small tap. A new constellation.', next: 'Next constellation',
+    finished: 'You wove a sky.', finishedSub: '30 constellations. One beautifully patient pair of hands.', endless: 'Play endless',
+    lost: 'Almost a masterpiece.', lostSub: 'Your next thread could be the one.', endlessLost: 'A lovely little infinity.',
+    score: 'SCORE', record: 'NEW BEST', earned: 'STARDUST', revive: 'Mend the thread', reviveSub: 'Continue with 2 hearts · once per run',
+    double: 'Double stardust', hint: 'Guide thread', hintSub: 'Align your next 3 shots', share: 'Share your constellation',
+    rewardTag: 'Optional reward', demoTag: 'Web demo · instant rewards · no charges', demoReward: 'Demo reward received',
+    unavailable: 'Unavailable right now. You can keep playing.', saved: 'PNG saved', shared: 'Ready to share',
+    stars: 'stars', locked: 'Locked', selected: 'Selected', use: 'Use color', buy: 'Unlock', needDust: 'Weave more constellations to earn stardust.',
+    colors: ['Sea glass', 'Apricot sky', 'Electric iris', 'Rose quartz', 'Solar flare'],
+    collection: 'Your little universe', collectionSub: 'Every constellation is yours to replay.',
+    instant: 'Instant rewards', instantSub: 'Skip optional reward videos. Keep every reward.',
+    premium: 'Prism palette', premiumSub: 'Two exclusive colors. A little more you.', purchase: 'Test purchase · free',
+    nativePurchase: 'Purchase', owned: 'Owned', purchased: 'Demo purchase complete · no charge', restore: 'Restore purchases', restored: 'Purchases restored',
+    noForced: 'No forced ads. Every constellation is free to play.',
+    privacy: 'Offline by design. Progress stays on this device. No analytics or account.',
+    rewardBusy: 'Opening reward…', pausedLabel: 'PAUSED', guideActive: 'GUIDE THREAD',
+    replay: 'Weave again', leave: 'Constellations', storage: 'Storage unavailable. Progress is kept for this session.',
+    waveClear: 'NEXT WAVE', woven: 'WOVEN', newColor: 'More colors in your collection', audioNote: 'Sound starts after your first tap.',
+    reset: 'Reset progress', resetAsk: 'Erase local progress?', resetBody: 'This clears scores, stars and earned colors on this device.', resetConfirm: 'Erase progress', cancel: 'Keep progress',
+    pauseLabel: 'Pause game', coinsLabel: 'Open thread colors', guideLabel: 'Get optional aim help',
+    campaignDone: 'ENDLESS UNLOCKED', gateHelp: 'Open gaps let the thread pass. Solid arcs stop it.',
+    aimLabel: 'Aim area. Drag to aim and release to fire. Keyboard: arrows to aim, space to fire.',
+    demoPurchaseBody: 'This build simulates purchases locally. No payment is collected.', confirmDemo: 'Unlock in demo',
+    confirmNativeBody: 'Continue to the store to see the price and confirm your purchase.'
+  };
+  const ko = {
+    tagline: '찰나의 타이밍, 작은 마법.', stage: '스테이지', wave: '웨이브', best: '최고', thread: '실 쏘기',
+    tapHint: '길이 열리는 순간, 탭', dragHint: '드래그로 조준 · 놓으면 발사', ready: '지금, 관통!', wait: '틈을 기다려요',
+    perfect: '완벽한 한 땀', nice: '빛으로 이어졌어요', miss: '조금만 더 기다려요', combo: '연속',
+    chapters: ['첫 번째 빛', '두 겹의 물결', '부드러운 혼돈', '노을의 잔상', '나만의 하늘'],
+    pause: '잠깐, 숨 고르기', resume: '계속 엮기', retry: '다시 도전', map: '별자리', settings: '설정', shop: '실의 색깔',
+    sound: '소리', haptics: '진동', language: '언어', on: '켜짐', off: '꺼짐', close: '닫기',
+    complete: '별 하나를 엮었어요.', clearSub: '작은 손끝에서 태어난, 새로운 별자리.', next: '다음 별자리',
+    finished: '하늘을 완성했어요.', finishedSub: '서른 개의 별자리, 당신의 손끝에서.', endless: '무한 모드',
+    lost: '거의 완성이었어요.', lostSub: '다음 한 땀은, 분명 다를 거예요.', endlessLost: '당신만의 작은 무한.',
+    score: '점수', record: '최고 기록', earned: '별가루', revive: '끊어진 실 잇기', reviveSub: '하트 2개로 이어하기 · 한 판에 한 번',
+    double: '별가루 2배', hint: '길잡이 실', hintSub: '다음 3번 자동 조준', share: '내 별자리 공유',
+    rewardTag: '선택형 보상', demoTag: '웹 데모 · 즉시 보상 · 실제 결제 없음', demoReward: '테스트 보상을 받았어요',
+    unavailable: '지금은 사용할 수 없어요. 플레이는 계속할 수 있어요.', saved: 'PNG를 저장했어요', shared: '공유 준비 완료',
+    stars: '별', locked: '잠김', selected: '사용 중', use: '사용하기', buy: '열기', needDust: '별자리를 완성해 별가루를 모아 보세요.',
+    colors: ['바다 유리', '살구빛 하늘', '아이리스', '로즈 쿼츠', '태양의 불꽃'],
+    collection: '나만의 작은 우주', collectionSub: '완성한 별자리는 언제든 다시 엮을 수 있어요.',
+    instant: '즉시 보상 패스', instantSub: '선택형 보상 영상을 건너뛰고 보상은 그대로.',
+    premium: '프리즘 팔레트', premiumSub: '두 가지 특별한 색, 더 나다운 우주.', purchase: '테스트 구매 · 무료',
+    nativePurchase: '구매', owned: '보유 중', purchased: '테스트 구매 완료 · 실제 결제 없음', restore: '구매 복원', restored: '구매를 복원했어요',
+    noForced: '강제 광고 없이, 모든 별자리를 무료로 즐겨요.',
+    privacy: '오프라인으로 작동하며 진행은 기기에만 저장돼요. 계정·분석·추적 없음.',
+    rewardBusy: '보상 여는 중…', pausedLabel: '일시정지', guideActive: '길잡이 실',
+    replay: '다시 엮기', leave: '별자리 보기', storage: '저장 공간을 사용할 수 없어 이번 실행 동안만 기록돼요.',
+    waveClear: '다음 웨이브', woven: '완성', newColor: '색깔 컬렉션을 열어 보세요', audioNote: '첫 터치 후 소리가 시작돼요.',
+    reset: '진행 초기화', resetAsk: '기록을 지울까요?', resetBody: '이 기기의 점수·별·별가루로 얻은 색을 지워요.', resetConfirm: '기록 지우기', cancel: '기록 유지',
+    pauseLabel: '게임 일시정지', coinsLabel: '실 색깔 열기', guideLabel: '선택형 조준 도움 받기',
+    campaignDone: '무한 모드 열림', gateHelp: '빈 틈은 통과하고, 단단한 고리에 닿으면 멈춰요.',
+    aimLabel: '조준 영역. 드래그하고 놓으면 발사. 키보드 방향키로 조준, 스페이스로 발사.',
+    demoPurchaseBody: '이 빌드는 구매를 기기에만 테스트로 적용해요. 실제 결제는 없어요.', confirmDemo: '데모에서 열기',
+    confirmNativeBody: '스토어에서 가격을 확인하고 구매를 결정할 수 있어요.'
+  };
+  const ja = {
+    ...en, tagline: '一瞬のタイミング、小さな魔法。', stage: 'ステージ', wave: 'ウェーブ', best: 'ベスト', thread: '糸を放つ',
+    tapHint: '道が開いたらタップ', dragHint: 'ドラッグで狙う · 離して放つ', ready: 'いま、通せる', wait: 'すき間を待とう',
+    perfect: '完璧なひと針', nice: '光がつながった', miss: 'あと少し', combo: '連続', chapters: ['最初の光', '二つの波', 'やさしい混沌', '残照', '自分だけの空'],
+    pause: 'ひと休み', resume: 'つづける', retry: 'もう一度', map: '星座', settings: '設定', shop: '糸の色',
+    sound: 'サウンド', haptics: '振動', language: '言語', on: 'オン', off: 'オフ', close: '閉じる', complete: '星座ができた。',
+    clearSub: '指先から、新しい星座。', next: '次の星座', finished: '空を織りあげた。', finishedSub: '30の星座が、あなたの手から。', endless: 'エンドレス',
+    lost: 'あと少しで完成。', lostSub: '次のひと針に、願いを。', endlessLost: '小さな無限。', score: 'スコア', record: '新記録', earned: '星のかけら',
+    revive: '糸をつなぐ', reviveSub: 'ハート2個で復活 · 1回限り', double: 'かけら2倍', hint: 'ガイドの糸', hintSub: '次の3回を自動照準',
+    share: '星座をシェア', rewardTag: '任意の報酬', demoTag: 'ウェブデモ · 即時報酬 · 課金なし', demoReward: 'デモ報酬を受け取りました',
+    unavailable: '今は利用できません。プレイは続けられます。', saved: 'PNGを保存しました', shared: 'シェアの準備完了', stars: '星', locked: 'ロック中',
+    selected: '使用中', use: '使う', buy: '解放', needDust: '星座を完成させて、かけらを集めよう。', colors: ['シーグラス', '杏色の空', 'アイリス', 'ローズクォーツ', '太陽の炎'],
+    collection: '小さな宇宙', collectionSub: '完成した星座は何度でも遊べます。', instant: '即時報酬', instantSub: '任意の報酬動画をスキップ。報酬はそのまま。',
+    premium: 'プリズムパレット', premiumSub: '特別な2色で、自分らしく。', purchase: 'テスト購入 · 無料', nativePurchase: '購入', owned: '所有済み',
+    purchased: 'テスト購入完了 · 課金なし', restore: '購入を復元', restored: '購入を復元しました', noForced: '強制広告なし。すべての星座を無料で。',
+    privacy: 'オフライン。進行状況は端末に保存。アカウントや追跡はありません。', rewardBusy: '報酬を開いています…', pausedLabel: '一時停止', guideActive: 'ガイドの糸',
+    replay: 'もう一度織る', leave: '星座を見る', storage: '保存できません。今回の起動中だけ記録します。', waveClear: '次のウェーブ', woven: '完成',
+    newColor: 'カラーコレクションへ', audioNote: '最初のタップで音が始まります。', reset: '進行をリセット', resetAsk: '記録を消しますか？',
+    resetBody: 'この端末のスコア・星・獲得した色を消します。', resetConfirm: '記録を消す', cancel: '記録を残す', pauseLabel: 'ゲームを一時停止',
+    coinsLabel: '糸の色を開く', guideLabel: '任意の照準ガイド', campaignDone: 'エンドレス解放', gateHelp: 'すき間は通れます。リングに当たると止まります。',
+    aimLabel: 'ドラッグして狙い、離すと発射。矢印キーで照準、スペースで発射。', demoPurchaseBody: 'このビルドは購入を端末上でテストします。課金はありません。',
+    confirmDemo: 'デモで解放', confirmNativeBody: 'ストアで価格を確認して購入できます。'
+  };
+  window.LoomI18n = Object.freeze({ en, ko, ja });
+})();
+
+</script>
+<script>
+/* Replace the native adapter only. The game never loads an advertising SDK. */
+(function () {
+  'use strict';
+  const DEMO_KEY = 'orbit-loom.demo-entitlements.v1';
+  const pending = new Map();
+  let entitlements = {};
+  try { const saved = JSON.parse(localStorage.getItem(DEMO_KEY) || '{}'); if (saved && typeof saved === 'object' && !Array.isArray(saved)) entitlements = saved; } catch (_) { /* Storage may be unavailable. */ }
+  let serial = 0;
+  const native = () => window.OrbitNative;
+  const demoEnabled = () => !window.ORBIT_CONFIG || window.ORBIT_CONFIG.demoMonetization !== false;
+  const save = () => { try { localStorage.setItem(DEMO_KEY, JSON.stringify(entitlements)); } catch (_) {} };
+
+  function nativeCall(method, payload) {
+    return new Promise(resolve => {
+      const id = 'loom-' + Date.now() + '-' + (++serial);
+      const timer = setTimeout(() => { pending.delete(id); resolve({ granted: false, purchased: false, reason: 'timeout' }); }, 120000);
+      pending.set(id, result => { clearTimeout(timer); resolve(result); });
+      try { native()[method](id, JSON.stringify(payload)); }
+      catch (_) { window.OrbitBridge.resolve(id, { granted: false, purchased: false, reason: 'unavailable' }); }
+    });
+  }
+
+  function isAdFree() {
+    try { if (native() && typeof native().isAdFree === 'function') return native().isAdFree() === true; } catch (_) {}
+    return demoEnabled() && entitlements.ad_free === true;
+  }
+
+  async function requestReward(options = {}, callback) {
+    if (typeof options === 'string') options = { placement: options };
+    let result;
+    if (isAdFree()) result = { granted: true, source: 'ad-free', transactionId: 'free-' + (++serial) };
+    else if (native() && typeof native().requestReward === 'function') result = await nativeCall('requestReward', options);
+    else if (demoEnabled()) result = { granted: true, source: 'web-demo', transactionId: 'demo-' + (++serial) };
+    else result = { granted: false, reason: 'unavailable' };
+    if (typeof callback === 'function') callback(result);
+    return result;
+  }
+
+  async function requestPurchase(productId) {
+    if (!['ad_free', 'prism_pack'].includes(productId)) return { purchased: false, reason: 'unknown-product' };
+    if (native() && typeof native().requestPurchase === 'function') return nativeCall('requestPurchase', { productId });
+    if (!demoEnabled()) return { purchased: false, reason: 'unavailable' };
+    entitlements[productId] = true;
+    save();
+    return { purchased: true, productId, source: 'web-demo' };
+  }
+
+  async function restorePurchases() {
+    if (native() && typeof native().restorePurchases === 'function') return nativeCall('restorePurchases', {});
+    return { restored: demoEnabled(), entitlements: demoEnabled() ? { ...entitlements } : {} };
+  }
+
+  function hasProduct(id) {
+    try { if (native() && typeof native().hasProduct === 'function') return native().hasProduct(id) === true; } catch (_) {}
+    return demoEnabled() && entitlements[id] === true;
+  }
+
+  async function shareResultPNG(canvas) {
+    try {
+      if (window.OrbitPlatform && typeof window.OrbitPlatform.sharePNG === 'function') {
+        window.OrbitPlatform.sharePNG(canvas.toDataURL('image/png').split(',')[1]);
+        return { shared: true, method: 'native' };
+      }
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+      if (!blob) return { shared: false, reason: 'encode-failed' };
+      const file = new File([blob], 'orbit-loom.png', { type: 'image/png' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ title: 'ORBIT LOOM', files: [file] });
+        return { shared: true, method: 'share' };
+      }
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = file.name;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 30000);
+      return { shared: true, method: 'download' };
+    } catch (error) { return { shared: false, reason: error.name === 'AbortError' ? 'cancelled' : 'unavailable' }; }
+  }
+
+  window.OrbitBridge = Object.freeze({ resolve(id, raw) {
+    const finish = pending.get(id);
+    if (!finish) return;
+    pending.delete(id);
+    let value = raw;
+    try { if (typeof raw === 'string') value = JSON.parse(raw); } catch (_) { value = {}; }
+    finish(value && typeof value === 'object' ? value : {});
+  } });
+  window.GameBridge = Object.freeze({ requestReward, isAdFree, requestPurchase, restorePurchases, hasProduct, shareResultPNG,
+    get mode() { return native() ? 'native' : demoEnabled() ? 'web-demo' : 'disabled'; }
+  });
+  window.requestReward = requestReward;
+  window.isAdFree = isAdFree;
+  window.shareResultPNG = shareResultPNG;
+})();
+
+</script>
+<script>
+/* ORBIT LOOM — all artwork and sound are generated locally. */
+(function () {
+  'use strict';
+  const E = window.LoomEngine;
+  const B = window.GameBridge;
+  const $ = id => document.getElementById(id);
+  const KEY = 'orbit-loom.save.v1';
+  const palettes = [
+    { id: 'sea', color: '#a6f3d1', rgb: '166,243,209', secondary: '#adc0ff', third: '#f6c3a3', price: 0 },
+    { id: 'apricot', color: '#ffca99', rgb: '255,202,153', secondary: '#f8a6b2', third: '#bdddda', price: 100 },
+    { id: 'iris', color: '#c6b1ff', rgb: '198,177,255', secondary: '#94dfef', third: '#ffd0b4', price: 220 },
+    { id: 'rose', color: '#f7b8dc', rgb: '247,184,220', secondary: '#c0b6ff', third: '#ffdaaf', premium: true },
+    { id: 'solar', color: '#f8e09a', rgb: '248,224,154', secondary: '#ff9d92', third: '#c9f0d0', premium: true }
+  ];
+  const defaultSave = () => ({ version: 1, level: 1, unlocked: 1, best: 0, endlessBest: 0, coins: 0,
+    stars: Array(30).fill(0), colors: ['sea'], skin: 'sea', sound: true, haptics: true,
+    lang: Object.keys(LoomI18n).includes(navigator.language.slice(0, 2)) ? navigator.language.slice(0, 2) : 'en',
+    snapshot: null, guideShots: 0
+  });
+  let storageOK = true;
+  function loadSave() {
+    const base = defaultSave();
+    try {
+      const raw = JSON.parse(localStorage.getItem(KEY));
+      if (!raw || raw.version !== 1) return base;
+      const integer = (v, lo, hi, fallback) => Number.isFinite(v) ? E.clamp(Math.floor(v), lo, hi) : fallback;
+      for (const k of ['best', 'endlessBest', 'coins']) base[k] = integer(raw[k], 0, 999999999, 0);
+      base.unlocked = integer(raw.unlocked, 1, 30, 1);
+      base.level = integer(raw.level, 1, base.unlocked, 1);
+      if (Array.isArray(raw.stars)) base.stars = Array.from({ length: 30 }, (_, i) => integer(raw.stars[i], 0, 3, 0));
+      if (Array.isArray(raw.colors)) base.colors = [...new Set(['sea', ...raw.colors.filter(id => palettes.some(p => p.id === id && !p.premium))])];
+      if (palettes.some(p => p.id === raw.skin)) base.skin = raw.skin;
+      if (Object.hasOwn(LoomI18n, raw.lang)) base.lang = raw.lang;
+      base.sound = raw.sound !== false;
+      base.haptics = raw.haptics !== false;
+      base.snapshot = E.restoreRun(raw.snapshot);
+      base.guideShots = integer(raw.guideShots, 0, 3, 0);
+      if (base.snapshot && base.snapshot.mode === 'campaign' && base.snapshot.level > base.unlocked) base.snapshot = null;
+      if (base.snapshot && base.snapshot.mode === 'endless' && !base.stars[29]) base.snapshot = null;
+    } catch (_) { storageOK = false; }
+    return base;
+  }
+  let data = loadSave();
+  let run = data.snapshot || E.createRun(data.level);
+  let palette = palettes[0];
+  let modalView = null;
+  let modalOrigin = null;
+  let modalFocus = null;
+  let busy = false;
+  let suspend = document.hidden;
+  let particles = [];
+  let pulses = [];
+  let beams = [];
+  let shake = 0;
+  let endTimer = 0;
+  let idleTime = 0;
+  let last = 0;
+  let lastSave = 0;
+  let animationClock = 0;
+  let feedbackTimer;
+  let toastTimer;
+  let guideRemaining = data.guideShots;
+  let wasRecord = false;
+  let pointer = null;
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const canvas = $('game');
+  const ctx = canvas.getContext('2d', { alpha: true });
+  let width = 1, height = 1, scale = 1, centerX = 0, centerY = 0;
+  let audioContext;
+  const t = key => LoomI18n[data.lang][key] ?? LoomI18n.en[key] ?? key;
+  const icon = name => '<svg aria-hidden="true"><use href="#i-' + name + '"/></svg>';
+  const pad = n => String(n).padStart(2, '0');
+  const escape = text => String(text).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const button = (action, label, cls = '', symbol = '') => '<button class="button ' + cls + '" data-action="' + action + '">' + (symbol ? icon(symbol) : '') + label + '</button>';
+  const canPlay = () => !modalView && !suspend && !busy && run.status === 'playing';
+
+  function persist() {
+    data.snapshot = run;
+    data.guideShots = guideRemaining;
+    try { localStorage.setItem(KEY, JSON.stringify(data)); }
+    catch (_) { if (storageOK) { storageOK = false; toast(t('storage')); } }
+  }
+
+  function setPalette() {
+    const selected = palettes.find(p => p.id === data.skin) || palettes[0];
+    const allowed = selected.premium ? B.hasProduct('prism_pack') : data.colors.includes(selected.id);
+    palette = allowed ? selected : palettes[0];
+    data.skin = palette.id;
+    document.documentElement.style.setProperty('--accent', palette.color);
+    document.documentElement.style.setProperty('--accent-rgb', palette.rgb);
+  }
+
+  function unlockAudio() {
+    if (!data.sound) return;
+    try {
+      const Audio = window.AudioContext || window.webkitAudioContext;
+      if (!Audio) return;
+      if (!audioContext) audioContext = new Audio();
+      if (audioContext.state === 'suspended') audioContext.resume().catch(() => {});
+    } catch (_) { /* A muted or unsupported device still plays normally. */ }
+  }
+
+  function tone(frequency, duration, delay = 0, type = 'sine', volume = 0.09) {
+    if (!data.sound || !audioContext || audioContext.state !== 'running') return;
+    const start = audioContext.currentTime + delay;
+    const o = audioContext.createOscillator();
+    const g = audioContext.createGain();
+    o.type = type; o.frequency.setValueAtTime(frequency, start);
+    o.frequency.exponentialRampToValueAtTime(frequency * 0.92, start + duration);
+    g.gain.setValueAtTime(0.0001, start);
+    g.gain.exponentialRampToValueAtTime(volume, start + 0.008);
+    g.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+    o.connect(g); g.connect(audioContext.destination);
+    o.start(start); o.stop(start + duration + 0.02);
+    o.onended = () => { o.disconnect(); g.disconnect(); };
+  }
+
+  function sound(kind) {
+    unlockAudio();
+    if (kind === 'miss') { tone(105, 0.12, 0, 'triangle', 0.13); tone(70, 0.18, 0.05, 'sine', 0.08); }
+    else if (kind === 'win') [392, 494, 587, 784, 988].forEach((f, i) => tone(f, 0.6, i * 0.075, 'sine', 0.06));
+    else if (kind === 'hit') { const note = [392, 440, 494, 587, 659, 784, 880, 988][(run.hits - 1) % 8]; tone(note, 0.34); tone(note * 2, 0.15, 0.015, 'sine', 0.024); }
+    else tone(600, 0.08, 0, 'sine', 0.035);
+  }
+
+  function vibrate(pattern) {
+    if (!data.haptics) return;
+    try {
+      if (window.OrbitPlatform && typeof window.OrbitPlatform.vibrate === 'function') window.OrbitPlatform.vibrate(Array.isArray(pattern) ? pattern[0] : pattern);
+      else if (navigator.vibrate) navigator.vibrate(pattern);
+    } catch (_) {}
+  }
+
+  function toast(text) {
+    clearTimeout(toastTimer);
+    $('toast').textContent = text;
+    $('toast').hidden = false;
+    toastTimer = setTimeout(() => { $('toast').hidden = true; }, 2600);
+  }
+
+  function feedback(text, bad = false) {
+    clearTimeout(feedbackTimer);
+    const el = $('floating-message');
+    el.textContent = text;
+    el.className = 'floating-message visible' + (bad ? ' bad' : '');
+    feedbackTimer = setTimeout(() => el.classList.remove('visible'), 1150);
+  }
+
+  function localize() {
+    document.documentElement.lang = data.lang;
+    document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+    $('pause-button').setAttribute('aria-label', t('pauseLabel'));
+    $('coins-button').setAttribute('aria-label', t('coinsLabel'));
+    $('guide-button').setAttribute('aria-label', t('guideLabel'));
+    canvas.setAttribute('aria-label', t('aimLabel'));
+    $('fire-label').textContent = t('thread');
+    $('best-label').textContent = t('best');
+    $('control-hint').textContent = t(run.level < 3 && run.mode === 'campaign' ? 'tapHint' : 'dragHint');
+    updateHUD();
+  }
+
+  function updateHUD() {
+    const spec = E.levelSpec(run.level, run.mode);
+    $('chapter-label').textContent = pad(spec.chapter + 1) + ' / ' + t('chapters')[spec.chapter];
+    $('stage-count').textContent = run.mode === 'endless' ? '∞' : pad(run.level) + ' / 30';
+    $('stage-label').textContent = t(run.mode === 'endless' ? 'wave' : 'stage');
+    $('stage-number').textContent = pad(run.level);
+    $('mode-mark').textContent = run.mode === 'endless' ? '∞' : '✧';
+    $('coins').textContent = data.coins.toLocaleString(data.lang);
+    $('best-score').textContent = (run.mode === 'endless' ? data.endlessBest : data.best).toLocaleString(data.lang);
+    $('hearts').innerHTML = Array.from({ length: 3 }, (_, i) => '<svg' + (i >= run.hearts ? ' class="empty"' : '') + '><use href="#i-heart"/></svg>').join('');
+    $('hearts').setAttribute('aria-label', run.hearts + ' / 3');
+    $('progress-track').innerHTML = Array.from({ length: spec.target }, (_, i) => '<span' + (i < run.hits ? ' class="filled"' : '') + '></span>').join('');
+    $('progress-track').setAttribute('aria-label', run.hits + ' / ' + spec.target);
+    $('thread-count').textContent = run.hits + ' / ' + spec.target;
+    $('run-score').textContent = String(run.score).padStart(4, '0');
+    $('guide-count').textContent = guideRemaining > 0 ? String(guideRemaining) : run.guided ? '✓' : '+3';
+    $('guide-button').classList.toggle('active', guideRemaining > 0);
+    $('guide-button').disabled = run.guided && guideRemaining <= 0;
+    $('control-hint').textContent = t(run.level < 3 && run.mode === 'campaign' ? 'tapHint' : 'dragHint');
+  }
+
+  function resize() {
+    const rect = canvas.getBoundingClientRect();
+    width = Math.max(1, rect.width); height = Math.max(1, rect.height);
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    canvas.width = Math.round(width * dpr); canvas.height = Math.round(height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    scale = Math.min(width / 380, height / 380);
+    centerX = width / 2; centerY = height / 2;
+    draw();
+  }
+
+  function sparkle(context, x, y, size, color, alpha = 1) {
+    context.save(); context.globalAlpha = alpha; context.fillStyle = color;
+    context.beginPath(); context.moveTo(x, y - size); context.quadraticCurveTo(x + size * 0.2, y - size * 0.2, x + size, y);
+    context.quadraticCurveTo(x + size * 0.2, y + size * 0.2, x, y + size); context.quadraticCurveTo(x - size * 0.2, y + size * 0.2, x - size, y);
+    context.quadraticCurveTo(x - size * 0.2, y - size * 0.2, x, y - size); context.fill(); context.restore();
+  }
+
+  function drawBloom(context, x, y, radius, amount, rotation = 0, completed = false) {
+    context.save(); context.translate(x, y); context.rotate(rotation);
+    const count = E.levelSpec(run.level, run.mode).target;
+    const colors = [palette.color, palette.secondary, palette.third];
+    const petals = Math.min(amount, count);
+    for (let j = 0; j < petals; j++) {
+      const angle = j * E.TAU / count - Math.PI / 2;
+      context.save(); context.rotate(angle);
+      for (let layer = 0; layer < 3; layer++) {
+        const r = radius * (1 - layer * 0.21);
+        const spread = r * (0.27 + (run.level % 4) * 0.025);
+        context.strokeStyle = colors[(j + layer) % colors.length];
+        context.globalAlpha = completed ? 0.88 - layer * 0.16 : 0.60 - layer * 0.12;
+        context.lineWidth = completed ? 1.2 : 0.9;
+        context.beginPath(); context.moveTo(0, 0);
+        context.bezierCurveTo(r * 0.27, -spread, r * 0.8, -spread * 0.78, r, 0);
+        context.bezierCurveTo(r * 0.8, spread * 0.78, r * 0.27, spread, 0, 0);
+        context.stroke();
+      }
+      context.globalAlpha = 0.9;
+      sparkle(context, radius, 0, completed ? 3.5 : 2, colors[j % 3]);
+      context.restore();
+    }
+    if (completed) {
+      context.strokeStyle = palette.color; context.globalAlpha = 0.18; context.lineWidth = 0.8;
+      context.beginPath(); context.arc(0, 0, radius * 1.11, 0, E.TAU); context.stroke();
+      for (let i = 0; i < count; i++) {
+        const a = i * E.TAU / count - Math.PI / 2;
+        context.beginPath(); context.moveTo(Math.cos(a) * radius, Math.sin(a) * radius);
+        const next = a + E.TAU * 2 / count;
+        context.lineTo(Math.cos(next) * radius, Math.sin(next) * radius); context.stroke();
+      }
+    }
+    sparkle(context, 0, 0, completed ? 9 : 6, palette.color);
+    context.restore();
+  }
+
+  function spawnBurst(x, y, count, color, force = 1) {
+    if (reduced) count = Math.min(count, 10);
+    for (let i = 0; i < count; i++) {
+      const a = Math.random() * E.TAU, speed = (30 + Math.random() * 100) * force;
+      particles.push({ x, y, vx: Math.cos(a) * speed, vy: Math.sin(a) * speed, life: 0.5 + Math.random() * 0.65, max: 1.15, size: 1 + Math.random() * 2, color });
+    }
+    if (particles.length > 180) particles.splice(0, particles.length - 180);
+  }
+
+  function shoot() {
+    unlockAudio();
+    if (!canPlay()) return;
+    if (guideRemaining > 0) run.aim = E.guideAngle(run);
+    const result = E.fire(run);
+    if (result.type === 'ignored') return;
+    idleTime = 0;
+    const spec = E.levelSpec(run.level, run.mode);
+    const radius = result.clear ? 177 : spec.rings[result.blockedRing].radius;
+    const color = result.clear ? palette.color : '#ffab96';
+    beams.push({ angle: result.aim, radius, life: 0.38, color });
+    spawnBurst(Math.cos(result.aim) * radius, Math.sin(result.aim) * radius, result.clear ? 22 : 15, color);
+    if (result.type === 'hit') {
+      if (guideRemaining > 0) guideRemaining--;
+      sound('hit'); vibrate(result.perfect ? [14, 25, 9] : 12);
+      feedback(t(result.perfect ? 'perfect' : 'nice'));
+      pulses.push({ radius: 18, life: 0.6, color: palette.color });
+      if (run.status === 'won') {
+        finishWin(); endTimer = run.mode === 'endless' ? 1.25 : 1.1;
+        sound('win'); vibrate([22, 45, 35]);
+        spawnBurst(0, 0, 80, palette.color, 1.6);
+        pulses.push({ radius: 40, life: 1.2, color: palette.secondary });
+      }
+    } else {
+      sound('miss'); vibrate([35, 35, 35]);
+      feedback(t('miss'), true); shake = reduced ? 0 : 0.22;
+      if (run.status === 'lost') {
+        finishLoss(); endTimer = 0.65;
+      }
+    }
+    persist(); updateHUD();
+  }
+
+  function finishWin() {
+    if (run.rewarded) return;
+    const previous = run.mode === 'campaign' ? data.stars[run.level - 1] : 0;
+    run.earned = run.mode === 'endless' ? 10 : previous ? 6 + E.stars(run) * 2 : 20 + E.stars(run) * 5;
+    data.coins += run.earned;
+    run.rewarded = true;
+    if (run.mode === 'campaign') {
+      data.stars[run.level - 1] = Math.max(previous, E.stars(run));
+      data.unlocked = Math.max(data.unlocked, Math.min(30, run.level + 1));
+      data.level = Math.min(30, run.level + 1);
+      wasRecord = run.score > data.best;
+      data.best = Math.max(data.best, run.score);
+    } else {
+      wasRecord = run.score > data.endlessBest;
+      data.endlessBest = Math.max(data.endlessBest, run.score);
+    }
+  }
+
+  function finishLoss() {
+    const key = run.mode === 'endless' ? 'endlessBest' : 'best';
+    wasRecord = run.score > data[key];
+    data[key] = Math.max(data[key], run.score);
+  }
+
+  function newRun(level, mode = 'campaign') {
+    run = E.createRun(level, mode);
+    if (mode === 'campaign') data.level = level;
+    guideRemaining = 0; endTimer = 0; wasRecord = false; idleTime = 0;
+    particles = []; beams = []; pulses = []; shake = 0;
+    closeModal(false); persist(); localize();
+    $('floating-message').classList.remove('visible');
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, width, height);
+    ctx.save(); ctx.translate(centerX, centerY); ctx.scale(scale, scale);
+    if (shake > 0) ctx.translate((Math.random() - 0.5) * shake * 27, (Math.random() - 0.5) * shake * 27);
+    const spec = E.levelSpec(run.level, run.mode);
+    const won = run.status === 'won';
+    // Quiet star field, fixed seed: no image assets, no random flicker.
+    for (let i = 0; i < 46; i++) {
+      const a = i * 2.39996323, r = 38 + ((i * 73) % 154);
+      ctx.fillStyle = i % 5 === 0 ? palette.color : '#aac6d0';
+      ctx.globalAlpha = 0.12 + (i % 3) * 0.045;
+      ctx.beginPath(); ctx.arc(Math.cos(a) * r, Math.sin(a) * r, i % 7 === 0 ? 1.2 : 0.7, 0, E.TAU); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    const halo = ctx.createRadialGradient(0, 0, 10, 0, 0, 185);
+    halo.addColorStop(0, 'rgba(' + palette.rgb + ',.055)'); halo.addColorStop(1, 'rgba(' + palette.rgb + ',0)');
+    ctx.fillStyle = halo; ctx.fillRect(-200, -200, 400, 400);
+    ctx.strokeStyle = '#25414d'; ctx.lineWidth = 0.8;
+    for (const radius of [61, 177]) { ctx.globalAlpha = radius === 177 ? 0.5 : 0.24; ctx.beginPath(); ctx.arc(0, 0, radius, 0, E.TAU); ctx.stroke(); }
+    ctx.globalAlpha = 1;
+    for (let i = 0; i < 48; i++) {
+      const a = i * E.TAU / 48;
+      const inner = i % 4 === 0 ? 178 : 180;
+      ctx.strokeStyle = i % 12 === 0 ? '#65818c' : '#2d4550';
+      ctx.beginPath(); ctx.moveTo(Math.cos(a) * inner, Math.sin(a) * inner); ctx.lineTo(Math.cos(a) * 183, Math.sin(a) * 183); ctx.stroke();
+    }
+    if (!won) {
+      drawBloom(ctx, 0, 0, 54, run.hits, animationClock * 0.025);
+      const colors = [palette.color, palette.secondary, palette.third];
+      spec.rings.forEach((ring, i) => {
+        const rot = E.rotation(run, i);
+        const thickness = 9 - i * 0.5;
+        // Closed arcs are visibly solid; open paths have two bright endpoints.
+        for (let g = 0; g < spec.gates; g++) {
+          const a = rot + g * E.TAU / spec.gates;
+          const end = rot + (g + 1) * E.TAU / spec.gates - spec.halfGap;
+          ctx.strokeStyle = colors[i]; ctx.globalAlpha = 0.18; ctx.lineWidth = thickness + 7; ctx.lineCap = 'round';
+          ctx.beginPath(); ctx.arc(0, 0, ring.radius, a + spec.halfGap, end); ctx.stroke();
+          ctx.globalAlpha = 0.75; ctx.lineWidth = thickness;
+          ctx.beginPath(); ctx.arc(0, 0, ring.radius, a + spec.halfGap, end); ctx.stroke();
+          ctx.globalAlpha = 0.95; ctx.lineWidth = 1; ctx.strokeStyle = colors[i];
+          ctx.beginPath(); ctx.arc(0, 0, ring.radius - thickness / 2, a + spec.halfGap + 0.025, end - 0.025); ctx.stroke();
+          for (const edge of [a - spec.halfGap, a + spec.halfGap]) {
+            ctx.fillStyle = colors[i]; ctx.globalAlpha = 1; ctx.beginPath(); ctx.arc(Math.cos(edge) * ring.radius, Math.sin(edge) * ring.radius, 3.2, 0, E.TAU); ctx.fill();
+          }
+          // Small diamonds visibly mark the centers of the openings.
+          sparkle(ctx, Math.cos(a) * ring.radius, Math.sin(a) * ring.radius, 2.3, colors[i], 0.5);
+        }
+      });
+      ctx.globalAlpha = 1;
+      const check = E.inspect(run);
+      const distance = check.clear ? 170 : spec.rings[check.blockedRing].radius - 9;
+      const color = check.clear ? palette.color : '#78949f';
+      ctx.save(); ctx.rotate(run.aim); ctx.strokeStyle = color; ctx.lineWidth = check.clear ? 1.5 : 1;
+      ctx.setLineDash([3, 7]); ctx.lineDashOffset = -animationClock * 12; ctx.globalAlpha = check.clear ? 0.8 : 0.52;
+      ctx.beginPath(); ctx.moveTo(24, 0); ctx.lineTo(distance, 0); ctx.stroke(); ctx.setLineDash([]);
+      if (!check.clear) { ctx.strokeStyle = '#ffab96'; ctx.globalAlpha = 0.8; ctx.beginPath(); ctx.moveTo(distance - 3, -4); ctx.lineTo(distance + 3, 4); ctx.moveTo(distance + 3, -4); ctx.lineTo(distance - 3, 4); ctx.stroke(); }
+      sparkle(ctx, 170, 0, check.clear ? 7 : 4, check.clear ? palette.color : '#577681', check.clear ? 1 : 0.8);
+      ctx.restore();
+      if (run.level === 1 && run.hits === 0 && run.misses === 0 && check.clear && !modalView) {
+        const demo = (animationClock % 2.4) / 2.4;
+        if (demo < 0.6) sparkle(ctx, Math.cos(run.aim) * (20 + demo / 0.6 * 150), Math.sin(run.aim) * (20 + demo / 0.6 * 150), 4, '#ffffff', 0.6);
+      }
+      const pulse = reduced ? 1 : 1 + Math.sin(animationClock * 2) * 0.07;
+      ctx.globalAlpha = 0.08; ctx.fillStyle = palette.color; ctx.beginPath(); ctx.arc(0, 0, 24 * pulse, 0, E.TAU); ctx.fill();
+      ctx.globalAlpha = 1; ctx.strokeStyle = palette.color; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(0, 0, 16, 0, E.TAU); ctx.stroke();
+      sparkle(ctx, 0, 0, 10, palette.color);
+    } else {
+      const bloomScale = reduced ? 1 : 1 + Math.sin(animationClock * 1.2) * 0.025;
+      drawBloom(ctx, 0, 0, 136 * bloomScale, spec.target, animationClock * 0.06, true);
+    }
+    for (const beam of beams) {
+      ctx.save(); ctx.rotate(beam.angle); ctx.globalAlpha = beam.life / 0.38;
+      ctx.strokeStyle = beam.color; ctx.shadowColor = beam.color; ctx.shadowBlur = 12; ctx.lineWidth = 2.8;
+      ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(beam.radius, 0); ctx.stroke(); ctx.shadowBlur = 0;
+      sparkle(ctx, beam.radius, 0, 7 * beam.life / 0.38, '#ffffff'); ctx.restore();
+    }
+    for (const pulse of pulses) {
+      ctx.strokeStyle = pulse.color; ctx.globalAlpha = pulse.life * 0.3; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(0, 0, pulse.radius, 0, E.TAU); ctx.stroke();
+    }
+    for (const p of particles) {
+      ctx.globalAlpha = Math.min(1, p.life * 1.6); ctx.fillStyle = p.color;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, E.TAU); ctx.fill();
+    }
+    ctx.restore(); ctx.globalAlpha = 1;
+  }
+
+  function frame(now) {
+    const dt = Math.min(0.05, Math.max(0, (now - (last || now)) / 1000)); last = now;
+    if (!suspend) {
+      animationClock += dt;
+      if (canPlay()) {
+        E.tick(run, dt); idleTime += dt;
+        if (guideRemaining > 0) run.aim = E.guideAngle(run);
+      }
+      if (!modalView && endTimer > 0) {
+        endTimer -= dt;
+        if (endTimer <= 0) {
+          if (run.mode === 'endless' && run.status === 'won') {
+            run = E.nextWave(run); updateHUD(); persist(); feedback(t('waveClear') + ' ' + run.level);
+          } else openModal(run.status === 'won' ? 'win' : 'lose');
+        }
+      }
+      for (const p of particles) { p.x += p.vx * dt; p.y += p.vy * dt; p.vx *= 1 - dt * 1.4; p.vy *= 1 - dt * 1.4; p.life -= dt; }
+      particles = particles.filter(p => p.life > 0);
+      for (const p of pulses) { p.radius += dt * 130; p.life -= dt; }
+      pulses = pulses.filter(p => p.life > 0);
+      for (const b of beams) b.life -= dt;
+      beams = beams.filter(b => b.life > 0);
+      shake = Math.max(0, shake - dt);
+      draw();
+      const check = E.inspect(run);
+      const ready = check.clear && run.cooldown <= 0 && run.status === 'playing';
+      $('path-state').classList.toggle('ready', ready);
+      const stateText = modalView ? t('pausedLabel') : guideRemaining > 0 ? t('guideActive') : run.status === 'won' ? t('woven') : t(ready ? 'ready' : 'wait');
+      if ($('path-text').textContent !== stateText) $('path-text').textContent = stateText;
+      $('fire-button').classList.toggle('waiting', !ready);
+      $('fire-button').disabled = run.status !== 'playing' || !!modalView || busy;
+      if (now - lastSave > 2500 && run.status === 'playing' && !modalView) { persist(); lastSave = now; }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function modalHeader(title, subtitle = '') {
+    return '<button class="icon-button modal-close" data-action="close" aria-label="' + t('close') + '">' + icon('close') + '</button><div class="kicker">ORBIT LOOM</div><h2 id="modal-title" class="modal-heading">' + title + '</h2>' + (subtitle ? '<p class="modal-sub">' + subtitle + '</p>' : '');
+  }
+  const demoNote = () => B.mode === 'web-demo' ? '<p class="demo-note">' + t('demoTag') + '</p>' : '';
+  const rewardLabel = key => t(key) + (B.isAdFree() ? '' : ' · ▷');
+
+  function openModal(view, origin) {
+    if (busy) return;
+    if (!modalView) { modalFocus = document.activeElement; pointer = null; persist(); }
+    modalOrigin = origin || (modalView && !['win', 'lose'].includes(modalView) ? modalView : null);
+    modalView = view;
+    $('modal').hidden = false;
+    renderModal();
+    const first = $('modal-panel').querySelector('button:not(:disabled),select');
+    if (first) first.focus({ preventScroll: true });
+  }
+
+  function closeModal(restoreResult = true) {
+    if (busy) return;
+    modalView = null; modalOrigin = null;
+    $('modal').hidden = true;
+    if (restoreResult && run.status !== 'playing' && endTimer <= 0) {
+      openModal(run.status === 'won' ? 'win' : 'lose'); return;
+    }
+    if (modalFocus && modalFocus.isConnected) modalFocus.focus({ preventScroll: true });
+  }
+
+  function renderModal() {
+    const panel = $('modal-panel');
+    panel.className = 'modal-panel' + (['win', 'lose'].includes(modalView) ? ' result-panel' : '');
+    let html = '';
+    if (modalView === 'pause') {
+      html = modalHeader(t('pause')) + '<div class="mini-guide">' + icon('moon') + '</div><div class="menu-stack">' +
+        button('resume', t('resume'), '', 'play') + button('retry', t('retry'), 'secondary', 'retry') + button('map', t('map'), 'ghost', 'grid') + '</div>';
+    } else if (modalView === 'settings') {
+      html = modalHeader(t('settings')) +
+        '<div class="setting-row"><span>' + icon('volume') + t('sound') + '</span><button data-action="sound" class="toggle ' + (data.sound ? 'on' : '') + '" aria-pressed="' + data.sound + '">' + t(data.sound ? 'on' : 'off') + '</button></div>' +
+        '<div class="setting-row"><span>' + icon('vibrate') + t('haptics') + '</span><button data-action="haptics" class="toggle ' + (data.haptics ? 'on' : '') + '" aria-pressed="' + data.haptics + '">' + t(data.haptics ? 'on' : 'off') + '</button></div>' +
+        '<label class="setting-row"><span>' + t('language') + '</span><select id="language-select"><option value="en"' + (data.lang === 'en' ? ' selected' : '') + '>English</option><option value="ko"' + (data.lang === 'ko' ? ' selected' : '') + '>한국어</option><option value="ja"' + (data.lang === 'ja' ? ' selected' : '') + '>日本語</option></select></label>' +
+        '<p class="fine-print">' + t('audioNote') + '</p><p class="fine-print">' + t('privacy') + '</p>' + button('reset', t('reset'), 'ghost');
+    } else if (modalView === 'reset') {
+      html = modalHeader(t('resetAsk'), t('resetBody')) + button('cancel-reset', t('cancel'), 'secondary') + button('reset-confirm', t('resetConfirm'), 'danger');
+    } else if (modalView === 'map') {
+      html = modalHeader(t('collection'), t('collectionSub'));
+      for (let chapter = 0; chapter < 5; chapter++) {
+        html += '<section class="chapter-section"><h3 class="chapter-title">' + pad(chapter + 1) + ' / ' + t('chapters')[chapter] + '</h3><div class="stage-grid">';
+        for (let i = chapter * 6 + 1; i <= chapter * 6 + 6; i++) {
+          const locked = i > data.unlocked;
+          html += '<button class="stage-cell' + (i === run.level && run.mode === 'campaign' ? ' current' : '') + '" data-level="' + i + '"' + (locked ? ' disabled' : '') + ' aria-label="' + t('stage') + ' ' + i + ', ' + (locked ? t('locked') : data.stars[i - 1] + ' ' + t('stars')) + '">' + (locked ? icon('lock') : pad(i)) + '<small>' + (locked ? '·' : '✦'.repeat(data.stars[i - 1]) || '·') + '</small></button>';
+        }
+        html += '</div></section>';
+      }
+      if (data.stars[29]) html += '<div class="map-endless">' + button('endless', '∞ &nbsp; ' + t('endless'), 'secondary') + '</div>';
+    } else if (modalView === 'shop') {
+      html = modalHeader(t('shop'), '✦ ' + data.coins.toLocaleString(data.lang) + ' ' + t('earned')) + '<div class="skin-grid">';
+      palettes.forEach((p, i) => {
+        const owned = p.premium ? B.hasProduct('prism_pack') : data.colors.includes(p.id);
+        const active = p.id === palette.id;
+        html += '<div class="skin-card' + (active ? ' active' : '') + '"><div class="swatch" style="--swatch:' + p.color + '">✧</div><div class="skin-info"><strong>' + t('colors')[i] + '</strong><small>' + (p.premium ? t('premium') : owned ? t('owned') : '✦ ' + p.price) + '</small></div><button data-skin="' + p.id + '"' + (active ? ' disabled' : '') + '>' + t(active ? 'selected' : owned ? 'use' : 'buy') + '</button></div>';
+      });
+      html += '</div>';
+      for (const [product, title, body] of [['ad_free', 'instant', 'instantSub'], ['prism_pack', 'premium', 'premiumSub']]) {
+        const owned = B.hasProduct(product);
+        html += '<section class="product"><h3>' + t(title) + '</h3><p>' + t(body) + '</p><button class="button secondary" data-product="' + product + '"' + (owned ? ' disabled' : '') + '>' + t(owned ? 'owned' : B.mode === 'web-demo' ? 'purchase' : 'nativePurchase') + '</button></section>';
+      }
+      html += button('restore', t('restore'), 'ghost') + '<p class="fine-print">' + t('noForced') + '</p>' + demoNote();
+    } else if (modalView === 'guide') {
+      html = modalHeader(t('hint'), t('hintSub')) + '<div class="mini-guide">' + icon('guide') + '</div>' +
+        button('reward-guide', rewardLabel('hint'), '', 'play') + '<p class="reward-note">' + t('rewardTag') + '</p>' + demoNote();
+    } else if (modalView === 'win') {
+      const finalLevel = run.mode === 'campaign' && run.level === 30;
+      html = '<div class="kicker" style="text-align:center">' + (finalLevel ? t('campaignDone') : t('stage') + ' ' + pad(run.level) + ' / 30') + '</div><canvas class="result-art" id="result-art" width="360" height="360"></canvas>' +
+        '<h2 id="modal-title" class="result-title">' + t(finalLevel ? 'finished' : 'complete') + '</h2><p class="result-sub">' + t(finalLevel ? 'finishedSub' : 'clearSub') + '</p>' +
+        '<div class="rating" aria-label="' + E.stars(run) + ' / 3 ' + t('stars') + '">' + Array.from({ length: 3 }, (_, i) => '<span' + (i >= E.stars(run) ? ' class="dim"' : '') + '>✦</span>').join('') + '</div>' +
+        '<div class="stat-row"><div class="stat"><small>' + t(wasRecord ? 'record' : 'score') + '</small><strong>' + run.score.toLocaleString(data.lang) + '</strong></div><div class="stat"><small>' + t('earned') + '</small><strong>+' + run.earned * (run.doubled ? 2 : 1) + '</strong></div></div>' +
+        button(finalLevel ? 'endless' : 'next', t(finalLevel ? 'endless' : 'next')) +
+        (!run.doubled ? button('reward-double', rewardLabel('double'), 'secondary', 'spark') : '') +
+        button('share', t('share'), 'ghost', 'share') + button('map', t('leave'), 'ghost', 'grid') + demoNote();
+    } else if (modalView === 'lose') {
+      html = '<div class="mini-guide">' + icon('retry') + '</div><h2 id="modal-title" class="result-title">' + t(run.mode === 'endless' ? 'endlessLost' : 'lost') + '</h2><p class="result-sub">' + t('lostSub') + '</p>' +
+        '<div class="stat-row"><div class="stat"><small>' + t(wasRecord ? 'record' : 'score') + '</small><strong>' + run.score.toLocaleString(data.lang) + '</strong></div><div class="stat"><small>' + t(run.mode === 'endless' ? 'wave' : 'stage') + '</small><strong>' + pad(run.level) + '</strong></div></div>' +
+        button('retry', t('retry'), '', 'retry') + (!run.revived ? button('reward-revive', rewardLabel('revive'), 'secondary', 'heart') + '<p class="reward-note">' + t('reviveSub') + '</p>' : '') +
+        button('share', t('share'), 'ghost', 'share') + button('map', t('leave'), 'ghost', 'grid') + demoNote();
+    }
+    panel.innerHTML = html;
+    if ($('result-art')) {
+      const art = $('result-art').getContext('2d');
+      drawBloom(art, 180, 180, 142, E.levelSpec(run.level, run.mode).target, -Math.PI / 14, true);
+    }
+  }
+
+  async function reward(placement) {
+    if (busy) return;
+    if (placement === 'revive' && (run.revived || run.status !== 'lost')) return;
+    if (placement === 'double' && (run.doubled || run.status !== 'won')) return;
+    if (placement === 'guide' && (run.guided || run.status !== 'playing')) return;
+    const runId = run.id;
+    busy = true; $('modal-panel').classList.add('busy');
+    try {
+      const result = await B.requestReward({ placement, runId, level: run.level });
+      if (run.id !== runId) return;
+      if (result.granted !== true) { toast(t('unavailable')); return; }
+      if (placement === 'revive') { E.revive(run); endTimer = 0; }
+      else if (placement === 'double' && !run.doubled) { data.coins += run.earned; run.doubled = true; }
+      else if (placement === 'guide') { run.guided = true; guideRemaining = 3; run.aim = E.guideAngle(run); }
+      persist(); updateHUD();
+      if (result.source === 'web-demo') toast(t('demoReward'));
+      busy = false;
+      if (placement !== 'double') closeModal(false); else renderModal();
+    } catch (_) { toast(t('unavailable')); }
+    finally { busy = false; $('modal-panel').classList.remove('busy'); }
+  }
+
+  let selectedProduct = null;
+  function showPurchase(product) {
+    selectedProduct = product;
+    modalView = 'purchase';
+    $('modal-panel').innerHTML = modalHeader(t(product === 'ad_free' ? 'instant' : 'premium'), t(B.mode === 'web-demo' ? 'demoPurchaseBody' : 'confirmNativeBody')) +
+      button('confirm-purchase', t(B.mode === 'web-demo' ? 'confirmDemo' : 'nativePurchase')) + button('shop', t('close'), 'ghost');
+    $('modal-panel').scrollTop = 0;
+  }
+
+  async function purchase() {
+    if (busy || !selectedProduct) return;
+    busy = true; $('modal-panel').classList.add('busy');
+    try {
+      const result = await B.requestPurchase(selectedProduct);
+      if (result.purchased === true) { toast(t(result.source === 'web-demo' ? 'purchased' : 'owned')); }
+      else toast(t('unavailable'));
+    } catch (_) { toast(t('unavailable')); }
+    finally { busy = false; openModal('shop'); setPalette(); persist(); }
+  }
+
+  function shareCanvas() {
+    const output = document.createElement('canvas'); output.width = 1080; output.height = 1350;
+    const c = output.getContext('2d');
+    const gradient = c.createLinearGradient(0, 0, 1080, 1350); gradient.addColorStop(0, '#173341'); gradient.addColorStop(1, '#07131d');
+    c.fillStyle = gradient; c.fillRect(0, 0, 1080, 1350);
+    c.strokeStyle = '#34515d'; c.lineWidth = 2; c.strokeRect(46, 46, 988, 1258);
+    c.fillStyle = palette.color; c.font = '500 35px sans-serif'; c.textAlign = 'center'; c.fillText('O R B I T   L O O M', 540, 150);
+    drawBloom(c, 540, 610, 330, Math.max(1, run.hits), -0.12, run.status === 'won');
+    c.fillStyle = '#eef5f2'; c.font = '300 58px sans-serif';
+    c.fillText(run.mode === 'endless' ? 'INFINITY / ' + pad(run.level) : 'CONSTELLATION / ' + pad(run.level), 540, 1060);
+    c.fillStyle = palette.color; c.font = '500 41px sans-serif'; c.fillText(String(run.score).padStart(4, '0') + '  ✦  ' + '★'.repeat(run.status === 'won' ? E.stars(run) : 1), 540, 1150);
+    c.fillStyle = '#94b0ba'; c.font = '26px sans-serif'; c.fillText('A LITTLE TIMING. A LITTLE MAGIC.', 540, 1240);
+    return output;
+  }
+
+  async function action(name) {
+    if (busy) return;
+    unlockAudio();
+    switch (name) {
+      case 'close':
+        if (modalView === 'purchase') { openModal('shop'); break; }
+        closeModal(); break;
+      case 'resume': closeModal(); break;
+      case 'retry': newRun(run.mode === 'endless' ? 1 : run.level, run.mode); break;
+      case 'next': if (run.status === 'won') newRun(Math.min(30, run.level + 1)); break;
+      case 'endless': if (data.stars[29]) newRun(1, 'endless'); break;
+      case 'map': case 'shop': case 'settings': openModal(name); break;
+      case 'sound': data.sound = !data.sound; if (!data.sound && audioContext) audioContext.suspend(); else sound('click'); persist(); renderModal(); break;
+      case 'haptics': data.haptics = !data.haptics; vibrate(20); persist(); renderModal(); break;
+      case 'reward-guide': await reward('guide'); break;
+      case 'reward-revive': await reward('revive'); break;
+      case 'reward-double': await reward('double'); break;
+      case 'confirm-purchase': await purchase(); break;
+      case 'restore': {
+        busy = true;
+        try { const result = await B.restorePurchases(); toast(t(result.restored ? 'restored' : 'unavailable')); setPalette(); persist(); }
+        catch (_) { toast(t('unavailable')); }
+        finally { busy = false; renderModal(); }
+        break;
+      }
+      case 'share': {
+        busy = true;
+        try { const result = await B.shareResultPNG(shareCanvas()); if (result.shared) toast(t(result.method === 'download' ? 'saved' : 'shared')); else if (result.reason !== 'cancelled') toast(t('unavailable')); }
+        finally { busy = false; }
+        break;
+      }
+      case 'reset': openModal('reset'); break;
+      case 'cancel-reset': openModal('settings'); break;
+      case 'reset-confirm': { const lang = data.lang; data = defaultSave(); data.lang = lang; setPalette(); newRun(1); break; }
+    }
+  }
+
+  $('modal-panel').addEventListener('click', async event => {
+    const el = event.target.closest('button');
+    if (!el || el.disabled || busy) return;
+    if (el.dataset.action) await action(el.dataset.action);
+    else if (el.dataset.level) { const level = Number(el.dataset.level); if (level <= data.unlocked) newRun(level); }
+    else if (el.dataset.product) showPurchase(el.dataset.product);
+    else if (el.dataset.skin) {
+      const skin = palettes.find(p => p.id === el.dataset.skin);
+      if (!skin) return;
+      if (skin.premium && !B.hasProduct('prism_pack')) { showPurchase('prism_pack'); return; }
+      if (!skin.premium && !data.colors.includes(skin.id)) {
+        if (data.coins < skin.price) { toast(t('needDust')); return; }
+        data.coins -= skin.price; data.colors.push(skin.id);
+      }
+      data.skin = skin.id; setPalette(); persist(); updateHUD(); renderModal(); sound('hit');
+    }
+  });
+  $('modal-panel').addEventListener('change', event => {
+    if (event.target.id === 'language-select' && Object.hasOwn(LoomI18n, event.target.value)) {
+      data.lang = event.target.value; localize(); persist(); renderModal();
+    }
+  });
+
+  $('fire-button').addEventListener('click', shoot);
+  $('pause-button').addEventListener('click', () => { sound('click'); openModal(run.status === 'playing' ? 'pause' : run.status === 'won' ? 'win' : 'lose'); });
+  $('coins-button').addEventListener('click', () => { sound('click'); openModal('shop'); });
+  $('guide-button').addEventListener('click', () => { sound('click'); if (canPlay() && !run.guided) openModal('guide'); });
+  document.querySelectorAll('[data-open]').forEach(el => el.addEventListener('click', () => { sound('click'); openModal(el.dataset.open); }));
+
+  function pointerAngle(event) {
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left - centerX, y = event.clientY - rect.top - centerY;
+    if (Math.hypot(x, y) > 22 * scale) run.aim = Math.atan2(y, x);
+  }
+  canvas.addEventListener('pointerdown', event => {
+    if (!canPlay() || pointer !== null || (event.pointerType === 'mouse' && event.button !== 0)) return;
+    event.preventDefault(); unlockAudio(); pointer = event.pointerId;
+    canvas.setPointerCapture(pointer); pointerAngle(event);
+  });
+  canvas.addEventListener('pointermove', event => {
+    if (pointer === event.pointerId && canPlay()) { event.preventDefault(); pointerAngle(event); }
+  });
+  canvas.addEventListener('pointerup', event => {
+    if (pointer !== event.pointerId) return;
+    event.preventDefault(); pointerAngle(event); pointer = null; shoot();
+  });
+  canvas.addEventListener('pointercancel', () => { pointer = null; });
+  canvas.addEventListener('lostpointercapture', () => { pointer = null; });
+  canvas.addEventListener('contextmenu', event => event.preventDefault());
+
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Tab' && modalView) {
+      const focusables = Array.from($('modal-panel').querySelectorAll('button:not(:disabled),select'));
+      const first = focusables[0], lastEl = focusables[focusables.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); lastEl?.focus(); }
+      else if (!event.shiftKey && document.activeElement === lastEl) { event.preventDefault(); first?.focus(); }
+      return;
+    }
+    if (event.key === 'Escape') { event.preventDefault(); if (modalView) closeModal(); else openModal('pause'); return; }
+    if (!canPlay() || ['BUTTON', 'SELECT', 'INPUT'].includes(document.activeElement.tagName)) return;
+    if (event.code === 'Space') { event.preventDefault(); if (!event.repeat) shoot(); }
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') { event.preventDefault(); run.aim += event.key === 'ArrowLeft' ? -0.09 : 0.09; }
+  });
+
+  function pauseForBackground() {
+    persist(); pointer = null;
+    if (!modalView && run.status === 'playing') openModal('pause');
+    if (audioContext && audioContext.state === 'running') audioContext.suspend().catch(() => {});
+  }
+  document.addEventListener('visibilitychange', () => { suspend = document.hidden; if (suspend) pauseForBackground(); last = 0; });
+  window.addEventListener('pagehide', persist);
+  window.addEventListener('blur', () => { if (!document.hidden && !busy) pauseForBackground(); });
+  window.addEventListener('resize', resize);
+  if (typeof ResizeObserver === 'function') new ResizeObserver(resize).observe(canvas);
+
+  // Small native lifecycle surface; no debug controls or hidden wins in the game.
+  window.OrbitApp = Object.freeze({ pause: pauseForBackground, back() { if (modalView) closeModal(); else openModal('pause'); } });
+  setPalette(); localize(); resize();
+  if (run.status === 'won') {
+    finishWin(); persist();
+    if (run.mode === 'endless') { run = E.nextWave(run); persist(); updateHUD(); }
+    else openModal('win');
+  } else if (run.status === 'lost') openModal('lose');
+  if (!storageOK) toast(t('storage'));
+  requestAnimationFrame(frame);
+})();
+
+</script>
+</body>
+</html>
