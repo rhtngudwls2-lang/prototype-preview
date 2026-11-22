@@ -1,0 +1,1359 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#102d2a">
+  <meta name="color-scheme" content="dark">
+  <title>MOLTLOOP · Ribbon Press</title>
+  <link rel="icon" href="data:,">
+  <style>
+:root {
+  --ink: #132f2b;
+  --night: #102d2a;
+  --paper: #f3e8c9;
+  --muted: #adbfad;
+  --orange: #ffad7a;
+  --line: rgba(210,231,202,.24);
+  --ui: "DM Sans", "Segoe UI", Roboto, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body {
+  color: var(--paper); background-color: var(--night);
+  background-image: radial-gradient(ellipse at 48% 38%, transparent 15%, rgba(2,18,15,.44) 100%),
+    radial-gradient(rgba(181,212,174,.115) .65px, transparent .85px);
+  background-size: auto, 5px 5px;
+  font-family: var(--ui); -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none;
+  -webkit-user-select: none; user-select: none; touch-action: none;
+  overscroll-behavior: none; display: grid; justify-items: center; align-items: center;
+}
+button, select { font: inherit; }
+button {
+  appearance: none; border: 0; color: inherit; padding: 0; cursor: pointer;
+  background: transparent; touch-action: none; -webkit-tap-highlight-color: transparent;
+}
+button:focus-visible, select:focus-visible { outline: 3px solid #ef8a5d; outline-offset: 3px; }
+button:disabled { cursor: default; }
+canvas { display: block; }
+[hidden] { display: none !important; }
+#machine {
+  width: min(100%, 478px); height: 100vh; height: min(100dvh, 880px);
+  padding: max(13px, env(safe-area-inset-top)) max(clamp(15px,5.1vw,26px), env(safe-area-inset-right))
+    max(10px, env(safe-area-inset-bottom)) max(clamp(15px,5.1vw,26px), env(safe-area-inset-left));
+  display: grid; grid-template-rows: 47px minmax(51px,.72fr) minmax(145px,3.22fr) minmax(43px,.51fr) minmax(54px,.65fr) 52px;
+  gap: clamp(8px, 1.55vh, 15px); align-content: center;
+}
+.mast, .mast-actions, .wordmark, .wallet, .headline, .eyebrow, .readout, .pedal, .dock, .dock button { display: flex; align-items: center; }
+.mast { justify-content: space-between; border-bottom: 1px solid var(--line); padding-bottom: 7px; }
+.wordmark { gap: 7px; }
+.wordmark canvas { width: 31px; height: 31px; color: var(--orange); }
+.wordmark span { font: italic 900 clamp(19px,5.1vw,23px)/1 Arial, var(--ui); letter-spacing: -.075em; }
+.mast-actions { gap: 7px; }
+.wallet, .round-button { height: 39px; min-width: 41px; justify-content: center; }
+.wallet { gap: 6px; font: 700 14px var(--mono); color: #f1d297; }
+.wallet canvas { width: 19px; height: 19px; }
+.round-button { display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; }
+.round-button canvas { width: 17px; height: 17px; }
+.headline { justify-content: space-between; align-self: end; padding: 0 1px 2px; gap: 8px; }
+.hero-left { min-width: 0; }
+.eyebrow, .reel-id > span, .stat span, .cut-block > span, .kicker, .group-label {
+  font: 700 10px/1.2 var(--mono); letter-spacing: .115em; text-transform: uppercase;
+}
+.eyebrow { gap: 7px; color: #f4bd98; }
+.eyebrow i { height: 7px; width: 15px; background: repeating-linear-gradient(119deg,transparent 0 2px,var(--orange) 2px 4px); }
+h1 { margin: 5px 0 1px; font-size: clamp(35px,9.6vw,49px); line-height: 1.03; letter-spacing: -.061em; font-weight: 750; }
+html:lang(ko) h1, html:lang(ja) h1 { letter-spacing: -.065em; font-weight: 800; }
+.reel-id { text-align: right; align-self: flex-end; margin-bottom: 2px; flex-shrink: 0; }
+.reel-id > span { color: var(--muted); }
+.reel-id > div { font: 600 12px/1.4 var(--mono); color: var(--muted); }
+.reel-id b { font-size: 21px; color: var(--paper); }
+.reel-id em { padding: 0 4px; font-style: normal; opacity: .6; }
+.instrument { min-height: 0; border-radius: 21px; overflow: hidden; position: relative; background: #ebdfbd;
+  box-shadow: 0 5px 0 #b3a27d, 0 8px 0 #071b17, 0 12px 21px #001a1740; }
+#board { width: 100%; height: 100%; touch-action: none; }
+.readout { justify-content: space-between; align-self: center; padding: 3px 6px 0; }
+.stat, .cut-block { display: grid; gap: 5px; }
+.stat { min-width: 66px; }
+.stat span, .cut-block > span { color: var(--muted); font-size: 9px; }
+.stat b { font: 650 clamp(20px,5.5vw,26px)/1 var(--mono); letter-spacing: -.06em; }
+.align-end { text-align: right; }
+.cut-block { text-align: center; }
+#cuts { height: 23px; display: flex; gap: 7px; align-items: center; justify-content: center; }
+.cut-pip { width: 15px; height: 15px; border-radius: 50%; border: 1px dashed #8aa395; position: relative; }
+.cut-pip.active { border: 2px solid var(--paper); }
+.cut-pip.active::after { content:""; position: absolute; inset: 3px; border-radius: 50%; background:var(--orange); }
+.cut-pip.done { border: 2px solid var(--ink); outline: 1px solid var(--paper); background: var(--pip); }
+.pedal-wrap { min-height: 0; padding-bottom: 5px; }
+.pedal { width: 100%; height: 100%; position: relative; justify-content: center; gap: 12px;
+  border: 1.5px solid #ffe1bc; border-radius: 16px; background: var(--orange); color: #26362a;
+  box-shadow: 0 5px 0 #bd7150, 0 8px 0 #081b16; transition: transform .09s, box-shadow .09s, background .12s; }
+.pedal > span { font-size: clamp(18px,5vw,23px); font-weight: 750; letter-spacing: -.045em; }
+.pedal .hand { width: 29px; height: 29px; }
+.pedal .grip { position: absolute; right: 14px; height: 21px; width: 10px;
+  background: repeating-linear-gradient(90deg,#92593b 0 1px,transparent 1px 4px); opacity: .7; }
+.pedal.running { transform: translateY(3px); box-shadow: 0 2px 0 #bd7150, 0 5px 0 #081b16; }
+.pedal.on-target { background: #c9eda1; }
+.pedal.missed { background: #e8b999; }
+.dock { justify-content: space-around; border-top: 1px solid var(--line); gap: 4px; }
+.dock button { flex: 1; height: 100%; justify-content: center; gap: 6px; color: #d3dcc7; font-size: 13px; font-weight: 600; }
+.dock canvas { width: 18px; height: 18px; }
+.veil { z-index: 5; position: fixed; inset: 0; display: grid; place-items: center; padding: max(12px,env(safe-area-inset-top))
+  max(13px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(13px,env(safe-area-inset-left));
+  background: #061b18b8; }
+.sheet { color-scheme: light; width: min(100%,393px); max-height: 100%; overflow-y: auto; overscroll-behavior: contain;
+  touch-action: pan-y; background: var(--paper); color: var(--ink); border: 1px solid #fff5dd; outline: none;
+  border-radius: 23px; padding: 22px; box-shadow: 0 5px 0 #ab9f7e, 0 12px 42px #00110f70; scrollbar-width: thin;
+  animation: sheet-in .18s ease-out; }
+.sheet button, .sheet select { touch-action: manipulation; }
+@keyframes sheet-in { from { transform: translateY(6px); opacity: .65; } to { transform: none; opacity: 1; } }
+.sheet-head { display:flex; align-items: flex-start; justify-content: space-between; gap:10px; margin-bottom: 14px; }
+.kicker { color: #546656; font-size: 10px; }
+.sheet h2 { margin: 5px 0 0; font-size: clamp(25px,7vw,36px); letter-spacing: -.06em; line-height: 1.08; }
+.sheet h3 { margin: 0; font-size: 15px; letter-spacing: -.025em; }
+.icon-btn { display:grid; place-items:center; height:40px; width:40px; flex:0 0 40px; border-radius: 50%; border:1px solid #a4af97; }
+.icon-btn canvas { width:17px; height:17px; }
+.sheet p { margin: 8px 0 14px; font-size: 14px; line-height: 1.5; color:#445849; }
+.sheet .action { display:flex; align-items:center; justify-content:center; gap:8px; min-height:47px; width:100%;
+  border:1px solid #97a18b; border-radius:12px; font-weight:700; font-size:15px; padding:9px 10px; margin-top:8px; }
+.sheet .action.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.sheet .action.bonus { background: #f5cc9e; border-color:#c29e74; }
+.action canvas, .setting canvas, .inline-icon { height:19px; width:19px; display:inline-block; vertical-align:middle; }
+.action:disabled, .icon-btn:disabled { opacity:.5; }
+.action-row { display:flex; gap:8px; }
+.action-row > * { flex:1; }
+.sheet small { display:block; color:#566653; line-height:1.35; font-size:11px; }
+.sheet .footnote { text-align:center; margin-top:10px; }
+.slip-art { display:block; width:100%; height:76px; border-radius:13px; background:#203c32; margin-bottom:12px; }
+.result-art { display:block; width:100%; height:clamp(112px,22vh,188px); border-radius:12px; background:#e6d8b4; margin-bottom:12px; }
+.receipt { border-block:1px dashed #97a18b; display:flex; justify-content:space-between; align-items:center; padding:10px 0; gap:8px; }
+.receipt > div { display:grid; gap:3px; }
+.receipt > div:last-child { text-align:right; }
+.receipt span { font:700 9px var(--mono); letter-spacing:.09em; text-transform:uppercase; color:#526451; }
+.receipt b { font:700 22px/1.1 var(--mono); }
+.setting, .product { display:flex; align-items:center; justify-content:space-between; gap:10px; min-height:53px;
+  width:100%; text-align:start; border-bottom:1px solid #bdc2a8; }
+.setting > span:first-child { display:flex; align-items:center; gap:9px; font-weight:650; }
+.switch { position:relative; width:39px; height:23px; border:1px solid #8a9a82; background:#d2d2b9; border-radius:15px; }
+.switch::after { content:""; position:absolute; left:3px; top:3px; width:15px; height:15px; border-radius:50%; background:#677763; }
+.switch.on { background:#254e40; border-color:#254e40; }
+.switch.on::after { left:19px; background:#e6f0cd; }
+select { max-width:48%; border:1px solid #a0ac94; padding:6px 5px; background:#f7edcf; color:var(--ink); border-radius:7px; }
+.help-strip { display:flex; align-items:center; justify-content:center; gap:12px; padding:9px; border-radius:10px; background:#dddcc0; }
+.help-strip canvas { width:30px; height:30px; }
+.help-strip i { width:12px; height:1px; background:#657a66; }
+.product { padding:10px 0; }
+.product .copy { flex:1; min-width:0; }
+.product .copy small { margin-top:3px; }
+.swatches { width:41px; height:35px; display:grid; grid-template-columns:repeat(3,1fr); transform:skewY(-10deg); border:1px solid #405445; overflow:hidden; border-radius:7px; }
+.product .item-icon { width:40px; height:32px; }
+.mini { min-height:39px; min-width:49px; padding:5px 9px; border-radius:9px; background:var(--ink); color:var(--paper); font-size:12px; font-weight:700; }
+.mini:disabled { background:#d4d8bd; color:#52624e; }
+.mini canvas { height:14px; width:14px; display:inline-block; vertical-align:-3px; }
+.group-label { margin:16px 0 1px; color:#5e705c; }
+.map-heading { display:flex; align-items:center; justify-content:space-between; margin:5px 0 12px; }
+.map-heading > div { text-align:center; }
+.map-heading h3 { font-size:21px; }
+.level-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; }
+.level { position:relative; min-height:70px; display:grid; place-items:center; gap:3px; border:1px solid #b5b99d; background:#e6dfc3; border-radius:11px; }
+.level > b { font:650 14px var(--mono); }
+.level canvas { width:29px; height:29px; }
+.level:not(:disabled) { background:#f9edcc; border-color:#7a927a; }
+.level.current { border:2px solid #306c50; }
+.level:disabled { color:#717b67; }
+.map-caption { text-align:center; margin:12px 0 0; }
+.toast { position:fixed; z-index:8; bottom:max(22px, env(safe-area-inset-bottom)); left:50%; transform:translateX(-50%);
+  max-width:90vw; width:max-content; padding:9px 14px; border:1px solid #b8c8a6; border-radius:12px; background:#15332c; color:#f1e8ce; font-size:13px; }
+.sr-only { position:absolute; width:1px; height:1px; padding:0; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; }
+@media(min-width:560px) { #machine { padding-inline:26px; } .veil { background:#061b18c9; } }
+@media(max-height:680px) {
+  #machine { grid-template-rows:40px minmax(43px,.58fr) minmax(136px,3.05fr) 41px 54px 44px; gap:8px; }
+  h1 { font-size:34px; margin-top:3px; } .sheet { padding:17px; }
+  .readout { padding-top:2px; } .stat, .cut-block { gap:3px; }
+}
+@media(max-height:480px) {
+  #machine { grid-template-columns:minmax(0,1.23fr) minmax(0,1fr); grid-template-rows:37px 1fr 46px 55px 39px; width:min(100%,730px); gap:7px 16px; }
+  .mast { grid-column:1/-1; } .instrument { grid-column:1; grid-row:2/6; }
+  .headline, .readout, .pedal-wrap, .dock { grid-column:2; } .headline { grid-row:2; align-self:center; }
+  .dock button { font-size:10px; gap:3px; } .dock canvas { width:15px; height:15px; } .sheet { max-width:460px; }
+}
+@media(prefers-reduced-motion:reduce) { *, *::before, *::after { animation-duration:0s !important; transition:none !important; } }
+
+</style>
+</head>
+<body>
+  <main id="machine">
+    <header class="mast">
+      <div class="wordmark" aria-label="Moltloop"><canvas data-icon="brand" aria-hidden="true"></canvas><span>MOLTLOOP</span></div>
+      <div class="mast-actions">
+        <button class="wallet" id="wallet"><canvas data-icon="coin" aria-hidden="true"></canvas><b id="balance">0</b></button>
+        <button class="round-button" id="pause"><canvas data-icon="pause" aria-hidden="true"></canvas></button>
+      </div>
+    </header>
+    <section class="headline">
+      <div class="hero-left"><div class="eyebrow"><i></i><span id="chapter"></span></div><h1 id="chapter-name"></h1></div>
+      <div class="reel-id"><span id="reel-label"></span><div><b id="reel-no">01</b><em>/</em>06</div></div>
+    </section>
+    <div class="instrument" id="instrument"><canvas id="board" role="img"></canvas></div>
+    <section class="readout">
+      <div class="stat"><span id="score-label"></span><b id="score">000</b></div>
+      <div class="cut-block"><span id="cut-label"></span><div id="cuts"></div></div>
+      <div class="stat align-end"><span id="best-label"></span><b id="best">000</b></div>
+    </section>
+    <div class="pedal-wrap">
+      <button class="pedal" id="pedal"><canvas class="hand" data-icon="hand" aria-hidden="true"></canvas><span id="pedal-label"></span><i class="grip" aria-hidden="true"></i></button>
+    </div>
+    <nav class="dock">
+      <button id="archive"><canvas data-icon="grid" aria-hidden="true"></canvas><span id="archive-label"></span></button>
+      <button id="inks"><canvas data-icon="inks" aria-hidden="true"></canvas><span id="inks-label"></span></button>
+      <button id="settings"><canvas data-icon="sliders" aria-hidden="true"></canvas><span id="settings-label"></span></button>
+    </nav>
+  </main>
+  <div class="veil" id="veil" hidden>
+    <section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="dialog-title" tabindex="-1"></section>
+  </div>
+  <div class="toast" id="toast" role="status" hidden></div>
+  <div class="sr-only" id="live" aria-live="polite"></div>
+<script>
+(() => {
+  "use strict";
+  const languages = ["en", "ko", "es", "ja"];
+  const names = ["English", "한국어", "Español", "日本語"];
+  const lines = {
+    sun: ["Sunroom", "햇살 작업실", "Solárium", "陽だまり工房"],
+    tide: ["Tidepool", "물결 공방", "Poza de marea", "潮だまり"],
+    night: ["Night Shift", "심야 작업실", "Turno nocturno", "夜の工房"],
+    prism: ["Prism Club", "프리즘 클럽", "Club prisma", "プリズムクラブ"],
+    chapter: ["Chapter {n}", "챕터 {n}", "Capítulo {n}", "チャプター {n}"],
+    reel: ["Reel", "릴", "Carrete", "リール"],
+    score: ["Score", "점수", "Puntos", "スコア"],
+    best: ["Best", "최고 기록", "Récord", "ベスト"],
+    cuts: ["Cuts", "찍은 띠", "Cortes", "カット"],
+    feed: ["Feed", "보내기", "Emisor", "送り"],
+    goal: ["Target", "목표", "Meta", "目標"],
+    gauge: ["Cut line", "정지선", "Línea de corte", "カットライン"],
+    wind: ["Hold to wind", "꾹 눌러 감기", "Mantén para girar", "長押しで巻く"],
+    winding: ["Winding", "감는 중", "Girando", "巻き取り中"],
+    release: ["Release!", "지금 떼기!", "¡Suelta!", "いま離す！"],
+    tapCut: ["Tap to cut", "탭해서 멈추기", "Toca para cortar", "タップで止める"],
+    tapNow: ["Tap now!", "지금 탭!", "¡Toca ahora!", "いまタップ！"],
+    perfect: ["Dead centre!", "정중앙!", "¡En el centro!", "ど真ん中！"],
+    good: ["Clean cut!", "잘 맞췄어요!", "¡Buen corte!", "ぴったり！"],
+    early: ["Too early", "조금 일렀어요", "Demasiado pronto", "少し早い"],
+    late: ["Too far", "조금 지나쳤어요", "Te pasaste", "少し遅い"],
+    archive: ["Reels", "릴 보관함", "Carretes", "リール帳"],
+    inks: ["Inks", "잉크", "Tintas", "インク"],
+    settings: ["Settings", "설정", "Ajustes", "設定"],
+    wallet: ["Ink tokens", "잉크 토큰", "Fichas", "インクコイン"],
+    pause: ["Pause", "일시정지", "Pausa", "一時停止"],
+    paused: ["On a break", "잠깐 쉬는 중", "En pausa", "ひと休み"],
+    resume: ["Keep winding", "계속 감기", "Seguir girando", "巻き取り再開"],
+    close: ["Close", "닫기", "Cerrar", "閉じる"],
+    sound: ["Sound", "소리", "Sonido", "サウンド"],
+    vibration: ["Vibration", "진동", "Vibración", "振動"],
+    lang: ["Language", "언어", "Idioma", "言語"],
+    how: ["Hold to wind. Lift inside the outlined band. Three cuts make a print.", "꾹 눌러 감다가 테두리가 있는 칸에서 손을 떼세요. 띠 세 겹이 모이면 인장이 찍혀요.", "Mantén para girar. Suelta dentro de la franja enmarcada. Tres cortes crean una estampa.", "長押しで巻いて、枠のついた帯で指を離そう。3回合わせると版画が完成。"],
+    altInput: ["Two taps also work. On a keyboard, hold Space.", "탭 두 번으로도 감고 멈출 수 있어요. 키보드에서는 스페이스를 꾹 누르세요.", "También puedes tocar dos veces o mantener la barra espaciadora.", "タップ2回でも操作できます。キーボードではスペース長押し。"],
+    assist: ["Slow this cut", "이번 띠 천천히 감기", "Ralentizar este corte", "この帯をゆっくり巻く"],
+    slowed: ["Slow winding", "천천히 감기", "Giro lento", "低速巻き"],
+    slipHelp: ["The pin marks your stop. Aim for the framed band.", "흰 바늘이 멈춘 자리예요. 테두리가 있는 칸을 노려보세요.", "La aguja marca tu parada. Apunta a la franja enmarcada.", "白い針が止めた位置。枠のついた帯を狙おう。"],
+    restart: ["Retry reel", "릴 다시 감기", "Reintentar carrete", "リールをやり直す"],
+    rewind: ["Rewind one cut", "이번 띠만 되감기", "Rebobinar un corte", "この帯だけ巻き戻す"],
+    rewindHelp: ["Keep your cuts and retry at a slower speed.", "지금까지 찍은 띠를 간직하고 이번 띠를 천천히 다시 감아요.", "Conserva los cortes y reintenta más despacio.", "今までのカットを残して、ゆっくり再挑戦。"],
+    proof: ["Print {n}", "인장 {n}", "Estampa {n}", "版画 {n}"],
+    printed: ["Fresh off the reel", "인장이 찍혔어요", "Recién estampado", "刷りあがり"],
+    next: ["Next reel", "다음 릴", "Siguiente carrete", "次のリール"],
+    finale: ["Open the folio", "완성된 도감 열기", "Abrir el álbum", "作品集を開く"],
+    bonus: ["Double ink", "잉크 두 배", "Duplicar tinta", "インクを2倍に"],
+    doubled: ["Double ink collected", "두 배 잉크 받음", "Tinta doble recibida", "インク2倍獲得"],
+    share: ["Share print", "인장 공유", "Compartir", "版画を共有"],
+    saved: ["PNG saved", "PNG를 저장했어요", "PNG guardado", "PNGを保存しました"],
+    shareError: ["Sharing unavailable", "공유를 열 수 없어요", "No se pudo compartir", "共有できませんでした"],
+    count: ["{n} / 6 prints", "인장 {n} / 6", "{n} / 6 estampas", "版画 {n} / 6"],
+    shelf: ["Print folio", "인장 도감", "Álbum de estampas", "版画集"],
+    finished: ["The folio is full.", "도감을 완성했어요", "Álbum completo", "作品集が完成！"],
+    encoreEnd: ["Prism set complete", "프리즘 도감 완성", "Prisma completo", "プリズム集完成"],
+    endText: ["All 18 reels, signed by your hand.", "손끝으로 기본 릴 18개의 인장을 모두 찍었어요.", "Los 18 carretes llevan tu firma.", "18本すべてに、あなたの手で刻んだ印。"],
+    encoreText: ["Six prism prints, each with its own fingerprint.", "각기 다른 손자국을 품은 프리즘 인장 여섯 장이에요.", "Seis estampas prisma con tu firma.", "6枚のプリズム版画に、それぞれの手の跡。"],
+    replay: ["Reprint this reel", "이 릴 다시 찍기", "Repetir este carrete", "このリールをもう一度"],
+    inspect: ["View print", "인장 보기", "Ver estampa", "版画を見る"],
+    collected: ["Collected", "수집 완료", "Conseguido", "収集済み"],
+    previous: ["Previous chapter", "이전 챕터", "Capítulo anterior", "前のチャプター"],
+    forward: ["Next chapter", "다음 챕터", "Capítulo siguiente", "次のチャプター"],
+    locked: ["Locked", "잠김", "Bloqueado", "ロック中"],
+    unlocked: ["Ready", "열림", "Disponible", "プレイ可能"],
+    normalInk: ["Apricot", "살구 잉크", "Albaricoque", "あんず"],
+    poolInk: ["Sea glass", "바다 유리", "Vidrio marino", "シーグラス"],
+    neonInk: ["Blackcurrant", "블랙커런트", "Grosella", "カシス"],
+    palette: ["Ribbon inks", "색띠 잉크", "Tintas de cinta", "帯のインク"],
+    extras: ["Extras", "추가 상품", "Extras", "追加アイテム"],
+    use: ["Equip", "사용", "Usar", "装備"],
+    inUse: ["In use", "사용 중", "En uso", "使用中"],
+    unlock: ["Unlock", "열기", "Abrir", "開く"],
+    adfree: ["Ad-free rewards", "광고 없는 보상", "Premios sin anuncios", "広告なし特典"],
+    adDesc: ["Instant rewinds, slow cuts and double ink.", "되감기, 느리게 감기, 두 배 잉크를 즉시 받아요.", "Rebobina, ralentiza y dobla tinta al instante.", "巻き戻し、低速巻き、インク2倍を即時に。"],
+    packDesc: ["Six extra reels with shifting speeds.", "속도가 변하는 추가 릴 여섯 개예요.", "Seis carretes extra de velocidad variable.", "速度が変わる追加リール6本。"],
+    testBuy: ["Test purchase", "테스트 구매", "Compra de prueba", "テスト購入"],
+    buy: ["Purchase", "구매", "Comprar", "購入"],
+    noCharge: ["Test mode · No charge", "테스트 모드 · 실제 청구 없음", "Modo de prueba · Sin cargo", "テストモード・請求なし"],
+    testReward: ["Test reward · Instant", "테스트 보상 · 즉시 지급", "Premio de prueba · Inmediato", "テスト報酬・即時付与"],
+    optReward: ["Optional rewarded ad", "선택형 보상 광고", "Anuncio opcional con premio", "任意のリワード広告"],
+    instant: ["Instant reward", "즉시 보상", "Premio inmediato", "即時特典"],
+    unavailable: ["Reward unavailable. You can keep playing.", "보상을 받을 수 없어요. 게임은 계속할 수 있어요.", "Premio no disponible. Puedes seguir jugando.", "報酬を受け取れません。プレイは続けられます。"],
+    purchaseError: ["Purchase incomplete", "구매가 완료되지 않았어요", "Compra incompleta", "購入未完了"],
+    needInk: ["Collect {n} more ink", "잉크 {n}개 더 필요해요", "Consigue {n} fichas más", "あと{n}コイン必要"],
+    boardInfo: ["Wind the ribbon. Stop on {shape}, band {i} of {n} from the {side}.", "색띠를 감아 {side}에서 {i}번째 칸의 {shape}에 멈추세요. 전체 {n}칸.", "Gira y para en {shape}, en la franja {i} de {n} desde la {side}.", "{side}から{i}番目の{shape}で止めよう。帯は全{n}本。"],
+    left: ["left", "왼쪽", "izquierda", "左"], right: ["right", "오른쪽", "derecha", "右"],
+    circle: ["circle", "동그라미", "círculo", "丸"], bars: ["stripes", "두 줄", "rayas", "二本線"],
+    diamond: ["diamond", "마름모", "rombo", "ひし形"], cross: ["cross", "십자", "cruz", "十字"],
+    wave: ["wave", "물결", "onda", "波"]
+  };
+  function get(lang, key, vars = {}) {
+    const row = lines[key];
+    const value = row ? row[Math.max(0, languages.indexOf(lang))] : key;
+    return value.replace(/\{(\w+)\}/g, (_, name) => String(vars[name] ?? ""));
+  }
+  function detect() {
+    for (const value of navigator.languages || [navigator.language]) {
+      const base = String(value).toLowerCase().split("-")[0];
+      if (languages.includes(base)) return base;
+    }
+    return "en";
+  }
+  window.MoltText = Object.freeze({ languages, names, get, detect });
+})();
+
+</script>
+<script>
+(() => {
+  "use strict";
+  const chapters = ["sun", "tide", "night", "prism"];
+  const inks = [
+    { name: "normalInk", colors: ["#ef845f","#93c6aa","#edbd62","#659bb1","#bd93b4"] },
+    { name: "poolInk", colors: ["#efb692","#7dd4c2","#d6dc83","#719bca","#bd94b7"] },
+    { name: "neonInk", colors: ["#ed88ad","#a49add","#ffba70","#80c5c6","#c795d3"] }
+  ];
+  const symbols = ["circle","bars","diamond","cross","wave"];
+  const clamp = (value, low, high) => Math.min(high, Math.max(low, value));
+  const pad = number => String(number).padStart(2, "0");
+  function random(seed) {
+    return () => {
+      seed = (Math.imul(1664525, seed) + 1013904223) >>> 0;
+      return seed / 4294967296;
+    };
+  }
+  function pattern(level, cut) {
+    const chapter = Math.floor(level / 6), local = level % 6;
+    const next = random(50771 + level * 3517 + cut * 9719);
+    const count = 5 + (chapter > 0 ? 1 : 0) + (local >= 4 ? 1 : 0);
+    const target = level === 0 ? [1,2,3][cut] : 1 + Math.floor(next() * (count - 2));
+    const color = level === 0 ? [2,0,3][cut] : Math.floor(next() * 5);
+    const bands = [];
+    for (let i = 0; i < count; i++) {
+      if (i === target) bands.push(color);
+      else {
+        const options = [0,1,2,3,4].filter(id => id !== color && id !== bands[i-1]);
+        bands.push(options[Math.floor(next() * options.length)]);
+      }
+    }
+    if (level === 0 && cut === 0) bands.splice(0, count, 0,2,1,3,4);
+    return {
+      level, cut, chapter, count, target, color, bands,
+      reverse: chapter > 0 && (level + cut) % 2 === 1,
+      speed: 1.03 + .13 * local + .19 * chapter + .07 * cut,
+      pulse: chapter >= 2 ? .24 + (chapter === 3 ? .13 : 0) : 0,
+      phase: next() * Math.PI * 2
+    };
+  }
+  function advance(position, seconds, spec, slow, drag) {
+    const steps = Math.max(1, Math.ceil(seconds * 70));
+    const dt = seconds / steps * spec.speed * (slow ? .60 : 1) * (1 - .16 * drag);
+    for (let i = 0; i < steps; i++) {
+      position += dt * (1 + spec.pulse * Math.sin(position * 1.72 + spec.phase));
+    }
+    return Math.min(spec.count, position);
+  }
+  function markAt(position, spec) {
+    if (position < spec.target || position >= spec.target + 1) return null;
+    return clamp(Math.round((position - spec.target - .5) * 1000), -500, 499);
+  }
+  const perfect = mark => Math.abs(mark) <= 165;
+  function score(marks) {
+    let total = 0, streak = 0;
+    for (const mark of marks) {
+      streak = perfect(mark) ? streak + 1 : 0;
+      total += 70 + Math.round(70 * (1 - Math.abs(mark) / 500)) + 15 * streak;
+    }
+    return total;
+  }
+  const payout = marks => 4 + marks.filter(perfect).length * 2;
+  const newRun = (level, ink) => ({ level, ink, marks: [], state: "play", stop: 0, rewound: false, slow: false, bonus: false });
+  const validMarks = value => Array.isArray(value) && value.length <= 3 && value.every(n => Number.isInteger(n) && n >= -500 && n <= 499);
+  const validInk = value => Number.isInteger(value) && value >= 0 && value < inks.length;
+  function initial() {
+    return { v: 1, lang: MoltText.detect(), sound: true, vibration: true, coins: 0, ink: 0, seaGlass: false, records: {}, run: newRun(0, 0) };
+  }
+  function unlocked(level, data, pack) {
+    if (!Number.isInteger(level) || level < 0 || level >= 24 || (level >= 18 && !pack)) return false;
+    return level === 0 || level === 18 || !!data.records[level-1] || !!data.records[level];
+  }
+  function restore(raw, pack, premiumInk) {
+    const data = initial();
+    if (!raw || raw.v !== 1) return data;
+    if (MoltText.languages.includes(raw.lang)) data.lang = raw.lang;
+    for (const key of ["sound","vibration","seaGlass"]) if (typeof raw[key] === "boolean") data[key] = raw[key];
+    if (Number.isSafeInteger(raw.coins) && raw.coins >= 0) data.coins = raw.coins;
+    const canEquip = id => id === 0 || (id === 1 && data.seaGlass) || (id === 2 && premiumInk);
+    if (canEquip(raw.ink)) data.ink = raw.ink;
+    for (let i = 0; i < 24; i++) {
+      const rec = raw.records && raw.records[i];
+      if (rec && validInk(rec.ink) && validMarks(rec.marks) && rec.marks.length === 3) {
+        data.records[i] = { ink: rec.ink, marks: rec.marks.slice() };
+      }
+    }
+    const run = raw.run;
+    if (!run || !unlocked(run.level, data, pack) || !validMarks(run.marks)) {
+      data.run = newRun(0, data.ink);
+      return data;
+    }
+    const saved = newRun(run.level, canEquip(run.ink) ? run.ink : data.ink);
+    saved.marks = run.marks.slice();
+    saved.slow = run.slow === true;
+    saved.rewound = run.rewound === true;
+    saved.bonus = run.bonus === true;
+    saved.stop = Number.isFinite(run.stop) ? clamp(run.stop, 0, 7) : 0;
+    if (saved.marks.length === 3) {
+      saved.state = run.state === "end" && [17,23].includes(run.level) ? "end" : "clear";
+    } else if (run.state === "miss") saved.state = "miss";
+    data.run = saved;
+    return data;
+  }
+  window.MoltRules = Object.freeze({ chapters, inks, symbols, clamp, pad, random, pattern, advance, markAt, perfect, score, payout, newRun, unlocked, restore });
+})();
+
+</script>
+<script>
+/* Set window.MoltProvider before app.js to use a production provider.
+   ownsProduct(id) reads its synchronous entitlement cache. Reward and purchase
+   methods resolve true only after a confirmed grant. The offline provider uses
+   its own local entitlements so test purchases cannot leak into production. */
+(() => {
+  "use strict";
+  const key = "moltloop.test.products.v1";
+  const products = new Set(["ad_free","ink_currant","prism_pack"]);
+  let saved = [];
+  try { saved = JSON.parse(localStorage.getItem(key)) || []; } catch (_) {}
+  const mockOwned = new Set(Array.isArray(saved) ? saved.filter(id => products.has(id)) : []);
+  const pending = new Map();
+  const isTest = () => !window.MoltProvider;
+  function ownsProduct(id) {
+    if (!products.has(id)) return false;
+    if (isTest()) return mockOwned.has(id);
+    try { return window.MoltProvider.ownsProduct(id) === true; } catch (_) { return false; }
+  }
+  function isAdFree() { return ownsProduct("ad_free"); }
+  function oneGrant(id, grant) {
+    if (!pending.has(id)) {
+      const result = Promise.resolve().then(grant).then(value => value === true, () => false);
+      pending.set(id, result);
+      result.finally(() => pending.delete(id));
+    }
+    return pending.get(id);
+  }
+  function requestReward(placement = "rewind", onResult) {
+    if (typeof placement === "function") { onResult = placement; placement = "rewind"; }
+    const result = oneGrant("reward:" + placement, () => {
+      if (isAdFree() || isTest()) return true;
+      return window.MoltProvider.requestReward(placement);
+    });
+    if (typeof onResult === "function") result.then(onResult);
+    return result;
+  }
+  function purchaseProduct(id) {
+    if (!products.has(id)) return Promise.resolve(false);
+    return oneGrant("buy:" + id, async () => {
+      if (ownsProduct(id)) return true;
+      if (!isTest()) return await window.MoltProvider.purchaseProduct(id) === true && ownsProduct(id);
+      mockOwned.add(id);
+      try { localStorage.setItem(key, JSON.stringify([...mockOwned])); } catch (_) {}
+      return true;
+    });
+  }
+  async function shareResultPNG(canvas) {
+    if (window.MoltShell && typeof window.MoltShell.sharePNG === "function") {
+      const accepted = window.MoltShell.sharePNG(canvas.toDataURL("image/png"));
+      if (!accepted) throw new Error("Native share unavailable");
+      return "shared";
+    }
+    const blob = await new Promise((resolve, reject) => canvas.toBlob(value =>
+      value ? resolve(value) : reject(new Error("PNG encoding failed")), "image/png"));
+    if (typeof File === "function" && typeof navigator.share === "function" && typeof navigator.canShare === "function") {
+      const file = new File([blob], "MOLTLOOP-print.png", { type: "image/png" });
+      const content = { files: [file], title: "MOLTLOOP · Ribbon Press" };
+      if (navigator.canShare(content)) {
+        try { await navigator.share(content); return "shared"; }
+        catch (error) { if (error && error.name === "AbortError") return "cancelled"; }
+      }
+    }
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url; link.download = "MOLTLOOP-print.png";
+    document.body.appendChild(link); link.click(); link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 30000);
+    return "downloaded";
+  }
+  window.MoltBridge = Object.freeze({ requestReward, isAdFree, shareResultPNG, purchaseProduct, ownsProduct, isTest });
+  Object.assign(window, { requestReward, isAdFree, shareResultPNG });
+})();
+
+</script>
+<script>
+(() => {
+  "use strict";
+  const R = MoltRules, TAU = Math.PI * 2;
+  const ink = "#203b32", cream = "#f5e9ca";
+  const plate = [
+    ["#f0e4c4","#e4d6b1"], ["#e0e8d4","#c8d7c1"],
+    ["#e6dfd7","#d4c9c1"], ["#ebe0cf","#decabb"]
+  ];
+  const icons = {
+    coin: "M12 2.4 20 7v10l-8 4.6L4 17V7Z M12 7.8l4 2.2v4l-4 2.2-4-2.2v-4Z",
+    grid: "M3.5 3.5h6.6v6.6H3.5z M14 3.5h6.6v6.6H14z M3.5 14h6.6v6.6H3.5z M14 14h6.6v6.6H14z",
+    inks: "M15 4a7 7 0 1 0 5 6 M17 2.7a4.3 4.3 0 1 0 .1 0 M4 14a7 7 0 0 0 12.8 5",
+    sliders: "M3 6h6m5 0h7 M3 17h11m5 0h2 M9 3v6h5V3Z M14 14v6h5v-6Z",
+    pause: "M7 5v14 M17 5v14",
+    close: "m6 6 12 12 M18 6 6 18",
+    hand: "M7.2 11.6V6a1.6 1.6 0 0 1 3.2 0v6.1-8a1.6 1.6 0 0 1 3.2 0v7.4-6a1.5 1.5 0 0 1 3 0v6.6-4a1.5 1.5 0 0 1 3 0v6.1c0 4.5-2.6 7.5-6.4 7.5h-1.4c-2.4 0-4-1.8-5.3-3.5l-3.2-4.6a1.6 1.6 0 0 1 2.5-1.9l1.4 1.7Z",
+    lift: "M7 12V8a1.6 1.6 0 0 1 3.2 0v5-6a1.6 1.6 0 0 1 3.2 0v6-4a1.5 1.5 0 0 1 3 0v5-3a1.5 1.5 0 0 1 3 0v4c0 4-2.3 7-6.5 7-2.8 0-4.5-1.4-6.2-3.7l-3-4a1.4 1.4 0 0 1 2.2-1.7L7 14 M9 2l3-2 3 2",
+    target: "M12 3a9 9 0 1 0 .01 0 M12 8a4 4 0 1 0 .01 0",
+    check: "m4.5 12 4.5 4.5L20 6", arrow: "M4 12h15m-6-6 6 6-6 6",
+    prev: "m15 5-7 7 7 7", next: "m9 5 7 7-7 7",
+    play: "m7 4 12 8-12 8Z",
+    video: "M3 4h18v16H3Z M3 9h18 M7 4l-3 5m9-5-3 5m9-5-3 5 M10 12l4 2-4 2Z",
+    rewind: "m12 6-8 6 8 6V6Zm9 0-8 6 8 6Z",
+    retry: "M4.1 10a8 8 0 1 1 .8 7M4 4v6h6",
+    sound: "M3 9h4l5-5v16l-5-5H3Z M15.5 8a5 5 0 0 1 0 8m2.8-11.4a9 9 0 0 1 0 14.8",
+    vibration: "M8 4h8v16H8zM4.5 7 3 10l1.5 4L3 17m16.5-10 1.5 3-1.5 4 1.5 3",
+    globe: "M12 2.8a9.2 9.2 0 1 0 .01 0 M3 12h18 M12 3q-8 9 0 18 8-9 0-18Z",
+    share: "M12 15V3m-4 4 4-4 4 4 M5 12v8h14v-8",
+    lock: "M5.5 10.5h13v10h-13z M8 10V7a4 4 0 1 1 8 0v3.5 M12 14v3",
+    slow: "M3 15h3a6.5 6.5 0 1 1 12.5 2H21 M7 18h10 M11 13a2 2 0 1 1 3 1.7 M4 15V9m0 2L2 9",
+    spark: "M12 2l2.3 6.9L21 12l-6.7 2.8L12 22l-2.5-7.2L3 12l6.5-3.1Z"
+  };
+  const paths = Object.fromEntries(Object.entries(icons).map(([name, path]) => [name, new Path2D(path)]));
+  function line(c, x1,y1,x2,y2,color,width=1) {
+    c.beginPath(); c.moveTo(x1,y1); c.lineTo(x2,y2); c.strokeStyle=color; c.lineWidth=width; c.stroke();
+  }
+  function disk(c,x,y,r,color) {
+    if (r <= 0) return;
+    c.beginPath(); c.arc(x,y,r,0,TAU); c.fillStyle=color; c.fill();
+  }
+  function arc(c,x,y,r,a,b,color,width=1) {
+    if (r <= 0) return;
+    c.beginPath(); c.arc(x,y,r,a,b); c.strokeStyle=color; c.lineWidth=width; c.stroke();
+  }
+  function box(c,x,y,w,h,r,fill,stroke) {
+    r = Math.max(0,Math.min(r,w/2,h/2));
+    c.beginPath(); c.moveTo(x+r,y); c.arcTo(x+w,y,x+w,y+h,r); c.arcTo(x+w,y+h,x,y+h,r);
+    c.arcTo(x,y+h,x,y,r); c.arcTo(x,y,x+w,y,r); c.closePath();
+    if (fill) { c.fillStyle=fill; c.fill(); }
+    if (stroke) { c.lineWidth=1; c.strokeStyle=stroke; c.stroke(); }
+  }
+  function type(c,text,x,y,size,color,align="left",mono=true,bold=700) {
+    c.font = bold + " " + size + "px " + (mono ? 'Consolas, "Malgun Gothic", monospace' : '"Segoe UI", Roboto, "Malgun Gothic", sans-serif');
+    c.textAlign=align; c.textBaseline="middle"; c.fillStyle=color; c.fillText(text,x,y);
+  }
+  function icon(c,name,x,y,size,color) {
+    c.save(); c.translate(x,y); c.scale(size/24,size/24); c.strokeStyle=color; c.fillStyle=color;
+    c.lineWidth=name==="pause"?4:1.8; c.lineCap="round"; c.lineJoin="round";
+    if (name==="brand") {
+      for (let i=0;i<3;i++) {
+        c.beginPath(); c.ellipse(11.9,8.1+i*4.2,9,4.7,-.29,.20,5.70); c.lineWidth=2.1; c.stroke();
+      }
+    } else if (paths[name]) c.stroke(paths[name]);
+    c.restore();
+  }
+  function fit(canvas) {
+    const w=canvas.clientWidth || 24, h=canvas.clientHeight || 24;
+    const dpr=Math.min(window.devicePixelRatio || 1,2.5);
+    const bw=Math.max(1,Math.round(w*dpr)), bh=Math.max(1,Math.round(h*dpr));
+    if (canvas.width!==bw || canvas.height!==bh) { canvas.width=bw; canvas.height=bh; }
+    const c=canvas.getContext("2d"); c.setTransform(bw/w,0,0,bh/h,0,0);
+    return {c,w,h};
+  }
+  function iconsIn(root=document) {
+    root.querySelectorAll("canvas[data-icon]").forEach(canvas => {
+      const {c,w,h}=fit(canvas), s=Math.min(w,h);
+      c.clearRect(0,0,w,h);
+      icon(c,canvas.dataset.icon,(w-s)/2,(h-s)/2,s,getComputedStyle(canvas).color);
+    });
+  }
+  function symbol(c,id,x,y,s,color) {
+    c.save(); c.translate(x,y); c.strokeStyle=color; c.lineWidth=Math.max(1.2,s*.23);
+    c.lineCap="round"; c.lineJoin="round"; c.beginPath();
+    if (id===0) c.arc(0,0,s*.72,0,TAU);
+    if (id===1) { c.moveTo(-s*.68,s*.6); c.lineTo(-s*.15,-s*.6); c.moveTo(s*.15,s*.6); c.lineTo(s*.68,-s*.6); }
+    if (id===2) { c.moveTo(0,-s*.85); c.lineTo(s*.8,0); c.lineTo(0,s*.85); c.lineTo(-s*.8,0); c.closePath(); }
+    if (id===3) { c.moveTo(-s*.7,0); c.lineTo(s*.7,0); c.moveTo(0,-s*.7); c.lineTo(0,s*.7); }
+    if (id===4) { c.moveTo(-s,-s*.1); c.quadraticCurveTo(-s*.5,-s,s*.05,0); c.quadraticCurveTo(s*.55,s,s,-s*.1); }
+    c.stroke(); c.restore();
+  }
+  function paper(c,w,h,tints,seed,density) {
+    const grad=c.createLinearGradient(0,0,w*.64,h); grad.addColorStop(0,tints[0]); grad.addColorStop(1,tints[1]);
+    c.fillStyle=grad; c.fillRect(0,0,w,h);
+    const rand=R.random(seed);
+    for (let i=0;i<density;i++) {
+      const x=rand()*w, y=rand()*h;
+      c.fillStyle=i%3 ? "rgba(49,55,34,.084)" : "rgba(255,255,241,.5)";
+      c.fillRect(x,y,.4+rand()*1.2,.3+rand()*.7);
+    }
+  }
+  function bolt(c,x,y,tilt) {
+    disk(c,x,y+.6,3.5,"#fff3cf"); disk(c,x,y,3.45,"#9c9f84"); disk(c,x,y-.35,2.65,"#c8c7a8");
+    const dx=2.1*Math.cos(tilt),dy=2.1*Math.sin(tilt);
+    line(c,x-dx,y-dy+.5,x+dx,y+dy+.5,"#e8e5cd",1); line(c,x-dx,y-dy,x+dx,y+dy,"#606d5c",1);
+  }
+  function stamp(c,x,y,r,level,marks,colors,reveal=1) {
+    const cutColors=marks.map((_,i)=>colors[R.pattern(level,i).color]);
+    const err=marks.map(n=>n/500), petals=6+level%5;
+    c.save(); c.translate(x,y); c.lineJoin="round";
+    function edge(radius,depth,phase,lobes) {
+      c.beginPath();
+      for (let j=0;j<=192;j++) {
+        const a=j*TAU/192, d=radius*(1+depth*Math.cos(lobes*a+phase)+.024*Math.cos(2*lobes*a-phase));
+        const px=Math.cos(a)*d,py=Math.sin(a)*d; if(j===0)c.moveTo(px,py);else c.lineTo(px,py);
+      }
+      c.closePath();
+    }
+    for (let i=0;i<3;i++) {
+      const bloom=1-Math.pow(1-R.clamp((reveal-.08*i)/(1-.08*i),0,1),3);
+      const radius=r*(.84-i*.222)*(.22+.78*bloom);
+      const phase=(err[i] || 0)*1.5 + i*1.85 + level*.29+(1-bloom)*2;
+      edge(radius,.145,phase,petals+(i===1?1:0)); c.fillStyle=cutColors[i] || cream;
+      c.fill(); c.strokeStyle=ink; c.lineWidth=Math.max(.6,r*.022); c.stroke();
+      for (let k=1;k<=4;k++) {
+        edge(radius-r*.025*k,.145,phase+k*.105,petals+(i===1?1:0));
+        c.strokeStyle=k%2?"rgba(26,54,43,.49)":"rgba(255,247,216,.65)"; c.lineWidth=Math.max(.38,r*.009); c.stroke();
+      }
+    }
+    disk(c,0,0,r*.156,ink); disk(c,0,0,r*.108,cream);
+    symbol(c,R.pattern(level,2).color,0,0,r*.066,ink); c.restore();
+  }
+  function geometry(h, spec) {
+    const gaugeH=R.clamp(h*.252,62,88), gy=h-gaugeH-11, cy=(gy+36)*.5;
+    const radius=Math.max(20,Math.min(69,(gy-40)*.48)), core=Math.max(7,Math.min(12,radius*.24));
+    return {w:360,h,gy,cy,radius,core,step:(radius-core)/spec.count,ax:spec.reverse?266:94,bx:spec.reverse?94:266};
+  }
+  function track(c,area,spec,colors,pointer,ghost) {
+    const {x,y,w,h}=area, cell=w/spec.count;
+    const position=v=>x+(spec.reverse?spec.count-v:v)*cell;
+    for(let i=0;i<spec.count;i++) {
+      const left=Math.min(position(i),position(i+1)), selected=i===spec.target;
+      box(c,left+1.3,y,cell-2.6,h,2.3,colors[spec.bands[i]]);
+      symbol(c,spec.bands[i],left+cell/2,y+h/2,Math.min(5,h*.25),selected?ink:"rgba(24,50,42,.55)");
+      if(selected) {
+        c.lineWidth=1.7; c.strokeStyle="#fff3cf"; c.strokeRect(left-.2,y-3,cell+.4,h+6);
+        const mid=left+cell/2;
+        c.fillStyle="#fff1c7"; c.beginPath(); c.moveTo(mid-3,y-7); c.lineTo(mid+3,y-7); c.lineTo(mid,y-4); c.fill();
+      }
+    }
+    if(pointer===null) return;
+    drawPin(c,position(pointer),y,h,false);
+    if(ghost!==null && ghost!==undefined) drawPin(c,position(ghost),y,h,true);
+  }
+  function drawPin(c,x,y,h,ghost) {
+    c.save(); c.globalAlpha=ghost ? .55 : 1;
+    line(c,x+.6,y-.4,x+.6,y+h+3,"#213e36",3.2);
+    line(c,x,y-1,x,y+h+4,"#fff6da",2);
+    c.fillStyle="#fff6da"; c.beginPath(); c.moveTo(x,y+h+2); c.lineTo(x-4.2,y+h+8); c.lineTo(x+4.2,y+h+8); c.closePath(); c.fill();
+    c.restore();
+  }
+  function drawBase(c,g,spec,colors,t) {
+    const {w,h,gy,cy,radius,ax,bx}=g;
+    paper(c,w,h,plate[spec.chapter],712+spec.chapter,Math.round(h*7));
+    box(c,4.5,4.5,w-9,h-9,17,null,"rgba(255,254,231,.74)");
+    for(const [x,y,a] of [[12,13,.6],[w-12,13,-.7],[12,h-12,-.4],[w-12,h-12,.8]]) bolt(c,x,y,a);
+    for(const [cx,name,letter] of [[ax,"feed","A"],[bx,"goal","B"]]) {
+      const text=t(name).toUpperCase();
+      c.font='700 10px Consolas, "Malgun Gothic", monospace';
+      const start=cx-(c.measureText(text).width+22)/2;
+      box(c,start,16,15,15,3,ink); type(c,letter,start+7.5,23.8,9,cream,"center");
+      type(c,text,start+21,24,10,ink);
+      arc(c,cx,cy,radius+6,0,TAU,"rgba(51,81,63,.26)",.8);
+      arc(c,cx,cy,radius+10,.65,2.5,"rgba(51,81,63,.34)",.8);
+      for(let k=0;k<40;k++) {
+        const a=k*TAU/40;
+        const d=radius+(k%5===0?11:7.6);
+        line(c,cx+Math.cos(a)*(radius+5),cy+Math.sin(a)*(radius+5),cx+Math.cos(a)*d,cy+Math.sin(a)*d,"rgba(47,72,56,.38)",k%5===0?1.2:.65);
+      }
+    }
+    const sign=spec.reverse?-1:1;
+    for(let i=-1;i<=1;i++) {
+      const x=180+i*7*sign; line(c,x-2*sign,cy-3,x+1.5*sign,cy,"#72806a",1.3);
+      line(c,x+1.5*sign,cy,x-2*sign,cy+3,"#72806a",1.3);
+    }
+    box(c,14,gy+1,w-28,h-gy-14,10,"#fbefcc");
+    box(c,14,gy,w-28,h-gy-14,10,"#244337", "#818c70");
+    box(c,17,gy+3,w-34,h-gy-20,8,null,"rgba(217,236,191,.12)");
+    type(c,t("gauge").toUpperCase(),29,gy+15,9.2,"#dce8c5");
+    const dir=spec.reverse?-1:1;
+    icon(c,dir<0?"prev":"next",325,gy+10,10,"#d7e4bf");
+    const area=g.track={x:29,y:gy+Math.max(27,(h-gy)*.40),w:302,h:Math.max(12,Math.min(20,(h-gy)*.24))};
+    track(c,area,spec,colors,null,null);
+    for(let i=0;i<=spec.count*4;i++) {
+      const x=area.x+area.w*i/(spec.count*4), top=Math.min(h-19,area.y+area.h+11);
+      line(c,x,top,x,top+(i%4===0?3.8:1.8),"rgba(209,227,191,.5)",.75);
+    }
+  }
+  function reel(c,x,y,layers,colors,g,angle) {
+    let radius=g.core+layers.reduce((sum,item)=>sum+item.weight*g.step,0);
+    c.save(); c.fillStyle="rgba(27,46,33,.18)"; c.beginPath();
+    c.ellipse(x+1,y+3,radius+1.6,radius+.8,0,0,TAU); c.fill();
+    for(let i=layers.length-1;i>=0;i--) {
+      const item=layers[i], thick=item.weight*g.step;
+      disk(c,x,y,radius,colors[item.id]); arc(c,x,y,radius,0,TAU,ink,Math.min(1.45,thick*.53));
+      if(thick>2.5) {
+        arc(c,x,y,radius-1.6,-2.7,-.35,"rgba(255,250,218,.65)",.9);
+        arc(c,x,y,radius-thick*.55,0,TAU,"rgba(40,60,44,.25)",.7);
+        for(let k=0;k<7;k++) {
+          const a=angle+k*TAU/7+i*.44, rr=radius-thick*.58;
+          arc(c,x,y,rr,a,a+.25,"rgba(255,245,208,.5)",.85);
+          if(thick>5) line(c,x+Math.cos(a)*rr,y+Math.sin(a)*rr,x+Math.cos(a+.022)*(rr+thick*.31),y+Math.sin(a+.022)*(rr+thick*.31),"rgba(34,53,40,.56)",1);
+        }
+      }
+      radius-=thick;
+    }
+    const r=g.core;
+    disk(c,x,y,r+.8,ink); disk(c,x,y,r-1.1,"#c9c8a6"); disk(c,x,y,r-3,"#4c6150");
+    for(let i=0;i<3;i++) {
+      const a=angle+i*TAU/3, d=r*.55;
+      disk(c,x+Math.cos(a)*d,y+Math.sin(a)*d,r*.16,"#eee5c7");
+    }
+    disk(c,x,y,r*.25,ink); disk(c,x-.3,y-.5,r*.10,"#b4baa0"); c.restore();
+  }
+  function ribbon(c,g,ra,rb,color,p,drag) {
+    const {ax,bx,cy}=g, dir=Math.sign(bx-ax);
+    const nx=(ra-rb)/(bx-ax), ny=-Math.sqrt(Math.max(0,1-nx*nx));
+    const a={x:ax+ra*nx,y:cy+ra*ny}, b={x:bx+rb*nx,y:cy+rb*ny};
+    function path(dy) {
+      c.beginPath(); c.moveTo(a.x,a.y+dy);
+      c.bezierCurveTo(a.x+dir*43,a.y+dy+4-drag*7,b.x-dir*37,b.y+dy+8-drag*9,b.x,b.y+dy);
+    }
+    path(3); c.strokeStyle="rgba(45,58,40,.18)"; c.lineWidth=6; c.stroke();
+    path(0); c.strokeStyle=ink; c.lineWidth=6.6; c.stroke();
+    path(-.1); c.strokeStyle=color; c.lineWidth=4.4; c.stroke();
+    path(-1.2); c.strokeStyle="rgba(255,247,215,.86)"; c.lineWidth=.9; c.stroke();
+    c.save(); c.setLineDash([1.4,8.2]); c.lineDashOffset=-p*31; path(.5); c.lineWidth=2.2;
+    c.strokeStyle="rgba(50,67,46,.4)"; c.stroke(); c.restore();
+  }
+  class Board {
+    constructor(canvas) { this.canvas=canvas; this.base=document.createElement("canvas"); this.dirty=true; }
+    invalidate() { this.dirty=true; }
+    draw(view) {
+      const {c,w,h}=fit(this.canvas), spec=view.spec, colors=view.colors;
+      const bw=this.canvas.width,bh=this.canvas.height, logicalH=360*h/w;
+      if(this.dirty || bw!==this.base.width || bh!==this.base.height) {
+        this.base.width=bw; this.base.height=bh; this.g=geometry(logicalH,spec);
+        const ctx=this.base.getContext("2d"); ctx.setTransform(bw/360,0,0,bh/logicalH,0,0);
+        drawBase(ctx,this.g,spec,colors,view.t); this.dirty=false;
+      }
+      const g=this.g,p=R.clamp(view.position,0,spec.count),step=g.step;
+      c.setTransform(bw/360,0,0,bh/logicalH,0,0); c.drawImage(this.base,0,0,360,logicalH);
+      const left=[], right=[];
+      spec.bands.forEach((id,i)=>{
+        const weight=R.clamp(p-i,0,1);
+        if(weight<1) left.unshift({id,weight:1-weight});
+        if(weight>0) right.push({id,weight});
+      });
+      const targetR=g.core+(spec.target+.5)*step, now=view.time*.001;
+      const inBand=p>=spec.target && p<spec.target+1;
+      c.save(); c.globalAlpha=inBand ? .34 : .18;
+      arc(c,g.bx,g.cy,targetR,0,TAU,colors[spec.color],step); c.restore();
+      c.save(); c.setLineDash([3.7,3.0]); arc(c,g.bx,g.cy,targetR,0,TAU,"#345849",1.6); c.restore();
+      let guide=null, lift=0;
+      if(view.demo) {
+        const cycle=now%2.8;
+        guide=(spec.target+.5)*R.clamp((cycle-.3)/1.35,0,1);
+        lift=R.clamp((cycle-1.65)/.53,0,1);
+        c.save(); c.globalAlpha=.23*(1-lift);
+        arc(c,g.bx,g.cy,g.core+guide*step,0,TAU,colors[spec.color],4); c.restore();
+      }
+      const movingColor=colors[spec.bands[Math.min(spec.count-1,Math.floor(p))]];
+      ribbon(c,g,g.core+(spec.count-p)*step,g.core+p*step,movingColor,p,view.drag);
+      const dir=spec.reverse?-1:1;
+      reel(c,g.ax,g.cy,left,colors,g,dir*p*1.55-.3);
+      reel(c,g.bx,g.cy,right,colors,g,dir*p*2.35+.6);
+      const tagY=g.cy-targetR-11;
+      box(c,g.bx-9,tagY-8,18,16,4,colors[spec.color],ink);
+      symbol(c,spec.color,g.bx,tagY,5,ink);
+      if(inBand) {
+        c.save(); c.setLineDash([3,4]); arc(c,g.bx,g.cy,g.core+p*step+3,0,TAU,"#fdf0ce",1.8); c.restore();
+      }
+      const area=g.track, positionX=q=>area.x+area.w*(spec.reverse?1-q/spec.count:q/spec.count);
+      drawPin(c,positionX(p),area.y,area.h,false);
+      if(view.demo && guide!==null) {
+        c.save(); c.globalAlpha=.58*(1-lift*.7);
+        drawPin(c,positionX(guide),area.y,area.h,true);
+        icon(c,"hand",positionX(guide)-5,area.y+area.h+1-lift*6,15,"#fff4d6"); c.restore();
+      }
+      if(view.slow) icon(c,"slow",302,g.gy+7,16,"#e2d49c");
+      if(view.fx) this.effect(c,g,view.fx,now,colors);
+    }
+    effect(c,g,fx,now,colors) {
+      const a=R.clamp((now-fx.start)/fx.duration,0,1), success=fx.kind!=="miss";
+      c.save(); c.globalAlpha=1-a;
+      const r=(success?g.core+(fx.position)*g.step:g.radius*.44)+a*18;
+      arc(c,g.bx,g.cy,r,0,TAU,success?cream:"#a04d34",2.2*(1-a)+.5);
+      if(success) {
+        for(let i=0;i<12;i++) {
+          const angle=i*TAU/12+.37, reach=r+5+Math.sin(i*31)*5+a*9;
+          c.save(); c.translate(g.bx+Math.cos(angle)*reach,g.cy+Math.sin(angle)*reach+a*a*9);
+          c.rotate(angle+a*3); c.fillStyle=colors[i%5]; c.fillRect(-2,-1,4+i%3,2.2); c.restore();
+        }
+      }
+      c.restore();
+    }
+  }
+  function resultArt(canvas,level,marks,inkId,reveal=1) {
+    const {c,w,h}=fit(canvas), colors=R.inks[inkId].colors;
+    paper(c,w,h,["#e9dcbc","#d9ca9f"],level+6,Math.round(w*h/28));
+    for(let x=12;x<w;x+=7) { disk(c,x,6,.7,"#9d9e7f"); disk(c,x,h-6,.7,"#9d9e7f"); }
+    const cx=w*.5,cy=h*.5,r=Math.min(h*.48,w*.29);
+    for(const sign of [-1,1]) {
+      const x=cx+sign*(r+12); line(c,x,cy,cx+sign*(w/2-15),cy,"#a7a789",.85);
+      for(let i=-1;i<=1;i++) disk(c,cx+sign*(w*.39),cy+i*8,1.35,i===0?ink:"#a2a387");
+    }
+    stamp(c,cx,cy,r,level,marks,colors,reveal);
+  }
+  function slipArt(canvas,spec,inkId,p) {
+    const {c,w,h}=fit(canvas); c.fillStyle=ink; c.fillRect(0,0,w,h);
+    track(c,{x:14,y:h*.35,w:w-28,h:h*.28},spec,R.inks[inkId].colors,p,null);
+  }
+  function thumb(canvas,level,rec) {
+    const {c,w,h}=fit(canvas); c.clearRect(0,0,w,h); stamp(c,w/2,h/2,Math.min(w,h)*.48,level,rec.marks,R.inks[rec.ink].colors);
+  }
+  function folio(canvas,records,start,count) {
+    const {c,w,h}=fit(canvas); paper(c,w,h,["#e9dfc0","#d6c9a2"],32,900);
+    const cols=6, rows=Math.ceil(count/cols), dx=w/(cols+.4), dy=h/(rows+.4);
+    for(let i=0;i<count;i++) {
+      const id=start+i, rec=records[id];
+      if(rec) stamp(c,dx*(i%cols+.7),dy*(Math.floor(i/cols)+.7),Math.min(dx,dy)*.48,id,rec.marks,R.inks[rec.ink].colors);
+    }
+  }
+  function shareCard(level,marks,inkId,t) {
+    const canvas=document.createElement("canvas"); canvas.width=720; canvas.height=900; const c=canvas.getContext("2d");
+    const colors=R.inks[inkId].colors;
+    paper(c,720,900,["#f0e6c9","#dfd0a7"],level+413,12500);
+    box(c,24,24,672,852,20,null,"#6e7c65");
+    icon(c,"brand",48,49,50,ink); type(c,"MOLTLOOP",108,75,37,ink,"left",false,850);
+    type(c,t("proof",{n:R.pad(level+1)}).toUpperCase(),668,76,20,ink,"right");
+    line(c,48,119,672,119,ink,1.5); line(c,48,671,672,671,ink,1.5);
+    for(const [x,y] of [[73,152],[647,152],[73,639],[647,639]]) {
+      line(c,x-7,y,x+7,y,"#6d7d64"); line(c,x,y-7,x,y+7,"#6d7d64");
+    }
+    stamp(c,360,393,248,level,marks,colors);
+    type(c,t(R.chapters[Math.floor(level/6)]),48,734,47,ink,"left",false,800);
+    type(c,t("score").toUpperCase(),666,715,16,ink,"right"); type(c,String(R.score(marks)),666,753,47,ink,"right");
+    type(c,t("reel").toUpperCase()+"  "+R.pad(level%6+1)+" / 06",49,795,19,ink);
+    for(let i=0;i<3;i++) {
+      const id=R.pattern(level,i).color; box(c,537+i*45,792,39,32,5,colors[id],ink); symbol(c,id,556+i*45,808,7,ink);
+    }
+    return canvas;
+  }
+  window.MoltArt=Object.freeze({Board, iconsIn, resultArt, slipArt, thumb, folio, shareCard});
+})();
+
+</script>
+<script>
+(() => {
+  "use strict";
+  const R=MoltRules, A=MoltArt, B=MoltBridge, L=MoltText;
+  const $=id=>document.getElementById(id), storeKey="moltloop.press.v1";
+  let raw=null;
+  try { raw=JSON.parse(localStorage.getItem(storeKey)); } catch (_) {}
+  const data=R.restore(raw,B.ownsProduct("prism_pack"),B.ownsProduct("ink_currant"));
+  const t=(key,vars)=>L.get(data.lang,key,vars);
+  const stage=() => data.run.level;
+  const canPlay=id=>R.unlocked(id,data,B.ownsProduct("prism_pack"));
+  const chapterOf=level=>Math.floor(level/6);
+  const colorSet=()=>R.inks[data.run.ink].colors;
+  const reduceMotion=window.matchMedia("(prefers-reduced-motion: reduce)");
+  const board=new A.Board($("board")), dialogs=[];
+  const top=()=>dialogs[dialogs.length-1];
+  const activeDialog=()=>top()?.kind;
+  let spec, position=0, drag=0, running=false, latched=false, pointer=null, keyHeld=false;
+  let touchStart=0, startX=0, startY=0, movement=0, lastTick=0, currentBand=-1;
+  let fx=null, frameId=0, lastPaint=-Infinity, busy=false, toastTimer=0, lastPedal="", audio=null;
+  let previousFocus=null;
+  function save() {
+    try { localStorage.setItem(storeKey,JSON.stringify(data)); } catch (_) {}
+  }
+  function wakeAudio() {
+    if(!data.sound) return;
+    try {
+      const Constructor=window.AudioContext || window.webkitAudioContext;
+      if(Constructor && !audio) audio=new Constructor();
+      if(audio?.state==="suspended") audio.resume().catch(()=>{});
+    } catch (_) {}
+  }
+  function tone(hz,end,length,shape="sine",volume=.052,delay=0) {
+    if(!data.sound || !audio || audio.state!=="running") return;
+    const start=audio.currentTime+delay, osc=audio.createOscillator(), gain=audio.createGain();
+    osc.type=shape; osc.frequency.setValueAtTime(hz,start); osc.frequency.exponentialRampToValueAtTime(end,start+length);
+    gain.gain.setValueAtTime(.0001,start); gain.gain.exponentialRampToValueAtTime(volume,start+.008);
+    gain.gain.exponentialRampToValueAtTime(.0001,start+length);
+    osc.connect(gain); gain.connect(audio.destination); osc.start(start); osc.stop(start+length+.012);
+    osc.onended=()=>{osc.disconnect();gain.disconnect();};
+  }
+  function buzz(ms) {
+    if(!data.vibration) return;
+    try {
+      if(navigator.vibrate && navigator.vibrate(ms)) return;
+      if(window.MoltShell?.buzz) window.MoltShell.buzz(ms);
+    } catch (_) {}
+  }
+  function announce(text) { $("live").textContent=text; }
+  function toast(key,vars) {
+    $("toast").textContent=t(key,vars); $("toast").hidden=false;
+    clearTimeout(toastTimer); toastTimer=setTimeout(()=>{$("toast").hidden=true;},2200);
+  }
+  function label(id,key,vars) { $(id).textContent=t(key,vars); }
+  function showPedal() {
+    const inBand=position>=spec.target && position<spec.target+1;
+    let key="wind";
+    if(fx) key=fx.kind==="miss"?(position<spec.target?"early":"late"):fx.kind;
+    else if(running) key=latched?(inBand?"tapNow":"tapCut"):(inBand?"release":"winding");
+    else if(data.run.slow) key="slowed";
+    const signature=[data.lang,key,running,!!fx,inBand].join("/");
+    if(lastPedal===signature) return;
+    lastPedal=signature; label("pedal-label",key);
+    const pedal=$("pedal"); pedal.classList.toggle("running",running);
+    pedal.classList.toggle("on-target",(running&&inBand)||(!!fx&&fx.kind!=="miss"));
+    pedal.classList.toggle("missed",fx?.kind==="miss");
+    pedal.setAttribute("aria-pressed",String(running));
+    pedal.querySelector("canvas").dataset.icon=fx?(fx.kind==="miss"?"rewind":"check"):(inBand&&running?"lift":"hand");
+    A.iconsIn(pedal);
+  }
+  function hud() {
+    const level=stage(),run=data.run;
+    document.documentElement.lang=data.lang;
+    label("chapter","chapter",{n:R.pad(chapterOf(level)+1)}); label("chapter-name",R.chapters[chapterOf(level)]);
+    label("reel-label","reel"); $("reel-no").textContent=R.pad(level%6+1);
+    for(const [id,key] of [["score-label","score"],["cut-label","cuts"],["best-label","best"],["archive-label","archive"],["inks-label","inks"],["settings-label","settings"]]) label(id,key);
+    $("score").textContent=String(R.score(run.marks)).padStart(3,"0");
+    const best=Math.max(0,...Object.values(data.records).map(record=>R.score(record.marks)));
+    $("best").textContent=String(best).padStart(3,"0"); $("balance").textContent=data.coins;
+    $("wallet").setAttribute("aria-label",t("wallet")+" · "+data.coins); $("pause").setAttribute("aria-label",t("pause"));
+    $("cuts").innerHTML=[0,1,2].map(i=>{
+      const state=i<run.marks.length?"done":i===run.marks.length?"active":"";
+      const color=colorSet()[R.pattern(level,i).color];
+      return '<i class="cut-pip '+state+'" style="--pip:'+color+'"></i>';
+    }).join("");
+    $("cuts").setAttribute("aria-label",run.marks.length+" / 3");
+    $("board").setAttribute("aria-label",t("boardInfo",{shape:t(R.symbols[spec.color]),i:spec.target+1,n:spec.count,side:t(spec.reverse?"right":"left")}));
+    showPedal();
+  }
+  function round() {
+    const run=data.run;
+    spec=R.pattern(stage(),Math.min(2,run.marks.length)); position=run.state==="miss"?run.stop:0;
+    if(run.marks.length===3) position=spec.target+.5+run.marks[2]/1000;
+    drag=0; currentBand=-1; lastPedal=""; board.invalidate(); hud(); requestFrame();
+  }
+  function demo() {
+    return !running && !fx && !dialogs.length && stage()===0 && data.run.state==="play" && data.run.marks.length===0 && !reduceMotion.matches;
+  }
+  function paint(now) {
+    board.draw({spec,position,colors:colorSet(),drag,demo:demo(),slow:data.run.slow,fx,time:now,t});
+  }
+  function requestFrame() {
+    if(!frameId && !document.hidden) frameId=requestAnimationFrame(tick);
+  }
+  function advanceWind(now) {
+    if(!running) return;
+    const dt=R.clamp((now-lastTick)/1000,0,.35); lastTick=Math.max(now,lastTick);
+    position=R.advance(position,dt,spec,data.run.slow,drag);
+    const band=Math.floor(position);
+    if(band!==currentBand && band<spec.count) {
+      const index=spec.bands[band]; currentBand=band;
+      tone(235+index*35,155+index*24,.055,"triangle",.032);
+      if(band===spec.target) { tone(660,780,.09,"sine",.045); buzz(13); announce(t(latched?"tapNow":"release")); }
+    }
+    if(position>=spec.count) commitStop(now);
+    else showPedal();
+  }
+  function tick(now) {
+    frameId=0;
+    if(document.hidden) return;
+    if(running) advanceWind(now);
+    if(fx && now/1000>=fx.start+fx.duration) settle();
+    if(!dialogs.length && (!demo() || now-lastPaint>=30)) { paint(now); lastPaint=now; }
+    if(running || fx || demo()) requestFrame();
+  }
+  function dropInput() {
+    const held=pointer; pointer=null; keyHeld=false; latched=false; running=false; drag=0;
+    if(held) {
+      try { if(held.element.hasPointerCapture(held.id)) held.element.releasePointerCapture(held.id); } catch (_) {}
+    }
+  }
+  function beginWind(now) {
+    if(dialogs.length || busy || fx || running || data.run.state!=="play") return false;
+    wakeAudio(); running=true; latched=false; drag=0; position=0; currentBand=-1; lastTick=now;
+    tone(112,181,.072,"triangle",.045); buzz(7); showPedal(); requestFrame(); return true;
+  }
+  function commitStop(now) {
+    if(!running) return;
+    dropInput();
+    const run=data.run, mark=R.markAt(position,spec);
+    const kind=mark===null?"miss":R.perfect(mark)?"perfect":"good";
+    run.stop=position; run.slow=false;
+    if(mark===null) {
+      run.state="miss"; tone(149,62,.16,"triangle",.085); buzz(34);
+    } else {
+      run.marks.push(mark); const pristine=R.perfect(mark);
+      const root=pristine?587.33:493.88;
+      tone(root,root*1.08,.095,"triangle",.07); tone(root*1.5,root*1.5,.17,"sine",.065,.048);
+      if(pristine) tone(root*2,root*2,.18,"sine",.042,.09);
+      buzz(pristine?22:13);
+      if(run.marks.length===3) {
+        run.state="clear"; data.coins+=R.payout(run.marks);
+        const old=data.records[run.level];
+        if(!old || R.score(run.marks)>R.score(old.marks)) data.records[run.level]={ink:run.ink,marks:run.marks.slice()};
+        tone(1174.66,1174.66,.24,"sine",.052,.19);
+      }
+    }
+    save();
+    fx={kind,start:now/1000,duration:reduceMotion.matches ? .18 : (mark===null ? .30 : .52),position};
+    hud(); announce(t(kind==="miss"?(position<spec.target?"early":"late"):kind)); requestFrame();
+  }
+  function stopWind() {
+    if(!running) return;
+    const now=performance.now(); advanceWind(now); if(running) commitStop(now);
+  }
+  function settle() {
+    fx=null;
+    if(data.run.state==="play") round();
+    else { hud(); paint(performance.now()); rootDialog(data.run.state); }
+  }
+  function pauseInput() {
+    if(running) { dropInput(); position=0; currentBand=-1; showPedal(); }
+    if(fx) settle();
+    paint(performance.now());
+  }
+  function startStage(level) {
+    if(!canPlay(level)) return;
+    dropInput(); fx=null; data.run=R.newRun(level,data.ink); save(); hideDialogs(); round();
+  }
+  function down(event) {
+    if(!event.isPrimary || event.button!==0 || dialogs.length) return;
+    event.preventDefault();
+    if(running && latched) { stopWind(); return; }
+    const now=performance.now(); if(!beginWind(now)) return;
+    const element=event.currentTarget;
+    pointer={id:event.pointerId,element}; touchStart=now; startX=event.clientX; startY=event.clientY; movement=0;
+    try { element.setPointerCapture(event.pointerId); } catch (_) {}
+  }
+  function move(event) {
+    if(!pointer || event.pointerId!==pointer.id) return;
+    movement=Math.max(movement,Math.hypot(event.clientX-startX,event.clientY-startY));
+    drag=R.clamp(Math.hypot(event.clientX-startX,event.clientY-startY)/145,0,1);
+  }
+  function up(event) {
+    if(!pointer || event.pointerId!==pointer.id) return;
+    event.preventDefault(); move(event);
+    if(performance.now()-touchStart<=170 && movement<10) {
+      pointer=null; latched=true; drag=0; showPedal(); requestFrame();
+    } else stopWind();
+  }
+  function cancelled(event) {
+    if(!pointer || event.pointerId!==pointer.id) return;
+    pauseInput(); openPanel("pause");
+  }
+  for(const element of [$("board"),$("pedal")]) {
+    element.addEventListener("pointerdown",down); element.addEventListener("pointermove",move);
+    element.addEventListener("pointerup",up); element.addEventListener("pointercancel",cancelled);
+    element.addEventListener("lostpointercapture",cancelled);
+    element.addEventListener("contextmenu",e=>e.preventDefault());
+  }
+  $("pedal").addEventListener("click",event=>{
+    if(event.detail!==0 || keyHeld) return;
+    if(running&&latched) stopWind();
+    else if(beginWind(performance.now())) { latched=true; showPedal(); }
+  });
+  function icon(name,cls="") { return '<canvas aria-hidden="true" class="'+cls+'" data-icon="'+name+'"></canvas>'; }
+  const button=(act,key,glyph,style="",disabled=false)=>'<button class="action '+style+'" data-act="'+act+'"'+(disabled?" disabled":"")+'>'+icon(glyph)+t(key)+'</button>';
+  const closeButton=()=>'<button class="icon-btn" data-act="close" aria-label="'+t("close")+'">'+icon("close")+'</button>';
+  function head(title,subtitle,close=true) {
+    return '<div class="sheet-head"><div><div class="kicker">'+subtitle+'</div><h2 id="dialog-title">'+title+'</h2></div>'+(close?closeButton():"")+'</div>';
+  }
+  const rewardLabel=()=>t(B.isAdFree()?"instant":B.isTest()?"testReward":"optReward");
+  const rewardIcon=()=>B.isAdFree()?"spark":"video";
+  const note=text=>'<small class="footnote">'+text+'</small>';
+  const stageLabel=level=>t(R.chapters[chapterOf(level)])+' / '+t("reel")+' '+R.pad(level%6+1);
+  const receipt=(marks,other,value)=>'<div class="receipt"><div><span>'+t("score")+'</span><b>'+R.score(marks)+'</b></div><div><span>'+other+'</span><b>'+value+'</b></div></div>';
+  function mapHTML(view) {
+    const ch=view.chapter, start=ch*6;
+    const nav=(act,key,glyph,disabled)=>'<button class="icon-btn" data-act="'+act+'" aria-label="'+t(key)+'"'+(disabled?" disabled":"")+'>'+icon(glyph)+'</button>';
+    let cards="";
+    for(let id=start;id<start+6;id++) {
+      const rec=data.records[id],allowed=canPlay(id);
+      const labelText=t("reel")+" "+R.pad(id%6+1)+" · "+t(rec?"collected":allowed?"unlocked":"locked");
+      cards+='<button aria-label="'+labelText+'" class="level '+(id===stage()?"current":"")+'" data-act="level" data-id="'+id+'"'+(allowed?"":" disabled")+'>'+
+        (rec?'<canvas aria-hidden="true" data-thumb="'+id+'"></canvas>':icon(allowed?"play":"lock"))+'<b>'+R.pad(id%6+1)+'</b></button>';
+    }
+    const count=Object.keys(data.records).filter(id=>chapterOf(+id)===ch).length;
+    return head(t("shelf"),t("archive"))+'<div class="map-heading">'+nav("prev","previous","prev",ch===0)+'<div><small>'+t("chapter",{n:R.pad(ch+1)})+'</small><h3>'+t(R.chapters[ch])+'</h3></div>'+nav("forward","forward","next",ch===3)+'</div>'+
+      '<div class="level-grid">'+cards+'</div><small class="map-caption">'+t("count",{n:count})+'</small>'+
+      (ch===3&&!B.ownsProduct("prism_pack")?button("offer-pack","unlock","lock","primary"):"");
+  }
+  function ownedInk(id) { return id===0 || (id===1?data.seaGlass:B.ownsProduct("ink_currant")); }
+  function shopHTML() {
+    let html=head(t("palette"),t("wallet")+" · "+data.coins);
+    R.inks.forEach((set,id)=>{
+      const owned=ownedInk(id), worn=data.ink===id;
+      const word=worn?t("inUse"):owned?t("use"):id===1?icon("coin")+" 24":t("unlock");
+      html+='<div class="product"><div class="swatches" aria-hidden="true">'+[0,2,3].map(n=>'<i style="background:'+set.colors[n]+'"></i>').join("")+'</div><div class="copy"><h3>'+t(set.name)+'</h3></div>'+
+        '<button class="mini" data-act="ink" data-id="'+id+'"'+(worn?" disabled":"")+'>'+word+'</button></div>';
+    });
+    html+='<div class="group-label">'+t("extras")+'</div>';
+    for(const [id,title,desc,act,glyph] of [["ad_free","adfree","adDesc","offer-ads","spark"],["prism_pack","prism","packDesc","offer-pack","grid"]]) {
+      const owned=B.ownsProduct(id);
+      html+='<div class="product">'+icon(glyph,"item-icon")+'<div class="copy"><h3>'+t(title)+'</h3><small>'+t(desc)+'</small></div><button class="mini" data-act="'+act+'"'+(owned?" disabled":"")+'>'+t(owned?"collected":"unlock")+'</button></div>';
+    }
+    return html+(B.isTest()?note(t("noCharge")):"");
+  }
+  function settingsHTML() {
+    const row=(id,glyph)=>'<button class="setting" role="switch" aria-checked="'+data[id]+'" data-act="'+id+'"><span>'+icon(glyph)+t(id)+'</span><i class="switch '+(data[id]?"on":"")+'" aria-hidden="true"></i></button>';
+    const options=L.languages.map((lang,i)=>'<option value="'+lang+'"'+(data.lang===lang?" selected":"")+'>'+L.names[i]+'</option>').join("");
+    return head(t("settings"),"MOLTLOOP")+row("sound","sound")+row("vibration","vibration")+
+      '<label class="setting"><span>'+icon("globe")+t("lang")+'</span><select id="language" aria-label="'+t("lang")+'">'+options+'</select></label>'+
+      '<p>'+t("how")+'</p>'+note(t("altInput"));
+  }
+  function sheetHTML(view) {
+    const run=data.run, kind=view.kind;
+    if(kind==="settings") return settingsHTML();
+    if(kind==="archive") return mapHTML(view);
+    if(kind==="shop") return shopHTML();
+    if(kind==="pause") return head(t("paused"),stageLabel(stage()))+
+      '<div class="help-strip" aria-hidden="true">'+icon("hand")+'<i></i>'+icon("target")+'<i></i>'+icon("lift")+'</div><p>'+t("how")+'</p>'+
+      button("resume","resume","play","primary")+button("slow",run.slow?"slowed":"assist",run.slow?"check":rewardIcon(),"bonus",run.slow)+
+      (!run.slow?note(rewardLabel()):"");
+    if(kind==="miss") {
+      const early=run.stop<spec.target;
+      return head(t(early?"early":"late"),stageLabel(stage()),false)+'<canvas id="slip-art" class="slip-art" aria-hidden="true"></canvas><p>'+t("slipHelp")+'</p>'+
+        button("retry","restart","retry","primary")+
+        (run.rewound?"":button("rewind","rewind",rewardIcon(),"bonus")+note(t("rewindHelp")+" · "+rewardLabel()));
+    }
+    if(kind==="clear" || kind==="print") {
+      const live=kind==="clear",id=live?stage():view.id,rec=live?run:data.records[id];
+      const reward=R.payout(rec.marks)*(live&&run.bonus?2:1);
+      const count=rec.marks.filter(R.perfect).length;
+      const html=head(t(live?"printed":"inspect"),t("proof",{n:R.pad(id+1)})+" · "+stageLabel(id),!live)+
+        '<canvas id="result-art" class="result-art" aria-hidden="true"></canvas>'+
+        receipt(rec.marks,live?t("wallet"):t("perfect").replace(/!|！/g,""),live?"+"+reward:count+" / 3");
+      if(!live) return html+button("play-print","replay","play","primary")+button("share","share","share");
+      const end=[17,23].includes(id);
+      return html+button("next",end?"finale":"next",end?"grid":"arrow","primary")+
+        '<div class="action-row">'+button("double",run.bonus?"doubled":"bonus",run.bonus?"check":rewardIcon(),"bonus",run.bonus)+button("share","share","share")+'</div>'+
+        (!run.bonus?note(rewardLabel()):"");
+    }
+    if(kind==="end") {
+      const encore=stage()>=18;
+      return head(t(encore?"encoreEnd":"finished"),t("shelf"),false)+'<canvas id="folio-art" class="result-art" aria-hidden="true"></canvas><p>'+
+        t(encore?"encoreText":"endText")+'</p>'+button("archive","archive","grid","primary")+button("retry","replay","retry");
+    }
+    const id=view.sku, name=id==="ad_free"?"adfree":id==="prism_pack"?"prism":"neonInk";
+    const desc=id==="ad_free"?"adDesc":id==="prism_pack"?"packDesc":null;
+    return head(t(name),t("extras"))+(desc?'<p>'+t(desc)+'</p>':"")+button("buy",B.isTest()?"testBuy":"buy","check","primary")+(B.isTest()?note(t("noCharge")):"");
+  }
+  function dialogArt() {
+    const view=top(); if(!view) return;
+    const run=data.run;
+    if($("slip-art")) A.slipArt($("slip-art"),spec,run.ink,run.stop);
+    if($("result-art")) {
+      const rec=view.kind==="print"?data.records[view.id]:run;
+      A.resultArt($("result-art"),view.kind==="print"?view.id:stage(),rec.marks,rec.ink);
+    }
+    if($("folio-art")) A.folio($("folio-art"),data.records,stage()>=18?18:0,stage()>=18?6:18);
+    $("sheet").querySelectorAll("[data-thumb]").forEach(el=>A.thumb(el,+el.dataset.thumb,data.records[el.dataset.thumb]));
+    A.iconsIn($("sheet"));
+  }
+  function renderSheet(focus=true) {
+    const view=top(); if(!view) return;
+    const sheet=$("sheet"), oldAct=document.activeElement?.dataset?.act;
+    $("veil").hidden=false; $("machine").inert=true; $("machine").setAttribute("aria-hidden","true");
+    sheet.innerHTML=sheetHTML(view); dialogArt();
+    if(focus && view.kind==="clear" && !reduceMotion.matches) {
+      const canvas=$("result-art"), run=data.run, start=performance.now();
+      const impress=now=>{
+        if(!canvas.isConnected || canvas!==$("result-art") || activeDialog()!=="clear") return;
+        const progress=R.clamp((now-start)/420,0,1);
+        A.resultArt(canvas,run.level,run.marks,run.ink,progress);
+        if(progress<1) requestAnimationFrame(impress);
+      };
+      impress(start);
+    }
+    if(focus) { sheet.scrollTop=0; sheet.focus({preventScroll:true}); }
+    else if(oldAct) sheet.querySelector('[data-act="'+oldAct+'"]:not(:disabled)')?.focus({preventScroll:true});
+  }
+  function hideDialogs() {
+    dialogs.length=0; $("veil").hidden=true; $("machine").inert=false; $("machine").removeAttribute("aria-hidden");
+    const back=previousFocus; previousFocus=null;
+    if(back?.isConnected && back!==document.body) back.focus({preventScroll:true});
+    requestFrame();
+  }
+  function rootDialog(kind) {
+    dialogs.length=0; dialogs.push({kind}); renderSheet();
+  }
+  function openPanel(kind,extra={}) {
+    if(busy) return;
+    if(!dialogs.length) {
+      previousFocus=document.activeElement; pauseInput();
+      if(dialogs.length) return;
+    }
+    dialogs.push({kind,...extra}); renderSheet();
+  }
+  function closePanel() {
+    if(busy || !dialogs.length || ["clear","miss","end"].includes(activeDialog())) return false;
+    dialogs.pop();
+    if(dialogs.length) renderSheet(); else hideDialogs();
+    return true;
+  }
+  async function claim(placement,apply) {
+    if(busy) return; busy=true; $("sheet").setAttribute("aria-busy","true");
+    const run=data.run;
+    try {
+      const granted=await B.requestReward(placement);
+      if(granted && data.run===run) apply(run);
+      else if(!granted) toast("unavailable");
+    } catch (_) { toast("unavailable"); }
+    finally { busy=false; $("sheet").removeAttribute("aria-busy"); }
+  }
+  function equip(id) {
+    data.ink=id;
+    if(data.run.state==="play" || data.run.state==="miss") data.run.ink=id;
+    save(); board.invalidate(); hud(); paint(performance.now()); renderSheet(false);
+  }
+  async function buy(sku) {
+    if(busy) return; busy=true;
+    let ok=false;
+    try { ok=await B.purchaseProduct(sku); } catch (_) {}
+    busy=false;
+    if(!ok) { toast("purchaseError"); return; }
+    closePanel();
+    if(sku==="ink_currant") equip(2); else { hud(); renderSheet(false); }
+  }
+  async function share(view) {
+    if(busy) return;
+    busy=true;
+    const level=view.kind==="print"?view.id:stage(),rec=view.kind==="print"?data.records[level]:data.run;
+    try {
+      const result=await B.shareResultPNG(A.shareCard(level,rec.marks,rec.ink,t));
+      if(result==="downloaded") toast("saved");
+    } catch (_) { toast("shareError"); }
+    finally { busy=false; }
+  }
+  $("sheet").addEventListener("click",event=>{
+    const element=event.target.closest("button[data-act]");
+    if(!element || element.disabled || busy) return;
+    const act=element.dataset.act, id=Number(element.dataset.id), view=top(), run=data.run;
+    wakeAudio();
+    switch(act) {
+      case "close": case "resume": closePanel(); break;
+      case "retry": startStage(stage()); break;
+      case "archive": openPanel("archive",{chapter:chapterOf(stage())}); break;
+      case "prev": case "forward": view.chapter=R.clamp(view.chapter+(act==="prev"?-1:1),0,3); renderSheet(false); break;
+      case "level":
+        if(!canPlay(id)) break;
+        if(data.records[id]) openPanel("print",{id});
+        else if(stage()===id && run.state==="play") hideDialogs();
+        else startStage(id);
+        break;
+      case "play-print": startStage(view.id); break;
+      case "next":
+        if(run.state!=="clear") break;
+        if([17,23].includes(stage())) { run.state="end"; save(); rootDialog("end"); }
+        else startStage(stage()+1);
+        break;
+      case "rewind":
+        if(run.state!=="miss" || run.rewound) break;
+        claim("rewind",r=>{r.rewound=true;r.slow=true;r.state="play";r.stop=0;save();hideDialogs();round();}); break;
+      case "slow":
+        if(run.state!=="play" || run.slow) break;
+        claim("slow",r=>{r.slow=true;save();hideDialogs();round();}); break;
+      case "double":
+        if(run.state!=="clear" || run.bonus) break;
+        claim("double",r=>{if(r.bonus)return;r.bonus=true;data.coins+=R.payout(r.marks);save();hud();renderSheet(false);}); break;
+      case "share": share(view); break;
+      case "sound": case "vibration":
+        data[act]=!data[act]; save(); if(act==="sound") {wakeAudio();tone(523,659,.12);} else buzz(14);
+        renderSheet(false); break;
+      case "ink":
+        if(ownedInk(id)) equip(id);
+        else if(id===1) {
+          if(data.coins<24) toast("needInk",{n:24-data.coins});
+          else { data.coins-=24; data.seaGlass=true; equip(id); }
+        } else openPanel("offer",{sku:"ink_currant"});
+        break;
+      case "offer-pack": openPanel("offer",{sku:"prism_pack"}); break;
+      case "offer-ads": openPanel("offer",{sku:"ad_free"}); break;
+      case "buy": buy(view.sku); break;
+    }
+  });
+  $("sheet").addEventListener("change",event=>{
+    if(event.target.id!=="language" || !L.languages.includes(event.target.value)) return;
+    data.lang=event.target.value; save(); board.invalidate(); hud(); paint(performance.now()); renderSheet(false);
+    $("language")?.focus({preventScroll:true});
+  });
+  for(const [id,kind] of [["pause","pause"],["wallet","shop"],["archive","archive"],["inks","shop"],["settings","settings"]]) {
+    $(id).addEventListener("click",()=>{wakeAudio();openPanel(kind,kind==="archive"?{chapter:chapterOf(stage())}:{});});
+  }
+  $("veil").addEventListener("click",event=>{ if(event.target===$("veil")) closePanel(); });
+  function back() {
+    if(busy) return true;
+    if(dialogs.length) return closePanel();
+    openPanel("pause"); return true;
+  }
+  window.MoltGameBack=()=>!busy && activeDialog()==="pause" && dialogs.length===1 ? false : back();
+  document.addEventListener("keydown",event=>{
+    if(event.key==="Escape") { event.preventDefault(); if(!event.repeat) back(); return; }
+    if(dialogs.length) {
+      if(event.key==="Tab") {
+        const items=[...$("sheet").querySelectorAll("button:not(:disabled),select")];
+        const first=items[0],last=items[items.length-1];
+        if(event.shiftKey && (document.activeElement===first || document.activeElement===$("sheet"))) {event.preventDefault();last?.focus();}
+        if(!event.shiftKey && document.activeElement===last) {event.preventDefault();first?.focus();}
+      }
+      return;
+    }
+    if(!["Space","Enter"].includes(event.code) || (event.target.closest("button") && event.target.closest("button")!==$("pedal"))) return;
+    event.preventDefault(); if(event.repeat) return;
+    if(running&&latched) stopWind();
+    else if(beginWind(performance.now())) keyHeld=true;
+  });
+  document.addEventListener("keyup",event=>{
+    if(keyHeld && ["Space","Enter"].includes(event.code)) { event.preventDefault(); stopWind(); }
+  });
+  function suspend() {
+    if(running) { pauseInput(); if(!dialogs.length) openPanel("pause"); }
+    else if(fx) settle();
+    if(frameId) { cancelAnimationFrame(frameId); frameId=0; }
+    save();
+  }
+  window.addEventListener("blur",suspend);
+  window.addEventListener("focus",requestFrame);
+  window.addEventListener("pagehide",suspend);
+  document.addEventListener("visibilitychange",()=>{ if(document.hidden) suspend(); else requestFrame(); });
+  function resized() {
+    board.invalidate(); paint(performance.now()); A.iconsIn($("machine")); if(dialogs.length) dialogArt(); requestFrame();
+  }
+  round(); paint(performance.now()); A.iconsIn($("machine"));
+  if(data.run.state!=="play") rootDialog(data.run.state);
+  if(window.ResizeObserver) new ResizeObserver(resized).observe($("instrument"));
+  else window.addEventListener("resize",resized);
+})();
+
+</script>
+</body>
+</html>
